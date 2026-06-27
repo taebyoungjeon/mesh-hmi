@@ -1402,7 +1402,7 @@
         // The customer page can still fall back to its built-in demo layout.
       }
       const target = location.pathname.endsWith("admin.html") ? "index.html" : "mesh_customer_floorplan_view.html";
-      window.open(`${target}?layout=${encodeURIComponent(encodeLayout(data))}`, "_blank");
+      window.open(`${target}?v=${Date.now()}&layout=${encodeURIComponent(encodeLayout(data))}`, "_blank");
     });
 
     document.getElementById("copyJson").addEventListener("click", async () => {

@@ -271,7 +271,8 @@
 
     .plan-wrap {
       position: relative;
-      padding: 12px 10px 10px;
+      min-height: 178px;
+      padding: 10px 8px 8px;
       background:
         linear-gradient(90deg, rgba(67, 91, 82, .045) 1px, transparent 1px),
         linear-gradient(rgba(67, 91, 82, .045) 1px, transparent 1px),
@@ -388,6 +389,7 @@
       display: block;
       width: 100%;
       height: auto;
+      min-height: 168px;
     }
 
 
@@ -809,13 +811,13 @@
       const bedCount = Math.max(1, Math.min(12, Number(greenhouse.bedCount) || 4));
       const spanCount = greenhouse.type === "vinyl-single" ? 1 : Math.max(1, Math.min(12, Number(greenhouse.spanCount) || 4));
       const totalWidthM = width * dongCount + gap * (dongCount - 1);
-      const left = 28;
-      const top = 36;
-      const maxW = 404;
-      const maxH = 166;
+      const left = 14;
+      const top = 28;
+      const maxW = 432;
+      const maxH = 128;
       const scale = Math.min(maxW / Math.max(length, 1), maxH / Math.max(totalWidthM, 1));
-      const dongLength = Math.max(length * scale, 160);
-      const dongDepth = Math.max(width * scale, 20);
+      const dongLength = Math.max(length * scale, 300);
+      const dongDepth = Math.max(width * scale, 34);
       const gapDepth = gap * scale;
       const totalDepth = dongDepth * dongCount + gapDepth * (dongCount - 1);
       const x0 = left + (maxW - dongLength) / 2;
@@ -828,8 +830,8 @@
             <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#31554c" flood-opacity=".12"/>
           </filter>
         </defs>
-        <text x="230" y="24" text-anchor="middle" class="svg-label">${esc(length)}m</text>
-        <text x="454" y="118" class="svg-label" transform="rotate(90 454 118)">총 폭 ${esc(Math.round(totalWidthM))}m</text>
+        <text x="230" y="18" text-anchor="middle" class="svg-label">${esc(length)}m</text>
+        <text x="454" y="92" class="svg-label" transform="rotate(90 454 92)">총 폭 ${esc(Math.round(totalWidthM))}m</text>
       `;
 
       for (let d = 0; d < dongCount; d += 1) {
@@ -870,6 +872,7 @@
       });
 
       floorPlanSvg.innerHTML = html;
+      floorPlanSvg.setAttribute("viewBox", "0 0 460 180");
     }
 
     function updateStatus(index) {
