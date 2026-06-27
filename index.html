@@ -812,15 +812,15 @@
       const left = 28;
       const top = 36;
       const maxW = 404;
-      const maxH = 154;
-      const scale = Math.min(maxW / Math.max(totalWidthM, 1), maxH / Math.max(length, 1));
-      const dongW = Math.max(width * scale, 13);
-      const dongH = Math.max(length * scale, 54);
-      const gapW = gap * scale;
-      const totalW = dongW * dongCount + gapW * (dongCount - 1);
-      const x0 = left + (maxW - totalW) / 2;
-      const y0 = top + (maxH - dongH) / 2;
-      const selectedX = x0 + index * (dongW + gapW);
+      const maxH = 166;
+      const scale = Math.min(maxW / Math.max(length, 1), maxH / Math.max(totalWidthM, 1));
+      const dongLength = Math.max(length * scale, 160);
+      const dongDepth = Math.max(width * scale, 20);
+      const gapDepth = gap * scale;
+      const totalDepth = dongDepth * dongCount + gapDepth * (dongCount - 1);
+      const x0 = left + (maxW - dongLength) / 2;
+      const y0 = top + (maxH - totalDepth) / 2;
+      const selectedY = y0 + index * (dongDepth + gapDepth);
 
       let html = `
         <defs>
@@ -833,33 +833,36 @@
       `;
 
       for (let d = 0; d < dongCount; d += 1) {
-        const x = x0 + d * (dongW + gapW);
+        const y = y0 + d * (dongDepth + gapDepth);
         const isSelected = d === index;
-        const rx = greenhouse.type === "glass" ? 8 : Math.min(18, dongW / 2);
-        html += `<rect x="${x}" y="${y0}" width="${dongW}" height="${dongH}" rx="${rx}" fill="${isSelected ? "#f0fbf6" : "#f8fcfa"}" stroke="${isSelected ? "#43b987" : "#9dccbe"}" stroke-width="${isSelected ? 2.6 : 1.4}" filter="url(#softShadow)"/>`;
+        const rx = greenhouse.type === "glass" ? 8 : Math.min(18, dongDepth / 2);
+        html += `<rect x="${x0}" y="${y}" width="${dongLength}" height="${dongDepth}" rx="${rx}" fill="${isSelected ? "#f0fbf6" : "#f8fcfa"}" stroke="${isSelected ? "#43b987" : "#9dccbe"}" stroke-width="${isSelected ? 2.6 : 1.4}" filter="url(#softShadow)"/>`;
 
         for (let s = 1; s < spanCount; s += 1) {
-          const sx = x + dongW * s / spanCount;
-          html += `<line x1="${sx}" y1="${y0 + 8}" x2="${sx}" y2="${y0 + dongH - 8}" stroke="#8bbcad" stroke-width=".8" opacity=".52"/>`;
+          const sy = y + dongDepth * s / spanCount;
+          html += `<line x1="${x0 + 8}" y1="${sy}" x2="${x0 + dongLength - 8}" y2="${sy}" stroke="#8bbcad" stroke-width=".8" opacity=".52"/>`;
         }
 
-        const bedInsetX = Math.max(dongW * .12, 5);
-        const bedW = Math.max(dongW - bedInsetX * 2, 7);
-        const bedH = Math.max(Math.min(dongH / (bedCount * 2.6), 13), 5);
-        const usableH = dongH * .70;
-        const firstBedY = y0 + dongH * .18;
+        const bedInsetX = Math.max(dongLength * .10, 18);
+        const bedInsetY = Math.max(dongDepth * .14, 4);
+        const bedW = Math.max(dongLength - bedInsetX * 2, 60);
+        const bedH = Math.max(Math.min((dongDepth - bedInsetY * 2) / Math.max(bedCount, 1) * .58, 11), 4);
+        const usableDepth = dongDepth - bedInsetY * 2;
+        const firstBedY = y + bedInsetY + bedH / 2;
         for (let b = 0; b < bedCount; b += 1) {
-          const by = bedCount === 1 ? y0 + dongH / 2 - bedH / 2 : firstBedY + (usableH / (bedCount - 1)) * b - bedH / 2;
-          html += `<rect x="${x + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
+          const by = bedCount === 1
+            ? y + dongDepth / 2 - bedH / 2
+            : firstBedY + (usableDepth / Math.max(1, bedCount - 1)) * b - bedH / 2;
+          html += `<rect x="${x0 + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
         }
 
-        html += `<text x="${x + dongW / 2}" y="${y0 + dongH / 2 + 4}" text-anchor="middle" class="svg-bed-label">${d + 1}동</text>`;
+        html += `<text x="${x0 + dongLength / 2}" y="${y + dongDepth / 2 + 4}" text-anchor="middle" class="svg-bed-label">${d + 1}동</text>`;
       }
 
       markers.forEach(marker => {
         const meta = markerMeta[marker.type] || markerMeta.air;
-        const mx = selectedX + Math.max(0, Math.min(100, Number(marker.xPercent) || 50)) / 100 * dongW;
-        const my = y0 + Math.max(0, Math.min(100, Number(marker.yPercent) || 50)) / 100 * dongH;
+        const mx = x0 + Math.max(0, Math.min(100, Number(marker.xPercent) || 50)) / 100 * dongLength;
+        const my = selectedY + Math.max(0, Math.min(100, Number(marker.yPercent) || 50)) / 100 * dongDepth;
         html += `
           <circle cx="${mx}" cy="${my}" r="10.5" fill="${meta.color}"/>
           <text x="${mx}" y="${my + 3}" font-size="7.5" fill="#fff" text-anchor="middle" font-weight="850">${meta.text}</text>
