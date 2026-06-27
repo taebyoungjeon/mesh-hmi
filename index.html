@@ -331,8 +331,10 @@
       display: block;
       width: 100%;
       height: 260px;
-      touch-action: pan-y;
+      touch-action: none;
       user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
 
     .three-fallback {
@@ -624,7 +626,7 @@
         <div class="hmi-stack">
           <div class="view-panel three-panel">
             <span class="view-label">3D 뷰</span>
-            <span class="touch-hint">좌우로 회전 · 두 손가락 줌</span>
+            <span class="touch-hint">상하좌우 회전 · 두 손가락 줌</span>
             <canvas id="greenhouse3d" aria-label="온실 3D 뷰"></canvas>
             <div class="three-fallback" id="threeFallback" aria-hidden="true">
               <svg class="iso-greenhouse" viewBox="0 0 420 250" role="img">
@@ -880,20 +882,25 @@
         return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
       }
 
+      canvas.addEventListener("touchstart", event => {
+        event.preventDefault();
+      }, { passive: false });
+
+      canvas.addEventListener("touchmove", event => {
+        event.preventDefault();
+      }, { passive: false });
+
       canvas.addEventListener("pointerdown", event => {
+        canvas.setPointerCapture(event.pointerId);
         pointers.set(event.pointerId, {
           x: event.clientX,
           y: event.clientY,
           startX: event.clientX,
           startY: event.clientY
         });
-
-        if (event.pointerType !== "touch" || pointers.size > 1) {
-          canvas.setPointerCapture(event.pointerId);
-          gesture = pointers.size > 1 ? "pinch" : "rotate";
-          pinchDistance = getPinchDistance();
-          event.preventDefault();
-        }
+        gesture = pointers.size > 1 ? "pinch" : "rotate";
+        pinchDistance = getPinchDistance();
+        event.preventDefault();
       }, { passive: false });
 
       canvas.addEventListener("pointermove", event => {
@@ -918,18 +925,6 @@
           pinchDistance = distance;
           event.preventDefault();
           return;
-        }
-
-        if (!gesture) {
-          const totalX = event.clientX - previous.startX;
-          const totalY = event.clientY - previous.startY;
-          if (Math.abs(totalY) > 10 && Math.abs(totalY) > Math.abs(totalX) * 1.2) {
-            pointers.delete(event.pointerId);
-            return;
-          }
-          if (Math.abs(totalX) < 8 && Math.abs(totalY) < 8) return;
-          gesture = "rotate";
-          canvas.setPointerCapture(event.pointerId);
         }
 
         if (gesture === "rotate") {
