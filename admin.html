@@ -1307,6 +1307,15 @@
       return btoa(unescape(encodeURIComponent(json)));
     }
 
+    function customerPreviewUrl(data) {
+      const url = location.pathname.endsWith("/admin.html")
+        ? new URL("./", location.href)
+        : new URL("mesh_customer_floorplan_view.html", location.href);
+      url.searchParams.set("v", Date.now().toString());
+      url.searchParams.set("layout", encodeLayout(data));
+      return url.toString();
+    }
+
     function renderMetrics() {
       const length = num(el.lengthM, 72);
       const width = num(el.widthM, 32);
@@ -1432,8 +1441,7 @@
       } catch (error) {
         // The customer page can still fall back to its built-in demo layout.
       }
-      const target = location.pathname.endsWith("admin.html") ? "index.html" : "mesh_customer_floorplan_view.html";
-      window.open(`${target}?v=${Date.now()}&layout=${encodeURIComponent(encodeLayout(data))}`, "_blank");
+      window.open(customerPreviewUrl(data), "_blank");
     });
 
     document.getElementById("copyJson").addEventListener("click", async () => {
