@@ -714,6 +714,7 @@
         dongGapM: 4,
         spanCount: 4,
         bedCount: 4,
+        bedOrientation: "length",
         layout: { xPercent: 50, yPercent: 50, rotationDeg: 0 }
       },
       markers: [
@@ -819,6 +820,7 @@
       const width = Number(greenhouse.widthM) || 32;
       const gap = Number(greenhouse.dongGapM) || 0;
       const bedCount = Math.max(1, Math.min(12, Number(greenhouse.bedCount) || 4));
+      const bedOrientation = greenhouse.bedOrientation || "length";
       const spanCount = greenhouse.type === "vinyl-single" ? 1 : Math.max(1, Math.min(12, Number(greenhouse.spanCount) || 4));
       const totalWidthM = width * dongCount + gap * (dongCount - 1);
       const left = 14;
@@ -869,17 +871,32 @@
           html += `<line x1="${x0 + 8}" y1="${sy}" x2="${x0 + dongLength - 8}" y2="${sy}" stroke="#8bbcad" stroke-width=".8" opacity=".52"/>`;
         }
 
-        const bedInsetX = Math.max(dongLength * .10, 18);
-        const bedInsetY = Math.max(dongDepth * .14, 4);
-        const bedW = Math.max(dongLength - bedInsetX * 2, 60);
-        const bedH = Math.max(Math.min((dongDepth - bedInsetY * 2) / Math.max(bedCount, 1) * .58, 11), 4);
-        const usableDepth = dongDepth - bedInsetY * 2;
-        const firstBedY = y + bedInsetY + bedH / 2;
-        for (let b = 0; b < bedCount; b += 1) {
-          const by = bedCount === 1
-            ? y + dongDepth / 2 - bedH / 2
-            : firstBedY + (usableDepth / Math.max(1, bedCount - 1)) * b - bedH / 2;
-          html += `<rect x="${x0 + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
+        if (bedOrientation === "width") {
+          const bedInsetX = Math.max(dongLength * .08, 16);
+          const bedInsetY = Math.max(dongDepth * .14, 4);
+          const bedW = Math.max(Math.min((dongLength - bedInsetX * 2) / Math.max(bedCount, 1) * .58, 18), 8);
+          const bedH = Math.max(dongDepth - bedInsetY * 2, 18);
+          const usableLength = dongLength - bedInsetX * 2;
+          const firstBedX = x0 + bedInsetX + bedW / 2;
+          for (let b = 0; b < bedCount; b += 1) {
+            const bx = bedCount === 1
+              ? x0 + dongLength / 2 - bedW / 2
+              : firstBedX + (usableLength / Math.max(1, bedCount - 1)) * b - bedW / 2;
+            html += `<rect x="${bx}" y="${y + bedInsetY}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
+          }
+        } else {
+          const bedInsetX = Math.max(dongLength * .10, 18);
+          const bedInsetY = Math.max(dongDepth * .14, 4);
+          const bedW = Math.max(dongLength - bedInsetX * 2, 60);
+          const bedH = Math.max(Math.min((dongDepth - bedInsetY * 2) / Math.max(bedCount, 1) * .58, 11), 4);
+          const usableDepth = dongDepth - bedInsetY * 2;
+          const firstBedY = y + bedInsetY + bedH / 2;
+          for (let b = 0; b < bedCount; b += 1) {
+            const by = bedCount === 1
+              ? y + dongDepth / 2 - bedH / 2
+              : firstBedY + (usableDepth / Math.max(1, bedCount - 1)) * b - bedH / 2;
+            html += `<rect x="${x0 + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
+          }
         }
 
         html += `<text x="${x0 + dongLength / 2}" y="${y + dongDepth / 2 + 4}" text-anchor="middle" class="svg-bed-label">${d + 1}동</text>`;
@@ -1090,6 +1107,7 @@
       const totalWidth = dongW * dongCount + gap * (dongCount - 1);
       const spanCount = greenhouse.type === "vinyl-single" ? 1 : Math.max(1, Math.min(8, Number(greenhouse.spanCount) || 4));
       const bedCount = Math.max(1, Math.min(8, Number(greenhouse.bedCount) || 4));
+      const bedOrientation = greenhouse.bedOrientation || "length";
       const sideHeight = greenhouse.type === "glass" ? 2.25 : 1.9;
       const roofHeight = greenhouse.type === "glass" ? 1.15 : 1.35;
       const frameColor = 0x43b987;
@@ -1112,10 +1130,17 @@
 
         for (let b = 0; b < bedCount; b += 1) {
           const bed = new THREE.Mesh(
-            new THREE.BoxGeometry(Math.max(dongW - .9, .8), .22, Math.max(length / (bedCount * 2.4), .65)),
+            bedOrientation === "width"
+              ? new THREE.BoxGeometry(Math.max(dongW / (bedCount * 1.9), .42), .22, Math.max(length - 1.9, 4))
+              : new THREE.BoxGeometry(Math.max(dongW - .9, .8), .22, Math.max(length / (bedCount * 2.4), .65)),
             new THREE.MeshLambertMaterial({ color: [0x2f8f55, 0x3ca35f, 0x55ad69, 0x72b86d][b % 4] })
           );
-          bed.position.set(baseX, .28, -length * .34 + b * (length * .68 / Math.max(1, bedCount - 1)));
+          if (bedOrientation === "width") {
+            const bedX = bedCount === 1 ? baseX : baseX - dongW * .34 + b * (dongW * .68 / Math.max(1, bedCount - 1));
+            bed.position.set(bedX, .28, 0);
+          } else {
+            bed.position.set(baseX, .28, -length * .34 + b * (length * .68 / Math.max(1, bedCount - 1)));
+          }
           bed.castShadow = true;
           greenhouseGroup.add(bed);
         }

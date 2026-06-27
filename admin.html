@@ -852,6 +852,13 @@
             <input id="bedCount" type="number" min="1" max="12" value="4" />
           </div>
         </div>
+        <div class="field">
+          <label>재배 베드 방향</label>
+          <div class="segmented" id="bedDirectionButtons">
+            <button class="active" data-bed-direction="length">길이 방향</button>
+            <button data-bed-direction="width">폭 방향</button>
+          </div>
+        </div>
         <div class="grid-2">
           <div class="field">
             <label for="layoutX">배치 X</label>
@@ -956,6 +963,7 @@
     const state = {
       projectMode: "existing",
       greenhouseType: "glass",
+      bedOrientation: "length",
       axis: "NS",
       northRotation: 0,
       selectedId: "air-1",
@@ -1070,6 +1078,7 @@
 
       const dongMarkup = [];
       const bedCount = clamp(num(el.bedCount, 4), 1, 12);
+      const bedOrientation = state.bedOrientation;
       for (let d = 0; d < dongCount; d += 1) {
         const x = left + d * (dongW + gapW);
         const y = top;
@@ -1077,14 +1086,26 @@
         const cls = `footprint${type === "glass" ? "" : " vinyl"}${state.projectMode === "new" ? " new" : ""}`;
         dongMarkup.push(`<rect class="${cls}" x="${x}" y="${y}" width="${dongW}" height="${dongH}" rx="${rx}" />`);
 
-        const bedInsetX = Math.max(dongW * .12, .8);
-        const bedW = Math.max(dongW - bedInsetX * 2, 1.4);
-        const bedH = Math.max(Math.min(dongH / (bedCount * 2.6), 2.2), .75);
-        const usableH = dongH * .70;
-        const firstBedY = y + dongH * .18;
-        for (let b = 0; b < bedCount; b += 1) {
-          const by = bedCount === 1 ? y + dongH / 2 - bedH / 2 : firstBedY + (usableH / (bedCount - 1)) * b - bedH / 2;
-          dongMarkup.push(`<rect x="${x + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx=".75" fill="rgba(76, 196, 112, .72)" stroke="rgba(198,255,220,.62)" stroke-width=".18" vector-effect="non-scaling-stroke" />`);
+        if (bedOrientation === "width") {
+          const bedInsetY = Math.max(dongH * .12, 1.2);
+          const bedW = Math.max(Math.min(dongW / (bedCount * 2.1), 2.6), .65);
+          const bedH = Math.max(dongH - bedInsetY * 2, 4);
+          const usableW = dongW * .74;
+          const firstBedX = x + dongW * .13;
+          for (let b = 0; b < bedCount; b += 1) {
+            const bx = bedCount === 1 ? x + dongW / 2 - bedW / 2 : firstBedX + (usableW / Math.max(1, bedCount - 1)) * b - bedW / 2;
+            dongMarkup.push(`<rect x="${bx}" y="${y + bedInsetY}" width="${bedW}" height="${bedH}" rx=".75" fill="rgba(76, 196, 112, .72)" stroke="rgba(198,255,220,.62)" stroke-width=".18" vector-effect="non-scaling-stroke" />`);
+          }
+        } else {
+          const bedInsetX = Math.max(dongW * .12, .8);
+          const bedW = Math.max(dongW - bedInsetX * 2, 1.4);
+          const bedH = Math.max(Math.min(dongH / (bedCount * 2.6), 2.2), .75);
+          const usableH = dongH * .70;
+          const firstBedY = y + dongH * .18;
+          for (let b = 0; b < bedCount; b += 1) {
+            const by = bedCount === 1 ? y + dongH / 2 - bedH / 2 : firstBedY + (usableH / Math.max(1, bedCount - 1)) * b - bedH / 2;
+            dongMarkup.push(`<rect x="${x + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx=".75" fill="rgba(76, 196, 112, .72)" stroke="rgba(198,255,220,.62)" stroke-width=".18" vector-effect="non-scaling-stroke" />`);
+          }
         }
 
         if (type === "glass") {
@@ -1241,6 +1262,8 @@
           dongGapM: num(el.dongGapM, 4),
           spanCount: num(el.spanCount, 4),
           bedCount: num(el.bedCount, 4),
+          bedOrientation: state.bedOrientation,
+          bedOrientationLabel: state.bedOrientation === "length" ? "길이 방향" : "폭 방향",
           layout: {
             xPercent: num(el.layoutX, 50),
             yPercent: num(el.layoutY, 50),
@@ -1359,6 +1382,14 @@
       if (!button) return;
       state.axis = button.dataset.axis;
       document.querySelectorAll("#axisButtons button").forEach(item => item.classList.toggle("active", item === button));
+      render();
+    });
+
+    document.getElementById("bedDirectionButtons").addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      state.bedOrientation = button.dataset.bedDirection;
+      document.querySelectorAll("#bedDirectionButtons button").forEach(item => item.classList.toggle("active", item === button));
       render();
     });
 
