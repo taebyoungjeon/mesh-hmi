@@ -199,6 +199,50 @@
       gap: 8px;
     }
 
+    .mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-switch button {
+      display: grid;
+      gap: 4px;
+      min-height: 62px;
+      text-align: left;
+    }
+
+    .mode-switch b {
+      display: block;
+      font-size: 13px;
+    }
+
+    .mode-switch small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .satellite-panel {
+      margin-top: 12px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111719;
+    }
+
+    .satellite-panel strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .satellite-panel p {
+      margin: 6px 0 0;
+      font-size: 11px;
+    }
+
     .type-grid {
       display: grid;
       gap: 8px;
@@ -334,6 +378,49 @@
         linear-gradient(32deg, transparent 0 54%, rgba(91, 123, 109, .22) 54% 57%, transparent 57%),
         radial-gradient(circle at 18% 78%, rgba(78, 110, 73, .20), transparent 34%);
       pointer-events: none;
+    }
+
+    .satellite-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: var(--satellite-opacity, .72);
+      background-size: cover;
+      background-position: center;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .satellite-layer svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .satellite-label {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 8;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(15, 19, 21, .78);
+      color: #d9e6e2;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+
+    .satellite-label i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(64, 201, 138, .13);
     }
 
     .compass {
@@ -684,7 +771,41 @@
       </section>
 
       <section class="section">
-        <h2>2. 온실 타입</h2>
+        <h2>2. 구축 방식</h2>
+        <div class="mode-switch" id="modeSwitch">
+          <button class="active" data-mode="existing">
+            <b>기존 온실</b>
+            <small>위성/도면 기준으로 외곽을 잡고 세부 치수 보정</small>
+          </button>
+          <button data-mode="new">
+            <b>신축 설계</b>
+            <small>치수, 연동 수, 베드 구성을 직접 생성</small>
+          </button>
+        </div>
+        <div class="satellite-panel" id="existingPanel">
+          <strong>위성/도면 기반 초기 배치</strong>
+          <button id="importSatellite" class="primary" type="button">주소 기반 배치 가져오기</button>
+          <div class="field">
+            <label for="siteImage">현장 도면/위성 캡처 업로드</label>
+            <input id="siteImage" type="file" accept="image/*" />
+          </div>
+          <div class="field">
+            <label for="satelliteOpacity">배경 투명도</label>
+            <div class="range-row">
+              <input id="satelliteOpacity" type="range" min="20" max="95" step="5" value="72" />
+              <input id="satelliteOpacityNumber" type="number" min="20" max="95" step="5" value="72" />
+            </div>
+          </div>
+          <p>실제 제품에서는 주소 좌표, 위성 이미지, 지적/도면 데이터를 불러온 뒤 외곽선만 관리자가 보정합니다.</p>
+        </div>
+        <div class="satellite-panel hidden" id="newPanel">
+          <strong>신축 온실 설계 시작</strong>
+          <p>위성 배경 없이 장축 방향, 길이, 폭, 연동 수, 베드 수를 입력해 기본 디지털 트윈을 생성합니다.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>3. 온실 타입</h2>
         <div class="type-grid" id="typeGrid">
           <button class="type-card active" data-type="glass">
             <i>GL</i>
@@ -702,7 +823,7 @@
       </section>
 
       <section class="section">
-        <h2>3. 방향과 치수</h2>
+        <h2>4. 방향과 치수</h2>
         <div class="field">
           <label>장축 방향</label>
           <div class="segmented" id="axisButtons">
@@ -742,7 +863,7 @@
       </section>
 
       <section class="section">
-        <h2>4. 장비 배치 도구</h2>
+        <h2>5. 장비 배치 도구</h2>
         <div class="tool-grid" id="toolGrid">
           <button class="active" data-tool="select"><b>↖</b>선택</button>
           <button data-tool="air"><b>A</b>Air</button>
@@ -770,10 +891,12 @@
         </div>
 
         <div class="stage" id="stage">
+          <div class="satellite-layer" id="satelliteLayer" aria-hidden="true"></div>
           <div class="stage-note">
-            <b>관리자 설정 기준</b>
-            온실 장축 방향과 북쪽 보정값을 먼저 정하고, 센서와 작동기를 실제 현장 위치에 맞춰 배치합니다.
+            <b id="stageNoteTitle">위성 기반 초기 배치</b>
+            <span id="stageNoteBody">주소로 위성/도면 레이어를 먼저 깔고, 온실 외곽과 치수만 관리자가 보정합니다.</span>
           </div>
+          <div class="satellite-label" id="satelliteLabel"><i></i><span>위성 기준 후보 구역 · 관리자 보정 필요</span></div>
           <div class="compass" aria-label="방위 표시">
             <span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">W</span>
             <i class="compass-arrow" id="compassArrow"></i>
@@ -828,9 +951,12 @@
 
   <script>
     const state = {
+      projectMode: "existing",
       greenhouseType: "glass",
       axis: "NS",
       northRotation: 0,
+      satelliteOpacity: 72,
+      customMapImage: "",
       selectedId: "air-1",
       activeTool: "select",
       markers: []
@@ -869,6 +995,12 @@
       bedCount: document.getElementById("bedCount"),
       northRotation: document.getElementById("northRotation"),
       northNumber: document.getElementById("northNumber"),
+      satelliteOpacity: document.getElementById("satelliteOpacity"),
+      satelliteOpacityNumber: document.getElementById("satelliteOpacityNumber"),
+      existingPanel: document.getElementById("existingPanel"),
+      newPanel: document.getElementById("newPanel"),
+      satelliteLayer: document.getElementById("satelliteLayer"),
+      satelliteLabel: document.getElementById("satelliteLabel"),
       stage: document.getElementById("stage"),
       stageSvg: document.getElementById("stageSvg"),
       bedsLayer: document.getElementById("bedsLayer"),
@@ -896,6 +1028,64 @@
 
     function totalRotation() {
       return axisAngle() + state.northRotation;
+    }
+
+    function renderSatelliteLayer() {
+      el.satelliteLayer.style.setProperty("--satellite-opacity", state.projectMode === "existing" ? state.satelliteOpacity / 100 : 0);
+      el.satelliteLabel.classList.toggle("hidden", state.projectMode !== "existing");
+
+      if (state.projectMode !== "existing") {
+        el.satelliteLayer.style.backgroundImage = "";
+        el.satelliteLayer.innerHTML = `
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+            <rect width="100" height="100" fill="#151a1d"/>
+            <g stroke="rgba(255,255,255,.06)" stroke-width=".25">
+              ${Array.from({ length: 14 }, (_, i) => `<line x1="${i * 8}" y1="0" x2="${i * 8}" y2="100"/>`).join("")}
+              ${Array.from({ length: 12 }, (_, i) => `<line x1="0" y1="${i * 9}" x2="100" y2="${i * 9}"/>`).join("")}
+            </g>
+          </svg>
+        `;
+        return;
+      }
+
+      if (state.customMapImage) {
+        el.satelliteLayer.innerHTML = "";
+        el.satelliteLayer.style.backgroundImage = `url("${state.customMapImage}")`;
+        return;
+      }
+
+      el.satelliteLayer.style.backgroundImage = "";
+      el.satelliteLayer.innerHTML = `
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="fieldA" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#43533d"/>
+              <stop offset=".55" stop-color="#29372d"/>
+              <stop offset="1" stop-color="#596345"/>
+            </linearGradient>
+            <linearGradient id="roofA" x1="0" x2="1">
+              <stop offset="0" stop-color="#d8e7e1" stop-opacity=".82"/>
+              <stop offset=".52" stop-color="#91bdb8" stop-opacity=".52"/>
+              <stop offset="1" stop-color="#f0f5ed" stop-opacity=".72"/>
+            </linearGradient>
+          </defs>
+          <rect width="100" height="100" fill="url(#fieldA)"/>
+          <path d="M-10 78 L112 22" stroke="#5b5944" stroke-width="7" opacity=".55"/>
+          <path d="M-8 80 L112 24" stroke="#9f986c" stroke-width=".8" opacity=".65"/>
+          <g opacity=".58">
+            <rect x="4" y="12" width="26" height="15" fill="#6d7b51"/>
+            <rect x="7" y="31" width="22" height="18" fill="#3f593d"/>
+            <rect x="72" y="8" width="22" height="23" fill="#51623f"/>
+            <rect x="69" y="67" width="28" height="20" fill="#394932"/>
+          </g>
+          <g transform="rotate(${totalRotation()} 50 49)">
+            <rect x="12" y="18" width="76" height="62" rx="4" fill="url(#roofA)" stroke="#eef8f4" stroke-width=".35" opacity=".82"/>
+            ${Array.from({ length: 6 }, (_, i) => `<line x1="${22 + i * 10}" y1="18" x2="${22 + i * 10}" y2="80" stroke="#f8fff9" stroke-width=".18" opacity=".55"/>`).join("")}
+            ${Array.from({ length: 4 }, (_, i) => `<line x1="12" y1="${31 + i * 11}" x2="88" y2="${31 + i * 11}" stroke="#7fb7ad" stroke-width=".18" opacity=".38"/>`).join("")}
+          </g>
+          <path d="M6 90 C20 86, 24 82, 41 83 C55 84, 67 91, 96 86" fill="none" stroke="#232b26" stroke-width="3" opacity=".65"/>
+        </svg>
+      `;
     }
 
     function initialMarkers() {
@@ -1072,6 +1262,8 @@
         },
         greenhouse: {
           name: el.houseName.value,
+          projectMode: state.projectMode,
+          projectModeLabel: state.projectMode === "existing" ? "기존 온실 위성/도면 기반" : "신축 온실 설계 기반",
           crop: el.crop.value,
           type: state.greenhouseType,
           typeLabel: typeNames[state.greenhouseType],
@@ -1082,6 +1274,12 @@
           widthM: num(el.widthM, 8),
           spanCount: num(el.spanCount, 4),
           bedCount: num(el.bedCount, 4)
+        },
+        baseLayer: {
+          source: state.projectMode === "existing" ? (state.customMapImage ? "uploaded-image" : "satellite-address-candidate") : "design-grid",
+          opacity: state.projectMode === "existing" ? state.satelliteOpacity : 0,
+          addressMatched: state.projectMode === "existing",
+          requiresFieldCalibration: true
         },
         digitalTwinLayers: {
           spatial: true,
@@ -1114,6 +1312,9 @@
       const width = num(el.widthM, 8);
       const data = payload();
       document.getElementById("stageTitle").textContent = `${el.farmName.value} ${el.houseName.value} 관리자 배치`;
+      document.getElementById("stageDesc").textContent = state.projectMode === "existing"
+        ? "위성/도면에서 가져온 기존 온실 배치를 기준으로 외곽, 치수, 센서/작동기 위치를 보정합니다."
+        : "신축 온실의 설계 치수와 방향을 기준으로 공간 디지털 트윈을 새로 생성합니다.";
       document.getElementById("areaMetric").textContent = `${Math.round(length * width).toLocaleString()}㎡`;
       document.getElementById("sizeMetric").textContent = `${length}m × ${width}m`;
       document.getElementById("axisMetric").textContent = axisNames[state.axis];
@@ -1130,6 +1331,7 @@
     }
 
     function render() {
+      renderSatelliteLayer();
       renderFootprint();
       renderBeds();
       renderMarkers();
@@ -1153,6 +1355,46 @@
         el.spanCount.value = 4;
         el.widthM.value = 8;
       }
+      render();
+    });
+
+    document.getElementById("modeSwitch").addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      state.projectMode = button.dataset.mode;
+      document.querySelectorAll("#modeSwitch button").forEach(item => item.classList.toggle("active", item === button));
+      el.existingPanel.classList.toggle("hidden", state.projectMode !== "existing");
+      el.newPanel.classList.toggle("hidden", state.projectMode !== "new");
+      document.getElementById("stageNoteTitle").textContent = state.projectMode === "existing" ? "위성 기반 초기 배치" : "신축 온실 설계 모드";
+      document.getElementById("stageNoteBody").textContent = state.projectMode === "existing"
+        ? "주소로 위성/도면 레이어를 먼저 깔고, 온실 외곽과 치수만 관리자가 보정합니다."
+        : "위성 배경 없이 설계 치수와 베드/장비 구성을 직접 생성합니다.";
+      render();
+    });
+
+    document.getElementById("importSatellite").addEventListener("click", () => {
+      state.projectMode = "existing";
+      state.customMapImage = "";
+      el.lengthM.value = 72;
+      el.widthM.value = 8;
+      el.spanCount.value = 4;
+      el.bedCount.value = 4;
+      state.axis = "NE";
+      document.querySelectorAll("#axisButtons button").forEach(item => item.classList.toggle("active", item.dataset.axis === "NE"));
+      state.northRotation = -15;
+      el.northRotation.value = state.northRotation;
+      el.northNumber.value = state.northRotation;
+      render();
+    });
+
+    document.getElementById("siteImage").addEventListener("change", event => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      state.customMapImage = URL.createObjectURL(file);
+      state.projectMode = "existing";
+      document.querySelectorAll("#modeSwitch button").forEach(item => item.classList.toggle("active", item.dataset.mode === "existing"));
+      el.existingPanel.classList.remove("hidden");
+      el.newPanel.classList.add("hidden");
       render();
     });
 
@@ -1187,6 +1429,18 @@
     el.northNumber.addEventListener("input", () => {
       state.northRotation = clamp(Number(el.northNumber.value) || 0, -180, 180);
       el.northRotation.value = state.northRotation;
+      render();
+    });
+
+    el.satelliteOpacity.addEventListener("input", () => {
+      state.satelliteOpacity = Number(el.satelliteOpacity.value);
+      el.satelliteOpacityNumber.value = state.satelliteOpacity;
+      render();
+    });
+
+    el.satelliteOpacityNumber.addEventListener("input", () => {
+      state.satelliteOpacity = clamp(Number(el.satelliteOpacityNumber.value) || 72, 20, 95);
+      el.satelliteOpacity.value = state.satelliteOpacity;
       render();
     });
 
