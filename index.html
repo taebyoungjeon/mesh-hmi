@@ -588,7 +588,7 @@
     </div>
 
     <header class="top">
-      <div class="farm-name">루트스퀘어</div>
+      <div class="farm-name" id="farmName">루트스퀘어</div>
       <div class="top-icons" aria-hidden="true">
         <span>▤</span>
         <span>●</span>
@@ -603,7 +603,7 @@
         <button class="arrow" aria-label="다음 온실">›</button>
       </div>
 
-      <nav class="dong-tabs" aria-label="온실 동 선택">
+      <nav class="dong-tabs" id="dongTabs" aria-label="온실 동 선택">
         <button class="dong-tab active" data-dong="0"><i></i>1동<br />토마토</button>
         <button class="dong-tab" data-dong="1"><i></i>2동<br />딸기</button>
         <button class="dong-tab warn" data-dong="2"><i></i>3동<br />파프리카</button>
@@ -621,7 +621,7 @@
       <section class="plan-card">
         <div class="plan-title">
           <span id="planTitle">1동 평면도</span>
-          <span>72m × 8m</span>
+          <span id="planSize">72m × 8m</span>
         </div>
         <div class="hmi-stack">
           <div class="view-panel three-panel">
@@ -651,48 +651,16 @@
           </div>
           <div class="view-panel plan-wrap">
             <span class="view-label">평면도</span>
-            <svg class="plan" viewBox="0 0 460 230" aria-label="온실 평면도">
-              <defs>
-                <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#31554c" flood-opacity=".12"/>
-                </filter>
-              </defs>
-
-              <rect x="18" y="34" width="424" height="160" rx="8" fill="#f6fcf9" stroke="#9dccbe" stroke-width="2.2" filter="url(#softShadow)"/>
-              <text x="230" y="24" text-anchor="middle" class="svg-label">72m</text>
-              <text x="454" y="118" class="svg-label" transform="rotate(90 454 118)">8m</text>
-
-              <rect x="40" y="55" width="382" height="21" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.4"/>
-              <rect x="40" y="90" width="382" height="21" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.4"/>
-              <rect x="40" y="125" width="382" height="21" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.4"/>
-              <rect x="40" y="160" width="382" height="21" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.4"/>
-              <text x="231" y="69" text-anchor="middle" class="svg-bed-label">베드 1열</text>
-              <text x="231" y="104" text-anchor="middle" class="svg-bed-label">베드 2열</text>
-              <text x="231" y="139" text-anchor="middle" class="svg-bed-label">베드 3열</text>
-              <text x="231" y="174" text-anchor="middle" class="svg-bed-label">베드 4열</text>
-
-              <circle id="airMarker1" cx="124" cy="41" r="11" fill="#4f92e8"/>
-              <text x="124" y="45" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">Air</text>
-              <circle id="airMarker2" cx="320" cy="41" r="11" fill="#4f92e8"/>
-              <text x="320" y="45" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">Air</text>
-              <circle id="heatMarker" cx="60" cy="199" r="11" fill="#de6f6f"/>
-              <text x="60" y="203" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">H</text>
-              <circle id="lightMarker" cx="230" cy="199" r="11" fill="#eba82f"/>
-              <text x="230" y="203" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">L</text>
-              <circle id="sunMarker" cx="372" cy="41" r="11" fill="#8a70e0"/>
-              <text x="372" y="45" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">S</text>
-              <circle id="fanMarker" cx="398" cy="199" r="11" fill="#36a8d6"/>
-              <text x="398" y="203" font-size="8" fill="#fff" text-anchor="middle" font-weight="800">F</text>
-            </svg>
+            <svg class="plan" id="floorPlanSvg" viewBox="0 0 460 230" aria-label="온실 평면도"></svg>
           </div>
         </div>
         <div class="legend">
           <span><i style="background:var(--blue)"></i>Air 센서</span>
-          <span><i style="background:var(--red)"></i>난방</span>
-          <span><i style="background:var(--yellow)"></i>조명</span>
-          <span><i style="background:var(--violet)"></i>일사</span>
-          <span><i style="background:var(--sky)"></i>순환팬</span>
-          <span><i style="background:var(--green)"></i>환기창</span>
+          <span><i style="background:var(--sky)"></i>CO₂ 센서</span>
+          <span><i style="background:var(--green)"></i>FR 제어</span>
+          <span><i style="background:var(--yellow)"></i>SW 제어</span>
+          <span><i style="background:var(--violet)"></i>MESH Hub</span>
+          <span><i style="background:#9aa8a3"></i>출입문</span>
         </div>
       </section>
 
@@ -717,59 +685,64 @@
   </main>
 
   <script>
-    const dongs = [
-      {
-        name: "1동 평면도",
+    const STORAGE_KEY = "meshHmiLayoutV1";
+    const fallbackLayout = {
+      farm: { name: "루트스퀘어", address: "충북 진천군 이월면 진광로 928-29" },
+      greenhouse: {
+        name: "1동",
         crop: "토마토",
-        status: "정상",
-        tone: "ok",
-        temp: "24.3℃",
-        hum: "67%",
-        co2: "820ppm",
-        light: "312W/m²",
-        alertTitle: "정상 운영 중",
-        alertBody: "모든 센서값이 정상 범위입니다. 현재 설정을 유지하세요."
+        type: "glass",
+        typeLabel: "Venlo 유리온실",
+        axis: "NS",
+        axisLabel: "남북",
+        northRotationDeg: 0,
+        lengthM: 72,
+        widthM: 32,
+        dongCount: 1,
+        dongGapM: 4,
+        spanCount: 4,
+        bedCount: 4,
+        layout: { xPercent: 50, yPercent: 50, rotationDeg: 0 }
       },
-      {
-        name: "2동 평면도",
-        crop: "딸기",
-        status: "정상",
-        tone: "ok",
-        temp: "22.1℃",
-        hum: "71%",
-        co2: "780ppm",
-        light: "298W/m²",
-        alertTitle: "야간 환경 안정",
-        alertBody: "딸기 생육 구간의 온습도 균형이 안정적입니다."
-      },
-      {
-        name: "3동 평면도",
-        crop: "파프리카",
-        status: "주의",
-        tone: "warn",
-        temp: "28.7℃",
-        hum: "82%",
-        co2: "1240ppm",
-        light: "180W/m²",
-        alertTitle: "주의 · 고온/고습 감지",
-        alertBody: "환기창 개방 또는 순환팬 가동을 확인하세요. CO₂도 목표 범위를 넘었습니다."
-      },
-      {
-        name: "4동 평면도",
-        crop: "상추",
-        status: "알람",
-        tone: "err",
-        temp: "—",
-        hum: "—",
-        co2: "—",
-        light: "—",
-        alertTitle: "알람 · 센서 통신 끊김",
-        alertBody: "Air 센서가 오프라인입니다. 현장 장치 전원과 Hub 연결 상태를 확인하세요."
-      }
-    ];
+      markers: [
+        { id: "air-1", type: "air", label: "Air Nano", category: "sensor", xPercent: 27, yPercent: 34 },
+        { id: "air-2", type: "air", label: "Air Nano", category: "sensor", xPercent: 67, yPercent: 31 },
+        { id: "co2-1", type: "co2", label: "CO₂ Node", category: "sensor", xPercent: 53, yPercent: 48 },
+        { id: "fr-1", type: "fr", label: "FR 제어 모듈", category: "actuator", xPercent: 42, yPercent: 18 },
+        { id: "fr-2", type: "fr", label: "FR 제어 모듈", category: "actuator", xPercent: 82, yPercent: 53 },
+        { id: "sw-1", type: "sw", label: "SW1p", category: "actuator", xPercent: 26, yPercent: 72 }
+      ],
+      summary: { sensors: 3, actuators: 3 }
+    };
 
-    const tabs = document.querySelectorAll(".dong-tab");
+    function readLayout() {
+      const params = new URLSearchParams(window.location.search);
+      const encodedLayout = params.get("layout");
+      if (encodedLayout) {
+        try {
+          const decoded = JSON.parse(decodeURIComponent(escape(atob(encodedLayout))));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(decoded));
+          return { ...fallbackLayout, ...decoded };
+        } catch (error) {
+          // Fall through to saved or default layout.
+        }
+      }
+
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? { ...fallbackLayout, ...JSON.parse(saved) } : fallbackLayout;
+      } catch (error) {
+        return fallbackLayout;
+      }
+    }
+
+    const layoutData = readLayout();
+    const greenhouse = layoutData.greenhouse || fallbackLayout.greenhouse;
+    const markers = Array.isArray(layoutData.markers) ? layoutData.markers : fallbackLayout.markers;
+    const dongCount = Math.max(1, Math.min(8, Number(greenhouse.dongCount) || 1));
+    const tabsWrap = document.getElementById("dongTabs");
     const planTitle = document.getElementById("planTitle");
+    const planSize = document.getElementById("planSize");
     const cropPill = document.getElementById("cropPill");
     const statusText = document.getElementById("statusText");
     const tempVal = document.getElementById("tempVal");
@@ -780,24 +753,159 @@
     const alertTitle = document.getElementById("alertTitle");
     const alertBody = document.getElementById("alertBody");
     const metricCards = document.querySelectorAll(".metric");
+    const floorPlanSvg = document.getElementById("floorPlanSvg");
 
     let scene3d;
     let camera3d;
     let renderer3d;
     let greenhouseGroup;
-    let orbit = { theta: 0.58, phi: 0.86, radius: 25 };
-    const hmiColors = [
-      { roof: "#7fcfba", frame: "#43b987" },
-      { roof: "#7fcfba", frame: "#43b987" },
-      { roof: "#f2c465", frame: "#d89420" },
-      { roof: "#ef9a9a", frame: "#d96c6c" }
-    ];
+    let selectedDong = 0;
+    let orbit = { theta: 0.58, phi: 0.86, radius: 26 };
 
-    function updateHmiTone(index) {
+    const markerMeta = {
+      air: { text: "Air", color: "#4f92e8", hex: 0x4f92e8 },
+      co2: { text: "CO₂", color: "#55c7d8", hex: 0x55c7d8 },
+      fr: { text: "FR", color: "#43b987", hex: 0x43b987 },
+      sw: { text: "SW", color: "#eba82f", hex: 0xeba82f },
+      hub: { text: "H", color: "#8a70e0", hex: 0x8a70e0 },
+      door: { text: "D", color: "#9aa8a3", hex: 0x9aa8a3 }
+    };
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function metricText() {
+      const length = Number(greenhouse.lengthM) || 72;
+      const width = Number(greenhouse.widthM) || 32;
+      const gap = Number(greenhouse.dongGapM) || 0;
+      const totalWidth = width * dongCount + gap * (dongCount - 1);
+      return dongCount > 1
+        ? `${length}m × ${width}m × ${dongCount}동 · 총 폭 ${Math.round(totalWidth)}m`
+        : `${length}m × ${width}m`;
+    }
+
+    function renderTabs() {
+      tabsWrap.innerHTML = Array.from({ length: dongCount }, (_, index) => {
+        const tone = index === 2 ? " warn" : "";
+        return `<button class="dong-tab${index === 0 ? " active" : ""}${tone}" data-dong="${index}"><i></i>${index + 1}동<br />${esc(greenhouse.crop || "작물")}</button>`;
+      }).join("");
+
+      tabsWrap.querySelectorAll(".dong-tab").forEach(tab => {
+        tab.addEventListener("click", () => selectDong(Number(tab.dataset.dong)));
+      });
+    }
+
+    function renderFloorPlan(index) {
+      const length = Number(greenhouse.lengthM) || 72;
+      const width = Number(greenhouse.widthM) || 32;
+      const gap = Number(greenhouse.dongGapM) || 0;
+      const bedCount = Math.max(1, Math.min(12, Number(greenhouse.bedCount) || 4));
+      const spanCount = greenhouse.type === "vinyl-single" ? 1 : Math.max(1, Math.min(12, Number(greenhouse.spanCount) || 4));
+      const totalWidthM = width * dongCount + gap * (dongCount - 1);
+      const left = 28;
+      const top = 36;
+      const maxW = 404;
+      const maxH = 154;
+      const scale = Math.min(maxW / Math.max(totalWidthM, 1), maxH / Math.max(length, 1));
+      const dongW = Math.max(width * scale, 13);
+      const dongH = Math.max(length * scale, 54);
+      const gapW = gap * scale;
+      const totalW = dongW * dongCount + gapW * (dongCount - 1);
+      const x0 = left + (maxW - totalW) / 2;
+      const y0 = top + (maxH - dongH) / 2;
+      const selectedX = x0 + index * (dongW + gapW);
+
+      let html = `
+        <defs>
+          <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#31554c" flood-opacity=".12"/>
+          </filter>
+        </defs>
+        <text x="230" y="24" text-anchor="middle" class="svg-label">${esc(length)}m</text>
+        <text x="454" y="118" class="svg-label" transform="rotate(90 454 118)">총 폭 ${esc(Math.round(totalWidthM))}m</text>
+      `;
+
+      for (let d = 0; d < dongCount; d += 1) {
+        const x = x0 + d * (dongW + gapW);
+        const isSelected = d === index;
+        const rx = greenhouse.type === "glass" ? 8 : Math.min(18, dongW / 2);
+        html += `<rect x="${x}" y="${y0}" width="${dongW}" height="${dongH}" rx="${rx}" fill="${isSelected ? "#f0fbf6" : "#f8fcfa"}" stroke="${isSelected ? "#43b987" : "#9dccbe"}" stroke-width="${isSelected ? 2.6 : 1.4}" filter="url(#softShadow)"/>`;
+
+        for (let s = 1; s < spanCount; s += 1) {
+          const sx = x + dongW * s / spanCount;
+          html += `<line x1="${sx}" y1="${y0 + 8}" x2="${sx}" y2="${y0 + dongH - 8}" stroke="#8bbcad" stroke-width=".8" opacity=".52"/>`;
+        }
+
+        const bedInsetX = Math.max(dongW * .12, 5);
+        const bedW = Math.max(dongW - bedInsetX * 2, 7);
+        const bedH = Math.max(Math.min(dongH / (bedCount * 2.6), 13), 5);
+        const usableH = dongH * .70;
+        const firstBedY = y0 + dongH * .18;
+        for (let b = 0; b < bedCount; b += 1) {
+          const by = bedCount === 1 ? y0 + dongH / 2 - bedH / 2 : firstBedY + (usableH / (bedCount - 1)) * b - bedH / 2;
+          html += `<rect x="${x + bedInsetX}" y="${by}" width="${bedW}" height="${bedH}" rx="5" fill="#dff4e9" stroke="#43b987" stroke-width="1.2"/>`;
+        }
+
+        html += `<text x="${x + dongW / 2}" y="${y0 + dongH / 2 + 4}" text-anchor="middle" class="svg-bed-label">${d + 1}동</text>`;
+      }
+
+      markers.forEach(marker => {
+        const meta = markerMeta[marker.type] || markerMeta.air;
+        const mx = selectedX + Math.max(0, Math.min(100, Number(marker.xPercent) || 50)) / 100 * dongW;
+        const my = y0 + Math.max(0, Math.min(100, Number(marker.yPercent) || 50)) / 100 * dongH;
+        html += `
+          <circle cx="${mx}" cy="${my}" r="10.5" fill="${meta.color}"/>
+          <text x="${mx}" y="${my + 3}" font-size="7.5" fill="#fff" text-anchor="middle" font-weight="850">${meta.text}</text>
+        `;
+      });
+
+      floorPlanSvg.innerHTML = html;
+    }
+
+    function updateStatus(index) {
+      const sensorCount = markers.filter(marker => marker.category === "sensor").length;
+      const actuatorCount = markers.filter(marker => marker.category === "actuator").length;
+      const status = index === 2 && dongCount > 2 ? "주의" : "정상";
+      const tone = status === "정상" ? "ok" : "warn";
+      planTitle.textContent = dongCount > 1 ? `${index + 1}동 평면도` : `${greenhouse.name || "1동"} 평면도`;
+      planSize.textContent = metricText();
+      cropPill.textContent = greenhouse.crop || "작물";
+      statusText.textContent = status;
+      tempVal.textContent = index === 2 && dongCount > 2 ? "28.7℃" : "24.3℃";
+      humVal.textContent = index === 2 && dongCount > 2 ? "82%" : "67%";
+      co2Val.textContent = index === 2 && dongCount > 2 ? "1240ppm" : "820ppm";
+      lightVal.textContent = "312W/m²";
+      alertTitle.textContent = status === "정상" ? "정상 운영 중" : "주의 · 환경 편차 감지";
+      alertBody.textContent = status === "정상"
+        ? `${greenhouse.typeLabel || "온실"} ${sensorCount}개 센서와 ${actuatorCount}개 작동기 배치가 반영되었습니다.`
+        : "선택한 동의 온습도 편차가 큽니다. 환기창 개방 또는 순환팬 가동을 확인하세요.";
+      alertBox.className = `alert ${tone === "ok" ? "" : tone}`.trim();
+      metricCards.forEach(card => {
+        card.classList.remove("warn", "err");
+        if (tone !== "ok") card.classList.add(tone);
+      });
+    }
+
+    function selectDong(index) {
+      selectedDong = Math.max(0, Math.min(dongCount - 1, index));
+      tabsWrap.querySelectorAll(".dong-tab").forEach((tab, tabIndex) => tab.classList.toggle("active", tabIndex === selectedDong));
+      updateStatus(selectedDong);
+      renderFloorPlan(selectedDong);
+      buildGreenhouse3d(selectedDong);
+    }
+
+    function updateHmiTone() {
       const panel = document.querySelector(".three-panel");
-      const color = hmiColors[index] || hmiColors[0];
-      panel.style.setProperty("--hmi-roof", color.roof);
-      panel.style.setProperty("--hmi-frame", color.frame);
+      const isVinyl = greenhouse.type !== "glass";
+      panel.style.setProperty("--hmi-roof", isVinyl ? "#95dcca" : "#7fcfba");
+      panel.style.setProperty("--hmi-frame", isVinyl ? "#37b98a" : "#43b987");
     }
 
     function loadThreeScene() {
@@ -821,15 +929,14 @@
         if (fallback) fallback.style.display = "flex";
         return;
       }
+
       renderer3d.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer3d.setClearColor(0xf5fbf8, 1);
-      renderer3d.autoClear = true;
       renderer3d.shadowMap.enabled = true;
-
       scene3d = new THREE.Scene();
       camera3d = new THREE.PerspectiveCamera(42, 1, 0.1, 120);
-
       scene3d.add(new THREE.AmbientLight(0xffffff, 0.86));
+
       const sun = new THREE.DirectionalLight(0xfff3dc, 1.05);
       sun.position.set(14, 22, 18);
       sun.castShadow = true;
@@ -838,15 +945,23 @@
       fill.position.set(-14, 8, -10);
       scene3d.add(fill);
 
+      const length = Number(greenhouse.lengthM) || 72;
+      const width = Number(greenhouse.widthM) || 32;
+      const gap = Number(greenhouse.dongGapM) || 0;
+      const totalWidthM = width * dongCount + gap * (dongCount - 1);
+      const scale = Math.min(20 / Math.max(length, 1), 15 / Math.max(totalWidthM, 1));
+      const sceneLength = Math.max(length * scale, 8);
+      const sceneWidth = Math.max(totalWidthM * scale, 5);
+
       const ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(42, 32),
+        new THREE.PlaneGeometry(sceneWidth + 4, sceneLength + 4),
         new THREE.MeshLambertMaterial({ color: 0xeaf3ed })
       );
       ground.rotation.x = -Math.PI / 2;
       ground.receiveShadow = true;
       scene3d.add(ground);
 
-      const grid = new THREE.GridHelper(42, 21, 0xbdd8cf, 0xdfece7);
+      const grid = new THREE.GridHelper(Math.max(sceneWidth, sceneLength) + 5, 20, 0xbdd8cf, 0xdfece7);
       grid.material.transparent = true;
       grid.material.opacity = 0.72;
       scene3d.add(grid);
@@ -855,11 +970,11 @@
       scene3d.add(greenhouseGroup);
 
       function resize3d() {
-        const width = panel.clientWidth;
-        const height = panel.clientHeight;
-        if (width < 1 || height < 1) return;
-        renderer3d.setSize(width, height, false);
-        camera3d.aspect = width / height;
+        const panelWidth = panel.clientWidth;
+        const panelHeight = panel.clientHeight;
+        if (panelWidth < 1 || panelHeight < 1) return;
+        renderer3d.setSize(panelWidth, panelHeight, false);
+        camera3d.aspect = panelWidth / panelHeight;
         camera3d.updateProjectionMatrix();
       }
 
@@ -869,96 +984,59 @@
           orbit.radius * Math.cos(orbit.phi),
           orbit.radius * Math.sin(orbit.phi) * Math.cos(orbit.theta)
         );
-        camera3d.lookAt(0, 1.8, 0);
+        camera3d.lookAt(0, 1.6, 0);
       }
 
       const pointers = new Map();
       let gesture = null;
       let pinchDistance = null;
-
-      function getPinchDistance() {
+      const getPinchDistance = () => {
         const points = Array.from(pointers.values());
-        if (points.length < 2) return null;
-        return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
-      }
+        return points.length < 2 ? null : Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+      };
 
-      canvas.addEventListener("touchstart", event => {
-        event.preventDefault();
-      }, { passive: false });
-
-      canvas.addEventListener("touchmove", event => {
-        event.preventDefault();
-      }, { passive: false });
-
+      canvas.addEventListener("touchstart", event => event.preventDefault(), { passive: false });
+      canvas.addEventListener("touchmove", event => event.preventDefault(), { passive: false });
       canvas.addEventListener("pointerdown", event => {
         canvas.setPointerCapture(event.pointerId);
-        pointers.set(event.pointerId, {
-          x: event.clientX,
-          y: event.clientY,
-          startX: event.clientX,
-          startY: event.clientY
-        });
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
         gesture = pointers.size > 1 ? "pinch" : "rotate";
         pinchDistance = getPinchDistance();
         event.preventDefault();
       }, { passive: false });
-
       canvas.addEventListener("pointermove", event => {
         const previous = pointers.get(event.pointerId);
         if (!previous) return;
-
-        const next = {
-          x: event.clientX,
-          y: event.clientY,
-          startX: previous.startX,
-          startY: previous.startY
-        };
-        pointers.set(event.pointerId, next);
-
+        pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
         if (pointers.size > 1) {
-          gesture = "pinch";
           const distance = getPinchDistance();
-          if (pinchDistance !== null && distance !== null) {
-            orbit.radius = Math.max(12, Math.min(42, orbit.radius - (distance - pinchDistance) * 0.045));
-            updateCamera();
-          }
+          if (pinchDistance !== null && distance !== null) orbit.radius = Math.max(12, Math.min(42, orbit.radius - (distance - pinchDistance) * .045));
           pinchDistance = distance;
-          event.preventDefault();
-          return;
+        } else if (gesture === "rotate") {
+          orbit.theta -= (event.clientX - previous.x) * .008;
+          orbit.phi = Math.max(.22, Math.min(1.34, orbit.phi + (event.clientY - previous.y) * .006));
         }
-
-        if (gesture === "rotate") {
-          const dx = event.clientX - previous.x;
-          const dy = event.clientY - previous.y;
-          orbit.theta -= dx * 0.008;
-          orbit.phi = Math.max(0.22, Math.min(1.34, orbit.phi + dy * 0.006));
-          updateCamera();
-          event.preventDefault();
-        }
+        updateCamera();
+        event.preventDefault();
       }, { passive: false });
-
-      function endPointer(event) {
+      const endPointer = event => {
         pointers.delete(event.pointerId);
         if (pointers.size < 2) pinchDistance = null;
         if (pointers.size === 0) gesture = null;
-      }
-
+      };
       canvas.addEventListener("pointerup", endPointer);
       canvas.addEventListener("pointercancel", endPointer);
-      canvas.addEventListener("pointerleave", event => {
-        if (event.pointerType === "mouse") endPointer(event);
-      });
-
       canvas.addEventListener("wheel", event => {
-        orbit.radius = Math.max(12, Math.min(42, orbit.radius + event.deltaY * 0.03));
+        orbit.radius = Math.max(12, Math.min(42, orbit.radius + event.deltaY * .03));
         updateCamera();
         event.preventDefault();
       }, { passive: false });
 
+      orbit.radius = Math.max(20, Math.min(38, Math.max(sceneWidth, sceneLength) * 1.45));
       window.addEventListener("resize", resize3d);
       resize3d();
       updateCamera();
-      buildGreenhouse3d(0);
+      buildGreenhouse3d(selectedDong);
 
       function renderLoop() {
         requestAnimationFrame(renderLoop);
@@ -971,170 +1049,122 @@
       if (!window.THREE || !greenhouseGroup) return;
       while (greenhouseGroup.children.length) greenhouseGroup.remove(greenhouseGroup.children[0]);
 
-      const palette = [
-        { roof: 0x7fcfba, frame: 0x43b987 },
-        { roof: 0x7fcfba, frame: 0x43b987 },
-        { roof: 0xf2c465, frame: 0xd89420 },
-        { roof: 0xef9a9a, frame: 0xd96c6c }
-      ][index] || { roof: 0x7fcfba, frame: 0x43b987 };
+      const lengthM = Number(greenhouse.lengthM) || 72;
+      const widthM = Number(greenhouse.widthM) || 32;
+      const gapM = Number(greenhouse.dongGapM) || 0;
+      const totalWidthM = widthM * dongCount + gapM * (dongCount - 1);
+      const scale = Math.min(20 / Math.max(lengthM, 1), 15 / Math.max(totalWidthM, 1));
+      const length = Math.max(lengthM * scale, 8);
+      const dongW = Math.max(widthM * scale, greenhouse.type === "vinyl-single" ? 1.8 : 3);
+      const gap = gapM * scale;
+      const totalWidth = dongW * dongCount + gap * (dongCount - 1);
+      const spanCount = greenhouse.type === "vinyl-single" ? 1 : Math.max(1, Math.min(8, Number(greenhouse.spanCount) || 4));
+      const bedCount = Math.max(1, Math.min(8, Number(greenhouse.bedCount) || 4));
+      const sideHeight = greenhouse.type === "glass" ? 2.25 : 1.9;
+      const roofHeight = greenhouse.type === "glass" ? 1.15 : 1.35;
+      const frameColor = 0x43b987;
+      const roofColor = greenhouse.type === "glass" ? 0x7fcfba : 0x95dcca;
 
-      const spans = 4;
-      const spanWidth = 2.85;
-      const totalWidth = spans * spanWidth;
-      const length = 16;
-      const sideHeight = 2.15;
-      const roofHeight = 1.45;
-      const segments = 18;
+      const roofMaterial = new THREE.MeshLambertMaterial({ color: roofColor, transparent: true, opacity: .32, side: THREE.DoubleSide, depthWrite: false });
+      const frameMaterial = new THREE.LineBasicMaterial({ color: frameColor, transparent: true, opacity: .76 });
+      const columnMaterial = new THREE.MeshLambertMaterial({ color: frameColor });
 
-      const floor = new THREE.Mesh(
-        new THREE.BoxGeometry(totalWidth + 0.7, 0.12, length + 0.8),
-        new THREE.MeshLambertMaterial({ color: 0xd9c89a })
-      );
-      floor.position.y = 0.05;
-      floor.receiveShadow = true;
-      greenhouseGroup.add(floor);
-
-      const bedColors = [0x2f8f55, 0x3ca35f, 0x55ad69, 0x72b86d];
-      for (let i = 0; i < 4; i += 1) {
-        const bed = new THREE.Mesh(
-          new THREE.BoxGeometry(totalWidth - 2.1, 0.24, 1.05),
-          new THREE.MeshLambertMaterial({ color: bedColors[i] })
+      for (let d = 0; d < dongCount; d += 1) {
+        const baseX = -totalWidth / 2 + d * (dongW + gap) + dongW / 2;
+        const isSelected = d === index;
+        const floor = new THREE.Mesh(
+          new THREE.BoxGeometry(dongW + .35, .12, length + .55),
+          new THREE.MeshLambertMaterial({ color: isSelected ? 0xd9c89a : 0xe5dcc1 })
         );
-        bed.position.set(0, 0.28, -5.25 + i * 3.5);
-        bed.castShadow = true;
-        greenhouseGroup.add(bed);
-      }
+        floor.position.set(baseX, .05, 0);
+        floor.receiveShadow = true;
+        greenhouseGroup.add(floor);
 
-      const roofMaterial = new THREE.MeshLambertMaterial({
-        color: palette.roof,
-        transparent: true,
-        opacity: 0.32,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      });
-      const frameMaterial = new THREE.LineBasicMaterial({ color: palette.frame });
-      const softFrameMaterial = new THREE.LineBasicMaterial({
-        color: palette.frame,
-        transparent: true,
-        opacity: 0.58
-      });
-
-      for (let span = 0; span < spans; span += 1) {
-        const centerX = -totalWidth / 2 + span * spanWidth + spanWidth / 2;
-        const shape = new THREE.Shape();
-        shape.moveTo(-spanWidth / 2, sideHeight);
-        for (let i = 0; i <= segments; i += 1) {
-          const angle = Math.PI * i / segments;
-          shape.lineTo(
-            -spanWidth / 2 + (1 - Math.cos(angle)) * spanWidth / 2,
-            sideHeight + Math.sin(angle) * roofHeight
+        for (let b = 0; b < bedCount; b += 1) {
+          const bed = new THREE.Mesh(
+            new THREE.BoxGeometry(Math.max(dongW - .9, .8), .22, Math.max(length / (bedCount * 2.4), .65)),
+            new THREE.MeshLambertMaterial({ color: [0x2f8f55, 0x3ca35f, 0x55ad69, 0x72b86d][b % 4] })
           );
+          bed.position.set(baseX, .28, -length * .34 + b * (length * .68 / Math.max(1, bedCount - 1)));
+          bed.castShadow = true;
+          greenhouseGroup.add(bed);
         }
-        shape.lineTo(spanWidth / 2, 0);
-        shape.lineTo(-spanWidth / 2, 0);
-        shape.closePath();
 
-        const roof = new THREE.Mesh(
-          new THREE.ExtrudeGeometry(shape, { depth: length, bevelEnabled: false }),
-          roofMaterial
-        );
-        roof.position.set(centerX, 0, -length / 2);
-        greenhouseGroup.add(roof);
-
-        for (let z = -length / 2; z <= length / 2 + 0.01; z += 2.65) {
-          const points = [];
-          for (let i = 0; i <= segments; i += 1) {
-            const angle = Math.PI * i / segments;
-            points.push(new THREE.Vector3(
-              centerX - spanWidth / 2 + (1 - Math.cos(angle)) * spanWidth / 2,
-              sideHeight + Math.sin(angle) * roofHeight,
-              z
-            ));
+        for (let span = 0; span < spanCount; span += 1) {
+          const spanW = dongW / spanCount;
+          const spanX = baseX - dongW / 2 + spanW * span + spanW / 2;
+          const shape = new THREE.Shape();
+          if (greenhouse.type === "glass") {
+            shape.moveTo(-spanW / 2, 0);
+            shape.lineTo(-spanW / 2, sideHeight);
+            shape.lineTo(0, sideHeight + roofHeight);
+            shape.lineTo(spanW / 2, sideHeight);
+            shape.lineTo(spanW / 2, 0);
+          } else {
+            const segments = 16;
+            shape.moveTo(-spanW / 2, 0);
+            shape.lineTo(-spanW / 2, sideHeight);
+            for (let i = 0; i <= segments; i += 1) {
+              const angle = Math.PI * i / segments;
+              shape.lineTo(-spanW / 2 + (1 - Math.cos(angle)) * spanW / 2, sideHeight + Math.sin(angle) * roofHeight);
+            }
+            shape.lineTo(spanW / 2, 0);
           }
-          greenhouseGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), frameMaterial));
+          shape.closePath();
+
+          const roof = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: length, bevelEnabled: false }), roofMaterial);
+          roof.position.set(spanX, 0, -length / 2);
+          greenhouseGroup.add(roof);
+
+          for (let z = -length / 2; z <= length / 2 + .01; z += Math.max(length / 7, 1.8)) {
+            const points = greenhouse.type === "glass"
+              ? [
+                  new THREE.Vector3(spanX - spanW / 2, sideHeight, z),
+                  new THREE.Vector3(spanX, sideHeight + roofHeight, z),
+                  new THREE.Vector3(spanX + spanW / 2, sideHeight, z)
+                ]
+              : Array.from({ length: 17 }, (_, i) => {
+                  const angle = Math.PI * i / 16;
+                  return new THREE.Vector3(spanX - spanW / 2 + (1 - Math.cos(angle)) * spanW / 2, sideHeight + Math.sin(angle) * roofHeight, z);
+                });
+            greenhouseGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), frameMaterial));
+          }
         }
 
-        greenhouseGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-          new THREE.Vector3(centerX, sideHeight + roofHeight, -length / 2),
-          new THREE.Vector3(centerX, sideHeight + roofHeight, length / 2)
-        ]), softFrameMaterial));
+        for (let s = 0; s <= spanCount; s += 1) {
+          const x = baseX - dongW / 2 + s * dongW / spanCount;
+          [-length / 2, 0, length / 2].forEach(z => {
+            const column = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, sideHeight, 8), columnMaterial);
+            column.position.set(x, sideHeight / 2, z);
+            column.castShadow = true;
+            greenhouseGroup.add(column);
+          });
+        }
       }
 
-      const columnMaterial = new THREE.MeshLambertMaterial({ color: palette.frame });
-      for (let i = 0; i <= spans; i += 1) {
-        const x = -totalWidth / 2 + i * spanWidth;
-        [-length / 2, 0, length / 2].forEach(z => {
-          const column = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, sideHeight, 8), columnMaterial);
-          column.position.set(x, sideHeight / 2, z);
-          column.castShadow = true;
-          greenhouseGroup.add(column);
-        });
-      }
-
-      const wallMaterial = new THREE.MeshLambertMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.22,
-        side: THREE.DoubleSide
-      });
-      [-length / 2, length / 2].forEach(z => {
-        const wall = new THREE.Mesh(new THREE.BoxGeometry(totalWidth, sideHeight, 0.055), wallMaterial);
-        wall.position.set(0, sideHeight / 2, z);
-        greenhouseGroup.add(wall);
-      });
-
-      [
-        { x: -totalWidth / 2 + 2.2, y: 2.95, z: -4.7, color: 0x4f92e8 },
-        { x: totalWidth / 2 - 2.2, y: 2.95, z: 4.3, color: 0x4f92e8 },
-        { x: -totalWidth / 2 + 0.8, y: 0.78, z: length / 2 - 0.9, color: 0xde6f6f },
-        { x: 0, y: 0.78, z: -length / 2 + 0.9, color: 0xeba82f },
-        { x: totalWidth / 2 - 0.8, y: 2.75, z: -length / 2 + 1.0, color: 0x8a70e0 },
-        { x: totalWidth / 2 - 0.7, y: 0.9, z: length / 2 - 1.0, color: 0x36a8d6 }
-      ].forEach(marker => {
+      markers.forEach(marker => {
+        const meta = markerMeta[marker.type] || markerMeta.air;
+        const x = -totalWidth / 2 + Math.max(0, Math.min(100, Number(marker.xPercent) || 50)) / 100 * totalWidth;
+        const z = -length / 2 + Math.max(0, Math.min(100, Number(marker.yPercent) || 50)) / 100 * length;
+        const y = marker.category === "sensor" ? sideHeight + .65 : .78;
         const sphere = new THREE.Mesh(
-          new THREE.SphereGeometry(0.25, 18, 12),
-          new THREE.MeshLambertMaterial({
-            color: marker.color,
-            emissive: marker.color,
-            emissiveIntensity: 0.25
-          })
+          new THREE.SphereGeometry(.23, 18, 12),
+          new THREE.MeshLambertMaterial({ color: meta.hex, emissive: meta.hex, emissiveIntensity: .25 })
         );
-        sphere.position.set(marker.x, marker.y, marker.z);
+        sphere.position.set(x, y, z);
         sphere.castShadow = true;
         greenhouseGroup.add(sphere);
         greenhouseGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-          new THREE.Vector3(marker.x, 0.14, marker.z),
-          new THREE.Vector3(marker.x, marker.y - 0.25, marker.z)
-        ]), new THREE.LineBasicMaterial({ color: marker.color, transparent: true, opacity: 0.32 })));
+          new THREE.Vector3(x, .14, z),
+          new THREE.Vector3(x, y - .25, z)
+        ]), new THREE.LineBasicMaterial({ color: meta.hex, transparent: true, opacity: .32 })));
       });
     }
 
-    tabs.forEach(tab => {
-      tab.addEventListener("click", () => selectDong(Number(tab.dataset.dong)));
-    });
-
-    function selectDong(index) {
-      const dong = dongs[index];
-      tabs.forEach((tab, tabIndex) => tab.classList.toggle("active", tabIndex === index));
-      planTitle.textContent = dong.name;
-      cropPill.textContent = dong.crop;
-      statusText.textContent = dong.status;
-      tempVal.textContent = dong.temp;
-      humVal.textContent = dong.hum;
-      co2Val.textContent = dong.co2;
-      lightVal.textContent = dong.light;
-      alertTitle.textContent = dong.alertTitle;
-      alertBody.textContent = dong.alertBody;
-      alertBox.className = `alert ${dong.tone === "ok" ? "" : dong.tone}`.trim();
-      metricCards.forEach(card => {
-        card.classList.remove("warn", "err");
-        if (dong.tone !== "ok") card.classList.add(dong.tone);
-      });
-      updateHmiTone(index);
-      buildGreenhouse3d(index);
-    }
-
-    updateHmiTone(0);
+    document.getElementById("farmName").textContent = layoutData.farm?.name || "루트스퀘어";
+    renderTabs();
+    updateHmiTone();
+    selectDong(0);
     loadThreeScene();
   </script>
 </body>

@@ -951,6 +951,8 @@
   </div>
 
   <script>
+    const STORAGE_KEY = "meshHmiLayoutV1";
+
     const state = {
       projectMode: "existing",
       greenhouseType: "glass",
@@ -1268,7 +1270,18 @@
     }
 
     function renderJson() {
-      el.layoutJson.value = JSON.stringify(payload(), null, 2);
+      const data = payload();
+      el.layoutJson.value = JSON.stringify(data, null, 2);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (error) {
+        // local preview still works even if browser storage is unavailable.
+      }
+    }
+
+    function encodeLayout(data) {
+      const json = JSON.stringify(data);
+      return btoa(unescape(encodeURIComponent(json)));
     }
 
     function renderMetrics() {
@@ -1382,7 +1395,14 @@
     });
 
     document.getElementById("previewCustomer").addEventListener("click", () => {
-      window.open("mesh_customer_floorplan_view.html", "_blank");
+      const data = payload();
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (error) {
+        // The customer page can still fall back to its built-in demo layout.
+      }
+      const target = location.pathname.endsWith("admin.html") ? "index.html" : "mesh_customer_floorplan_view.html";
+      window.open(`${target}?layout=${encodeURIComponent(encodeLayout(data))}`, "_blank");
     });
 
     document.getElementById("copyJson").addEventListener("click", async () => {
