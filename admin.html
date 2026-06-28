@@ -867,6 +867,10 @@
             <button data-bed-direction="width">폭 방향</button>
           </div>
         </div>
+        <div class="field">
+          <label>설정 저장</label>
+          <button class="save" data-action="save-settings" style="width:100%">현재 설정 저장</button>
+        </div>
         <div class="grid-2">
           <div class="field">
             <label for="layoutX">배치 X</label>
@@ -902,7 +906,7 @@
             <p id="stageDesc">온실 타입, 방향, 치수, 센서/작동기 위치를 확정해 고객용 디지털 트윈 화면으로 넘깁니다.</p>
           </div>
           <div class="stage-actions">
-            <button id="saveSettings" class="save">현재 설정 저장</button>
+            <button id="saveSettings" class="save" data-action="save-settings">현재 설정 저장</button>
             <button id="resetMarkers">기본 배치</button>
             <button id="previewCustomer" class="primary">고객 화면 열기</button>
             <span id="saveStatus" class="save-status">저장 전</span>
@@ -1549,7 +1553,9 @@
       render();
     });
 
-    document.getElementById("saveSettings").addEventListener("click", saveCurrentSettings);
+    document.querySelectorAll('[data-action="save-settings"]').forEach(button => {
+      button.addEventListener("click", saveCurrentSettings);
+    });
 
     document.getElementById("previewCustomer").addEventListener("click", () => {
       const data = payload();
