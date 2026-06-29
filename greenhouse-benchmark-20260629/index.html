@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>온실 식물 재배 벤치마킹 방문 후보</title>
+<style>
+  :root {
+    --ink: #17231b;
+    --muted: #657064;
+    --paper: #fffdf8;
+    --soft: #f1ecdf;
+    --line: #d9d0bd;
+    --green: #1f3b2a;
+    --sage: #6f815d;
+    --clay: #9f6047;
+    --gold: #b4863d;
+    --blue: #4f7e92;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--soft);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    line-height: 1.48;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  a { color: inherit; }
+
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 18px;
+    padding: 14mm;
+    background: var(--paper);
+    box-shadow: 0 18px 48px rgba(28, 24, 18, .16);
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--green);
+  }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    color: var(--clay);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+  }
+
+  h1, h2, h3, p { margin-top: 0; }
+
+  h1 {
+    margin-bottom: 7px;
+    font-size: 27px;
+    line-height: 1.13;
+    letter-spacing: 0;
+  }
+
+  h2 {
+    margin-bottom: 8px;
+    color: var(--green);
+    font-size: 18px;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  h3 {
+    margin-bottom: 6px;
+    font-size: 15px;
+    line-height: 1.25;
+  }
+
+  p {
+    margin-bottom: 8px;
+    font-size: 11.5px;
+  }
+
+  .meta {
+    min-width: 38mm;
+    color: var(--muted);
+    font-size: 10px;
+    text-align: right;
+    line-height: 1.55;
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 9mm;
+    margin-top: 9mm;
+  }
+
+  .callout {
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--green);
+    padding: 11px 12px;
+    background: #fbf6eb;
+  }
+
+  .callout strong { color: var(--green); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 10.4px;
+  }
+
+  th, td {
+    border: 1px solid var(--line);
+    padding: 6px 7px;
+    vertical-align: top;
+  }
+
+  th {
+    background: #e9e1d2;
+    color: var(--green);
+    font-weight: 900;
+    text-align: left;
+  }
+
+  .tag {
+    display: inline-block;
+    margin: 0 3px 3px 0;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .section { margin-top: 9mm; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+    margin-top: 8mm;
+  }
+
+  .card {
+    display: grid;
+    grid-template-rows: 52mm auto;
+    min-height: 119mm;
+    border: 1px solid var(--line);
+    background: #fff;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+
+  .photo {
+    width: 100%;
+    height: 52mm;
+    object-fit: cover;
+    display: block;
+    background: #e7e1d5;
+  }
+
+  .card-body {
+    padding: 9px 10px 10px;
+  }
+
+  .place-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 7px;
+  }
+
+  .priority {
+    display: inline-block;
+    min-width: 19px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: var(--green);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .purpose {
+    margin-bottom: 7px;
+    padding: 7px;
+    border: 1px solid #e4dccd;
+    background: #fbf8f0;
+    color: #263a2d;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.42;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 15px;
+  }
+
+  li {
+    margin-bottom: 3px;
+    font-size: 10px;
+    line-height: 1.42;
+  }
+
+  .source {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 8.6px;
+    line-height: 1.35;
+  }
+
+  .route {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 8mm;
+  }
+
+  .route-box {
+    border: 1px solid var(--line);
+    padding: 9px;
+    background: #fff;
+  }
+
+  .route-box b {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--green);
+    font-size: 12px;
+  }
+
+  .route-box p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .footer {
+    margin-top: 8mm;
+    padding-top: 7px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 9px;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+    }
+    .sheet:last-child { page-break-after: auto; }
+    .card, .callout, .route-box, th {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="sheet">
+    <div class="topline">
+      <div>
+        <p class="eyebrow">GREENHOUSE BENCHMARK VISIT BRIEF</p>
+        <h1>온실 식물 재배·전시<br>벤치마킹 방문 후보</h1>
+        <p>농장팀이 온실 내 식물 재배, 관수, 식재 연출, 체험 동선을 함께 보기 위한 방문 후보 정리입니다. Farm8/메트로팜은 이번 목록에서 제외했습니다.</p>
+      </div>
+      <div class="meta">
+        회의/방문 검토용<br>
+        2026.06.29<br>
+        큰 주차장 온실 참고
+      </div>
+    </div>
+
+    <div class="intro">
+      <div class="callout">
+        <h2>보는 기준</h2>
+        <p><strong>식물 자체보다 운영 구조를 봐야 합니다.</strong> 어떤 식물을 심었는지뿐 아니라, 습윤/건조 구역을 어떻게 나누는지, 포트 식물을 어떻게 관리하는지, 관람객 동선과 작업 동선이 어떻게 충돌하지 않는지를 확인하는 것이 핵심입니다.</p>
+        <p>우리 온실에는 플랜터박스, Ebb & Flow bed, 점적관수를 혼합 적용할 예정이므로 각 장소에서 “식재 방식”과 “관수·관리 방식”을 분리해서 보는 것이 좋습니다.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>우선순위</th>
+            <th>장소</th>
+            <th>핵심 관찰 주제</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>서울식물원</td><td>대형 관람형 온실, 동선, 기후대별 식재</td></tr>
+          <tr><td>2</td><td>국립세종수목원</td><td>지중해/열대/특별전시온실 분리 운영</td></tr>
+          <tr><td>3</td><td>조인폴리아</td><td>화분·모주·판매 식물의 실무형 온실 운영</td></tr>
+          <tr><td>4</td><td>식물관PH</td><td>식물 기반 복합문화공간 연출</td></tr>
+          <tr><td>5</td><td>용산 아이파크몰</td><td>상업시설 속 참여형 정원 운영</td></tr>
+          <tr><td>6</td><td>더현대 서울</td><td>식물을 경험 콘텐츠로 만드는 방식</td></tr>
+          <tr><td>7</td><td>국립생태원</td><td>기후대별 환경 재현과 생태 전시</td></tr>
+          <tr><td>8</td><td>백두대간수목원</td><td>냉실·미스트·차광 등 특수 환경 관리</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>추천 방문 묶음</h2>
+      <div class="route">
+        <div class="route-box">
+          <b>서울 1일 코스</b>
+          <p>용산 아이파크몰 → 더현대 서울 → 서울식물원. 상업공간과 대형 온실 연출을 하루에 비교합니다.</p>
+        </div>
+        <div class="route-box">
+          <b>실무형 온실 코스</b>
+          <p>조인폴리아 → 식물관PH. 화분·포트·모주 운영과 체험형 공간 연출을 같이 봅니다.</p>
+        </div>
+        <div class="route-box">
+          <b>공공 온실 코스</b>
+          <p>국립세종수목원 → 국립생태원. 기후대별 구역 분리와 대형 관람 동선을 봅니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">방문 전 확인: 휴관일, 사전 예약 여부, 촬영 가능 범위, 단체 관람 가능 여부를 각 기관 공식 채널에서 확인해야 합니다.</div>
+  </section>
+
+  <section class="sheet">
+    <div class="topline">
+      <div>
+        <p class="eyebrow">VISIT CARDS / CORE BENCHMARKS</p>
+        <h1>우선 방문 후보</h1>
+      </div>
+      <div class="meta">2 / 4</div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <img class="photo" src="assets/benchmark_seoul_botanic.jpg" alt="서울식물원 온실 내부">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">1</span><span class="tag">대형 온실</span><span class="tag">동선</span><span class="tag">기후대</span></div>
+          <h3>서울식물원 온실 / 마곡</h3>
+          <div class="purpose">큰 주차장 온실의 가장 직접적인 공간 레퍼런스. 기후대별 식재, 스카이워크, 포토존, 관람 동선 분리를 확인.</div>
+          <ul>
+            <li>키 큰 수목과 하부 식재의 레이어 구성</li>
+            <li>습윤 구역과 건조 구역의 분위기 차이</li>
+            <li>관람객 동선에서 식재를 보호하는 방식</li>
+            <li>설명 패널, 포토 지점, 휴식 지점 배치</li>
+          </ul>
+          <p class="source">사진/참고: 월간 THE LIVING, “서울식물원 온실” 기사. https://www.theliving.co.kr/news/articleView.html?idxno=23480</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_sejong_arboretum.jpg" alt="국립세종수목원 사계절전시온실">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">2</span><span class="tag">지중해온실</span><span class="tag">열대온실</span><span class="tag">특별전시</span></div>
+          <h3>국립세종수목원 / 세종</h3>
+          <div class="purpose">지중해온실, 열대온실, 특별전시온실을 나눠 운영하는 구조를 볼 수 있는 곳. 우리 온실의 건조 허브존과 습윤 허브존 분리 설계에 직접 참고.</div>
+          <ul>
+            <li>온실을 3개 성격으로 분리하는 방식</li>
+            <li>지중해 식물의 배수·통풍·건조감 연출</li>
+            <li>열대 구역의 습도, 수공간, 데크 동선</li>
+            <li>특별전시온실의 계절 콘텐츠 교체 방식</li>
+          </ul>
+          <p class="source">사진/참고: 여기유, “국립세종수목원”. https://xn--ok0b236bp0a.com/place/14914</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_joinfolia.jpg" alt="조인폴리아 내부">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">3</span><span class="tag">실무형 온실</span><span class="tag">포트 운영</span><span class="tag">판매</span></div>
+          <h3>조인폴리아 / 파주</h3>
+          <div class="purpose">전시와 판매, 식물 수급이 같이 일어나는 실무형 온실. 모주·화분·판매용 포트를 함께 운영할 때 가장 현실적인 참고처.</div>
+          <ul>
+            <li>소형 포트, 대형 관엽, 행잉 식물의 밀도 배치</li>
+            <li>가격표, 동선, 계산, 분갈이 서비스의 운영 구조</li>
+            <li>방문객이 구경만 해도 공간이 유지되는 방식</li>
+            <li>모주와 판매용 식물의 상태 관리</li>
+          </ul>
+          <p class="source">사진/참고: 농촌진흥청 웹진, “조인폴리아 김용근 대표”. https://rda.go.kr/webzine/2021/10/sub1-4.html</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_sikmulgwan_ph.jpg" alt="식물관PH 내부 공간">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">4</span><span class="tag">복합문화</span><span class="tag">식물 경험</span><span class="tag">공간감</span></div>
+          <h3>식물관PH / 강남</h3>
+          <div class="purpose">식물을 단순 조경이 아니라 공간 경험의 중심으로 다루는 사례. 온실을 체험·전시·휴식 공간으로 풀어낼 때 참고.</div>
+          <ul>
+            <li>식물과 건축 구조가 함께 보이는 장면 구성</li>
+            <li>층고, 빛, 재료감으로 만드는 실내 온실 분위기</li>
+            <li>카페/전시/휴식 기능과 식물의 결합</li>
+            <li>사진이 잘 나오는 식재 밀도와 여백</li>
+          </ul>
+          <p class="source">사진/참고: BRIQUE Magazine, “식물관 PH Sikmulgwan PH”. https://magazine.brique.co/project/식물관ph-sikmulgwan-ph/</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="topline">
+      <div>
+        <p class="eyebrow">VISIT CARDS / COMMERCIAL & EXPERIENCE</p>
+        <h1>상업공간·체험 연출 후보</h1>
+      </div>
+      <div class="meta">3 / 4</div>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <img class="photo" src="assets/benchmark_yongsan_iparkmall.png" alt="용산 아이파크몰 루프탑 공유정원">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">5</span><span class="tag">상업시설</span><span class="tag">참여형 정원</span><span class="tag">운영</span></div>
+          <h3>용산 아이파크몰 공유정원 / 용산</h3>
+          <div class="purpose">쇼핑몰 유휴공간을 참여형 정원으로 전환한 사례. 온실을 “관리되는 정원”이 아니라 “사람이 참여하는 콘텐츠”로 운영하는 힌트가 있음.</div>
+          <ul>
+            <li>상업시설 이용객과 정원 프로그램의 연결 방식</li>
+            <li>원데이 클래스, 정기 가드닝 클럽 운영 구조</li>
+            <li>포토존과 실제 관리 구역의 거리감</li>
+            <li>도시형 정원의 유지관리 난이도</li>
+          </ul>
+          <p class="source">사진/참고: 서울가드닝클럽, “용산 아이파크몰 루프탑 공유정원”. https://seoulgardeningclub.com/PROJECT/?bmode=view&idx=171503196</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_thehyundai_soundsforest.png" alt="더현대 서울 사운즈 포레스트">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">6</span><span class="tag">상업공간</span><span class="tag">브랜딩</span><span class="tag">체류</span></div>
+          <h3>더현대 서울 사운즈 포레스트 / 여의도</h3>
+          <div class="purpose">재배시설은 아니지만, 식물을 체류·향·경험 콘텐츠로 만드는 방식이 좋음. 큰 주차장 온실의 방문객 경험 설계 참고처.</div>
+          <ul>
+            <li>실내 식물 공간의 조명, 휴식, 촬영 포인트</li>
+            <li>향, 소리, 씨앗, 식물 콘텐츠의 연결 방식</li>
+            <li>식물이 브랜드 경험으로 읽히게 만드는 장치</li>
+            <li>식재보다 이용객 체류 흐름을 우선하는 배치</li>
+          </ul>
+          <p class="source">사진/참고: 현대백화점 더현대 서울 Sounds Forest 공식 페이지. https://www.ehyundai.com/mobile/branch/DP/SF/main.do</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_ecorium.jpg" alt="국립생태원 에코리움">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">7</span><span class="tag">기후대</span><span class="tag">전시</span><span class="tag">생태</span></div>
+          <h3>국립생태원 에코리움 / 서천</h3>
+          <div class="purpose">열대관, 사막관, 지중해관, 온대관, 극지관처럼 세계 5대 기후를 재현한 사례. 작물군별 환경 분리 감각을 보기 좋음.</div>
+          <ul>
+            <li>건조 구역과 습윤 구역의 환경 차이</li>
+            <li>암석, 수공간, 지형을 활용한 몰입감</li>
+            <li>동식물 전시에서 관람객 동선을 통제하는 방식</li>
+            <li>기후대별 온도·습도·식재 분위기 전환</li>
+          </ul>
+          <p class="source">사진/참고: 한국관광공사 열린관광, “국립생태원 에코리움”. https://access.visitkorea.or.kr/ms/detail.do?cotId=2f78a8e0-98e8-4355-9e7d-3dd03e3c92a2</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img class="photo" src="assets/benchmark_baekdudaegan_alpine.jpg" alt="국립백두대간수목원 알파인하우스">
+        <div class="card-body">
+          <div class="place-meta"><span class="priority">8</span><span class="tag">냉실</span><span class="tag">특수환경</span><span class="tag">보전</span></div>
+          <h3>국립백두대간수목원 알파인하우스 / 봉화</h3>
+          <div class="purpose">일반 온실과 반대로 온도를 낮추고 민감한 식물을 관리하는 시설. 여름철 과열 대응, 차광, 미스트, 통풍 아이디어 참고.</div>
+          <ul>
+            <li>고산식물 보전을 위한 냉실 운영 방식</li>
+            <li>차광, 미스트, 환기, 냉방의 조합</li>
+            <li>민감한 식물을 별도 환경으로 격리하는 구조</li>
+            <li>삽목묘·약한 묘의 여름 관리 아이디어</li>
+          </ul>
+          <p class="source">사진/참고: 공공누리, “국립백두대간수목원 : 알파인하우스 가을 내부 풍경”. https://www.kogl.or.kr/recommend/recommendDivView.do?division=img&recommendIdx=176152</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <div class="topline">
+      <div>
+        <p class="eyebrow">FIELD CHECKLIST</p>
+        <h1>농장팀 현장 체크리스트</h1>
+      </div>
+      <div class="meta">4 / 4</div>
+    </div>
+
+    <div class="section">
+      <h2>현장에서 공통으로 볼 것</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 20%;">항목</th>
+            <th>체크 질문</th>
+            <th style="width: 27%;">우리 온실 적용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>관수</strong></td>
+            <td>포트 재배, 플랜터 식재, 수목 식재의 물 관리가 어떻게 분리되어 있는가?</td>
+            <td>Ebb & Flow / 점적관수 / 수동 보완 라인 분리</td>
+          </tr>
+          <tr>
+            <td><strong>배수</strong></td>
+            <td>물 고임이 생기는 구역은 어디이며, 배수구와 바닥 구배는 어떻게 처리했는가?</td>
+            <td>중앙 베드 하부 배수, 플랜터 하부 점검구</td>
+          </tr>
+          <tr>
+            <td><strong>식재 구역</strong></td>
+            <td>건조성 식물과 습윤성 식물을 어떻게 물리적으로 나누는가?</td>
+            <td>건조 허브존 / 습윤 허브 포트존 분리</td>
+          </tr>
+          <tr>
+            <td><strong>작업 동선</strong></td>
+            <td>관리자가 물, 흙, 포트, 도구를 옮길 때 관람객 동선과 충돌하지 않는가?</td>
+            <td>중앙 작업테이블과 후면 보관 동선 확보</td>
+          </tr>
+          <tr>
+            <td><strong>전시성</strong></td>
+            <td>방문자가 사진을 찍는 지점과 식물을 만지는 지점이 어디인가?</td>
+            <td>좌측 포토존, 우측 향 체험 라인 구분</td>
+          </tr>
+          <tr>
+            <td><strong>유지관리</strong></td>
+            <td>식물이 약해졌을 때 교체·보식·격리하는 공간이 따로 있는가?</td>
+            <td>중앙 Ebb & Flow 베드를 보식묘·삽목묘 관리구역으로 활용</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>방문 후 정리할 산출물</h2>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 23%;">산출물</th>
+            <th>작성 내용</th>
+            <th style="width: 24%;">활용처</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>사진 기록</strong></td>
+            <td>관수 설비, 배수, 플랜터 상세, 작업 동선, 포토존, 사인물 중심으로 촬영</td>
+            <td>시설 회의 자료</td>
+          </tr>
+          <tr>
+            <td><strong>작물 리스트</strong></td>
+            <td>눈에 띄는 식물명, 식재 방식, 포트/노지/플랜터 여부 기록</td>
+            <td>식재 계획</td>
+          </tr>
+          <tr>
+            <td><strong>운영 메모</strong></td>
+            <td>인력, 관리 빈도, 교체 주기, 방문객 접촉이 많은 식물 기록</td>
+            <td>농장팀 운영 매뉴얼</td>
+          </tr>
+          <tr>
+            <td><strong>적용 아이디어</strong></td>
+            <td>우리 온실에 바로 적용 가능한 것과 비용/시설 검토가 필요한 것을 구분</td>
+            <td>실시설계/구매 검토</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>한 줄 정리</h2>
+      <p><strong>서울식물원과 세종수목원은 “큰 온실을 어떻게 구역화하는지”, 조인폴리아는 “화분 식물을 어떻게 실무적으로 운영하는지”, 식물관PH와 상업공간 사례는 “방문객이 식물을 경험하게 만드는 방법”을 보기 위한 목적지입니다.</strong></p>
+    </div>
+
+    <div class="footer">사진은 회의 검토용 참고 이미지로만 사용했습니다. 외부 공유·게시 전에는 각 출처의 이용 조건을 별도 확인해 주세요.</div>
+  </section>
+</body>
+</html>
