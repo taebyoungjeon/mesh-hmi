@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MESH HMI Admin Builder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
       color-scheme: dark;
@@ -370,27 +371,29 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
-      background:
-        linear-gradient(128deg, transparent 0 47%, rgba(166, 150, 95, .20) 47% 51%, transparent 51%),
-        linear-gradient(22deg, transparent 0 58%, rgba(79, 109, 98, .30) 58% 61%, transparent 61%),
-        linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px),
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        #18211d;
-      background-size: auto, auto, 28px 28px, 28px 28px, auto;
+      background: #121719;
       box-shadow: var(--shadow);
     }
 
-    .farm-map::before {
-      content: "";
+    .farm-leaflet-map {
       position: absolute;
-      inset: 10px;
-      border: 1px solid rgba(126, 173, 144, .22);
-      border-radius: 10px;
-      background:
-        linear-gradient(90deg, rgba(82, 130, 80, .16), transparent 44%),
-        radial-gradient(circle at 18% 78%, rgba(72, 130, 85, .24), transparent 28%),
-        radial-gradient(circle at 76% 28%, rgba(52, 102, 88, .28), transparent 30%);
-      pointer-events: none;
+      inset: 0;
+      z-index: 1;
+      background: #18211d;
+    }
+
+    .farm-leaflet-map .leaflet-tile {
+      filter: saturate(.9) contrast(.96) brightness(.82);
+    }
+
+    .farm-leaflet-map .leaflet-control-attribution {
+      background: rgba(12, 17, 18, .72);
+      color: rgba(238, 245, 242, .74);
+      font-size: 9px;
+    }
+
+    .farm-leaflet-map .leaflet-control-attribution a {
+      color: rgba(128, 217, 178, .9);
     }
 
     .farm-map-head {
@@ -406,72 +409,26 @@
     .farm-map-head b { font-size: 14px; }
     .farm-map-head span { color: var(--muted); font-size: 11px; }
 
-    .map-scale {
+    .farm-map-tools {
       position: absolute;
-      left: 15px;
-      bottom: 14px;
       z-index: 4;
       display: flex;
       align-items: center;
-      gap: 7px;
-      color: var(--muted);
-      font-size: 11px;
+      gap: 6px;
+      right: 12px;
+      top: 12px;
     }
 
-    .map-scale i {
-      display: block;
-      width: 58px;
-      height: 4px;
-      border-left: 1px solid #bed8ce;
-      border-right: 1px solid #bed8ce;
-      border-bottom: 2px solid #bed8ce;
-    }
-
-    .farm-map-footprint {
-      position: absolute;
-      z-index: 5;
-      left: var(--map-x, 50%);
-      top: var(--map-y, 50%);
-      width: var(--map-w, 28%);
-      height: var(--map-h, 42%);
-      display: grid;
-      place-items: center;
-      border: 2px solid #54dda0;
-      border-radius: 10px;
-      background: rgba(72, 201, 138, .22);
-      box-shadow: 0 14px 36px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.16);
-      color: #eafff4;
-      font-size: 12px;
+    .farm-map-tools button {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 9px;
+      border-color: rgba(214, 232, 224, .28);
+      background: rgba(15, 19, 21, .82);
+      color: #e8fff5;
+      font-size: 13px;
       font-weight: 900;
-      cursor: grab;
-      touch-action: none;
-      transform: translate(-50%, -50%) rotate(var(--map-rotation, 0deg));
-    }
-
-    .farm-map-footprint:active { cursor: grabbing; }
-
-    .farm-map-footprint::before,
-    .farm-map-footprint::after {
-      content: "";
-      position: absolute;
-      background: rgba(199, 255, 226, .35);
-      border-radius: 999px;
-    }
-
-    .farm-map-footprint::before {
-      inset: 18% 12% auto;
-      height: 4px;
-      box-shadow: 0 20px 0 rgba(199, 255, 226, .28), 0 40px 0 rgba(199, 255, 226, .22);
-    }
-
-    .farm-map-footprint::after {
-      right: -8px;
-      top: 50%;
-      width: 16px;
-      height: 16px;
-      transform: translateY(-50%);
-      background: #54dda0;
-      border: 3px solid rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
     }
 
     .farm-map-help {
@@ -483,6 +440,50 @@
       color: var(--muted);
       font-size: 11px;
       text-align: right;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(15, 19, 21, .76);
+      backdrop-filter: blur(10px);
+    }
+
+    .greenhouse-map-label {
+      display: grid;
+      place-items: center;
+      min-width: 34px;
+      min-height: 26px;
+      padding: 4px 8px;
+      border: 2px solid rgba(255,255,255,.8);
+      border-radius: 999px;
+      background: #40c98a;
+      color: #082017;
+      font-size: 12px;
+      font-weight: 950;
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+      cursor: grab;
+    }
+
+    .greenhouse-map-resize {
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(255,255,255,.9);
+      border-radius: 50%;
+      background: #ffd45d;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      cursor: nwse-resize;
+    }
+
+    .farm-map-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      color: var(--muted);
+      text-align: center;
+      background: #121719;
+      font-size: 13px;
     }
 
     .stage {
@@ -1035,13 +1036,18 @@
         </div>
 
         <div class="farm-map" id="farmMap" aria-label="농장 지도 배치">
+          <div class="farm-leaflet-map" id="farmLeafletMap"></div>
           <div class="farm-map-head">
             <b>농장 지도 배치</b>
             <span id="farmMapAddress">충북 진천군 이월면 진광로 928-29</span>
           </div>
-          <button class="farm-map-footprint" id="farmMapFootprint" type="button">1동</button>
-          <div class="map-scale"><i></i><span>약 50m</span></div>
-          <div class="farm-map-help">온실 블록을 드래그해 농장 내 위치를 맞춥니다. 회전은 장축 방향/북쪽 보정값을 따릅니다.</div>
+          <div class="farm-map-tools" aria-label="지도 조작">
+            <button id="mapZoomOut" type="button" aria-label="지도 축소">−</button>
+            <button id="mapZoomIn" type="button" aria-label="지도 확대">+</button>
+            <button id="mapFitFarm" type="button">맞춤</button>
+          </div>
+          <div class="farm-map-help">초록 마커는 위치 이동, 노란 핸들은 온실 외곽 크기 조절</div>
+          <div class="farm-map-fallback" id="farmMapFallback">지도를 불러오지 못했습니다. 네트워크 연결 후 다시 열어주세요.</div>
         </div>
 
         <div class="stage" id="stage">
@@ -1102,9 +1108,11 @@
     </aside>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const STORAGE_KEY = "meshHmiLayoutV1";
     const SAVED_STORAGE_KEY = "meshHmiSavedLayoutV1";
+    const DEFAULT_FARM_CENTER = { lat: 36.9219, lng: 127.4387 };
 
     const state = {
       projectMode: "existing",
@@ -1114,8 +1122,20 @@
       northRotation: 0,
       selectedId: "air-1",
       activeTool: "select",
-      markers: []
+      markers: [],
+      map: {
+        centerLat: DEFAULT_FARM_CENTER.lat,
+        centerLng: DEFAULT_FARM_CENTER.lng,
+        zoom: 18,
+        houseLat: DEFAULT_FARM_CENTER.lat,
+        houseLng: DEFAULT_FARM_CENTER.lng
+      }
     };
+
+    let leafletMap = null;
+    let greenhousePolygon = null;
+    let greenhouseCenterMarker = null;
+    let greenhouseResizeMarker = null;
 
     const typeNames = {
       glass: "Venlo 유리온실",
@@ -1157,7 +1177,8 @@
       existingPanel: document.getElementById("existingPanel"),
       newPanel: document.getElementById("newPanel"),
       farmMap: document.getElementById("farmMap"),
-      farmMapFootprint: document.getElementById("farmMapFootprint"),
+      farmLeafletMap: document.getElementById("farmLeafletMap"),
+      farmMapFallback: document.getElementById("farmMapFallback"),
       farmMapAddress: document.getElementById("farmMapAddress"),
       stage: document.getElementById("stage"),
       stageSvg: document.getElementById("stageSvg"),
@@ -1316,24 +1337,208 @@
       });
     }
 
-    function renderFarmMap() {
+    function totalGreenhouseWidthM() {
       const length = num(el.lengthM, 72);
       const width = num(el.widthM, 32);
       const dongCount = clamp(num(el.dongCount, 1), 1, 8);
       const dongGapM = clamp(num(el.dongGapM, 4), 0, 30);
-      const totalPhysicalWidth = width * dongCount + dongGapM * (dongCount - 1);
-      const mapX = clamp(num(el.layoutX, 50), 8, 92);
-      const mapY = clamp(num(el.layoutY, 50), 10, 90);
-      const maxDimension = Math.max(length, totalPhysicalWidth, 1);
-      const mapW = clamp((totalPhysicalWidth / maxDimension) * 34, 11, 42);
-      const mapH = clamp((length / maxDimension) * 48, 18, 62);
-      el.farmMap.style.setProperty("--map-x", `${mapX}%`);
-      el.farmMap.style.setProperty("--map-y", `${mapY}%`);
-      el.farmMap.style.setProperty("--map-w", `${mapW}%`);
-      el.farmMap.style.setProperty("--map-h", `${mapH}%`);
-      el.farmMap.style.setProperty("--map-rotation", `${totalRotation()}deg`);
-      el.farmMapFootprint.textContent = num(el.dongCount, 1) > 1 ? `${dongCount}동` : el.houseName.value;
-      el.farmMapAddress.textContent = el.address.value;
+      return width * dongCount + dongGapM * (dongCount - 1);
+    }
+
+    function metersToLatLng(center, eastM, northM) {
+      const lat = center.lat + northM / 111320;
+      const lng = center.lng + eastM / (111320 * Math.cos(center.lat * Math.PI / 180));
+      return [lat, lng];
+    }
+
+    function latLngToMeters(center, latLng) {
+      const lat = typeof latLng.lat === "number" ? latLng.lat : latLng[0];
+      const lng = typeof latLng.lng === "number" ? latLng.lng : latLng[1];
+      return {
+        east: (lng - center.lng) * 111320 * Math.cos(center.lat * Math.PI / 180),
+        north: (lat - center.lat) * 111320
+      };
+    }
+
+    function greenhouseCorners(center, length, totalWidth, headingDeg) {
+      const heading = headingDeg * Math.PI / 180;
+      const along = { east: Math.sin(heading), north: Math.cos(heading) };
+      const across = { east: Math.cos(heading), north: -Math.sin(heading) };
+      const halfLength = length / 2;
+      const halfWidth = totalWidth / 2;
+      return [
+        [halfLength, -halfWidth],
+        [halfLength, halfWidth],
+        [-halfLength, halfWidth],
+        [-halfLength, -halfWidth]
+      ].map(([longM, crossM]) => {
+        const east = along.east * longM + across.east * crossM;
+        const north = along.north * longM + across.north * crossM;
+        return metersToLatLng(center, east, north);
+      });
+    }
+
+    function greenhouseCenter() {
+      return {
+        lat: Number(state.map.houseLat) || DEFAULT_FARM_CENTER.lat,
+        lng: Number(state.map.houseLng) || DEFAULT_FARM_CENTER.lng
+      };
+    }
+
+    function resizeHandleLatLng() {
+      const center = greenhouseCenter();
+      const length = num(el.lengthM, 72);
+      const totalWidth = totalGreenhouseWidthM();
+      const heading = totalRotation() * Math.PI / 180;
+      const along = { east: Math.sin(heading), north: Math.cos(heading) };
+      const across = { east: Math.cos(heading), north: -Math.sin(heading) };
+      const east = along.east * (length / 2) + across.east * (totalWidth / 2);
+      const north = along.north * (length / 2) + across.north * (totalWidth / 2);
+      return metersToLatLng(center, east, north);
+    }
+
+    function syncLayoutInputsFromMap() {
+      if (!leafletMap) return;
+      const point = leafletMap.latLngToContainerPoint(greenhouseCenter());
+      const size = leafletMap.getSize();
+      if (!size.x || !size.y) return;
+      el.layoutX.value = Math.round(clamp((point.x / size.x) * 100, 8, 92));
+      el.layoutY.value = Math.round(clamp((point.y / size.y) * 100, 10, 90));
+    }
+
+    function updateGreenhouseFromResize(latLng) {
+      const center = greenhouseCenter();
+      const offset = latLngToMeters(center, latLng);
+      const heading = totalRotation() * Math.PI / 180;
+      const along = { east: Math.sin(heading), north: Math.cos(heading) };
+      const across = { east: Math.cos(heading), north: -Math.sin(heading) };
+      const projectedLength = Math.abs(offset.east * along.east + offset.north * along.north) * 2;
+      const projectedWidth = Math.abs(offset.east * across.east + offset.north * across.north) * 2;
+      const dongCount = clamp(num(el.dongCount, 1), 1, 8);
+      const dongGapM = clamp(num(el.dongGapM, 4), 0, 30);
+      const gapWidth = dongGapM * (dongCount - 1);
+      const nextLength = clamp(Math.round(projectedLength), 10, 240);
+      const nextWidth = clamp(Math.round((projectedWidth - gapWidth) / dongCount), 4, 80);
+      el.lengthM.value = nextLength;
+      el.widthM.value = nextWidth;
+    }
+
+    function greenhouseLabel() {
+      const count = clamp(num(el.dongCount, 1), 1, 8);
+      return count > 1 ? `${count}동` : el.houseName.value;
+    }
+
+    function initFarmLeafletMap() {
+      if (leafletMap) return;
+      if (!window.L) {
+        el.farmMapFallback.style.display = "grid";
+        return;
+      }
+      leafletMap = L.map(el.farmLeafletMap, {
+        center: [state.map.centerLat, state.map.centerLng],
+        zoom: state.map.zoom,
+        zoomControl: false,
+        scrollWheelZoom: true,
+        touchZoom: true
+      });
+      L.control.zoom({ position: "bottomleft" }).addTo(leafletMap);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 21,
+        attribution: "&copy; OpenStreetMap"
+      }).addTo(leafletMap);
+      leafletMap.on("moveend zoomend", () => {
+        const center = leafletMap.getCenter();
+        state.map.centerLat = center.lat;
+        state.map.centerLng = center.lng;
+        state.map.zoom = leafletMap.getZoom();
+        syncLayoutInputsFromMap();
+        renderJson();
+      });
+      leafletMap.on("click", placeGreenhouseAtMapClick);
+    }
+
+    function updateFarmLeafletOverlay() {
+      initFarmLeafletMap();
+      if (!leafletMap) return;
+      const center = greenhouseCenter();
+      const length = num(el.lengthM, 72);
+      const totalWidth = totalGreenhouseWidthM();
+      const corners = greenhouseCorners(center, length, totalWidth, totalRotation());
+      const centerLatLng = [center.lat, center.lng];
+      const handleLatLng = resizeHandleLatLng();
+
+      if (!greenhousePolygon) {
+        greenhousePolygon = L.polygon(corners, {
+          color: "#40c98a",
+          weight: 3,
+          fillColor: "#40c98a",
+          fillOpacity: .24
+        }).addTo(leafletMap);
+      } else {
+        greenhousePolygon.setLatLngs(corners);
+      }
+
+      const labelIcon = L.divIcon({
+        className: "",
+        html: `<div class="greenhouse-map-label">${greenhouseLabel()}</div>`,
+        iconSize: [48, 32],
+        iconAnchor: [24, 16]
+      });
+      if (!greenhouseCenterMarker) {
+        greenhouseCenterMarker = L.marker(centerLatLng, { icon: labelIcon, draggable: true }).addTo(leafletMap);
+        greenhouseCenterMarker.on("drag", event => {
+          const latLng = event.target.getLatLng();
+          state.map.houseLat = latLng.lat;
+          state.map.houseLng = latLng.lng;
+          syncLayoutInputsFromMap();
+          updateFarmLeafletOverlay();
+          renderFootprint();
+          renderMetrics();
+          renderJson();
+        });
+      } else {
+        greenhouseCenterMarker.setLatLng(centerLatLng);
+        greenhouseCenterMarker.setIcon(labelIcon);
+      }
+
+      const resizeIcon = L.divIcon({
+        className: "",
+        html: `<div class="greenhouse-map-resize" title="온실 외곽 크기 조절"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+      if (!greenhouseResizeMarker) {
+        greenhouseResizeMarker = L.marker(handleLatLng, { icon: resizeIcon, draggable: true }).addTo(leafletMap);
+        greenhouseResizeMarker.on("drag", event => {
+          updateGreenhouseFromResize(event.target.getLatLng());
+          updateFarmLeafletOverlay();
+          renderFootprint();
+          renderMetrics();
+          renderJson();
+        });
+        greenhouseResizeMarker.on("dragend", render);
+      } else {
+        greenhouseResizeMarker.setLatLng(handleLatLng);
+        greenhouseResizeMarker.setIcon(resizeIcon);
+      }
+    }
+
+    function renderFarmMap() {
+      el.farmMapAddress.textContent = `${el.address.value} · 실제 지도`;
+      updateFarmLeafletOverlay();
+      syncLayoutInputsFromMap();
+    }
+
+    function fitFarmOnMap() {
+      if (!leafletMap || !greenhousePolygon) return;
+      leafletMap.fitBounds(greenhousePolygon.getBounds().pad(.8), { animate: true, maxZoom: 19 });
+    }
+
+    function placeGreenhouseAtMapClick(event) {
+      state.map.houseLat = event.latlng.lat;
+      state.map.houseLng = event.latlng.lng;
+      syncLayoutInputsFromMap();
+      render();
     }
 
     function stagePoint(event) {
@@ -1414,7 +1619,13 @@
       return {
         farm: {
           name: el.farmName.value,
-          address: el.address.value
+          address: el.address.value,
+          map: {
+            provider: "OpenStreetMap",
+            centerLat: state.map.centerLat,
+            centerLng: state.map.centerLng,
+            zoom: state.map.zoom
+          }
         },
         greenhouse: {
           name: el.houseName.value,
@@ -1438,6 +1649,11 @@
             xPercent: num(el.layoutX, 50),
             yPercent: num(el.layoutY, 50),
             rotationDeg: totalRotation()
+          },
+          mapPlacement: {
+            centerLat: state.map.houseLat,
+            centerLng: state.map.houseLng,
+            headingDeg: totalRotation()
           }
         },
         digitalTwinLayers: {
@@ -1534,6 +1750,11 @@
       const greenhouse = data.greenhouse || {};
       setValue(el.farmName, farm.name);
       setValue(el.address, farm.address);
+      if (farm.map) {
+        state.map.centerLat = Number(farm.map.centerLat) || state.map.centerLat;
+        state.map.centerLng = Number(farm.map.centerLng) || state.map.centerLng;
+        state.map.zoom = Number(farm.map.zoom) || state.map.zoom;
+      }
       setValue(el.houseName, greenhouse.name);
       setValue(el.crop, greenhouse.crop);
       setValue(el.lengthM, greenhouse.lengthM);
@@ -1545,6 +1766,10 @@
       if (greenhouse.layout) {
         setValue(el.layoutX, greenhouse.layout.xPercent);
         setValue(el.layoutY, greenhouse.layout.yPercent);
+      }
+      if (greenhouse.mapPlacement) {
+        state.map.houseLat = Number(greenhouse.mapPlacement.centerLat) || state.map.houseLat;
+        state.map.houseLng = Number(greenhouse.mapPlacement.centerLng) || state.map.houseLng;
       }
       state.projectMode = greenhouse.projectMode || "existing";
       state.greenhouseType = greenhouse.type || "glass";
@@ -1685,37 +1910,15 @@
 
     el.stage.addEventListener("click", addMarker);
 
-    function updateMapPlacement(event) {
-      const rect = el.farmMap.getBoundingClientRect();
-      const x = clamp(((event.clientX - rect.left) / rect.width) * 100, 8, 92);
-      const y = clamp(((event.clientY - rect.top) / rect.height) * 100, 10, 90);
-      el.layoutX.value = Math.round(x);
-      el.layoutY.value = Math.round(y);
-      render();
-    }
-
-    el.farmMapFootprint.addEventListener("pointerdown", event => {
-      event.preventDefault();
-      el.farmMapFootprint.setPointerCapture(event.pointerId);
-      updateMapPlacement(event);
-
-      function move(moveEvent) {
-        updateMapPlacement(moveEvent);
-      }
-
-      function up() {
-        window.removeEventListener("pointermove", move);
-        window.removeEventListener("pointerup", up);
-      }
-
-      window.addEventListener("pointermove", move);
-      window.addEventListener("pointerup", up);
+    document.getElementById("mapZoomIn").addEventListener("click", () => {
+      if (leafletMap) leafletMap.zoomIn();
     });
 
-    el.farmMap.addEventListener("click", event => {
-      if (event.target === el.farmMapFootprint) return;
-      updateMapPlacement(event);
+    document.getElementById("mapZoomOut").addEventListener("click", () => {
+      if (leafletMap) leafletMap.zoomOut();
     });
+
+    document.getElementById("mapFitFarm").addEventListener("click", fitFarmOnMap);
 
     [el.farmName, el.houseName, el.address, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
       input.addEventListener("input", render);

@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MESH Customer Floorplan View</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     :root {
       color-scheme: light;
@@ -328,13 +329,7 @@
 
     .farm-overview {
       min-height: 156px;
-      background:
-        linear-gradient(122deg, transparent 0 48%, rgba(184, 172, 109, .24) 48% 52%, transparent 52%),
-        linear-gradient(18deg, transparent 0 58%, rgba(86, 140, 111, .16) 58% 62%, transparent 62%),
-        linear-gradient(90deg, rgba(67, 91, 82, .045) 1px, transparent 1px),
-        linear-gradient(rgba(67, 91, 82, .045) 1px, transparent 1px),
-        #f7fbf8;
-      background-size: auto, auto, 20px 20px, 20px 20px, auto;
+      background: #f7fbf8;
     }
 
     .farm-overview::before {
@@ -349,8 +344,24 @@
       pointer-events: none;
     }
 
+    .farm-overview-map {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: #f7fbf8;
+    }
+
+    .farm-overview-map .leaflet-tile {
+      filter: saturate(.92) contrast(.96) brightness(1.02);
+    }
+
+    .farm-overview-map .leaflet-control-attribution {
+      display: none;
+    }
+
     .farm-overview-house {
       position: absolute;
+      z-index: 2;
       left: var(--farm-x, 50%);
       top: var(--farm-y, 50%);
       width: var(--farm-w, 34%);
@@ -381,9 +392,13 @@
 
     .farm-overview-note {
       position: absolute;
+      z-index: 3;
       left: 12px;
       right: 12px;
       bottom: 10px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.84);
       display: flex;
       justify-content: space-between;
       gap: 10px;
@@ -703,6 +718,7 @@
         </div>
         <div class="hmi-stack">
           <div class="view-panel farm-overview" id="farmOverview">
+            <div class="farm-overview-map" id="farmOverviewMap"></div>
             <span class="view-label">농장 배치</span>
             <div class="farm-overview-house" id="farmOverviewHouse">1동</div>
             <div class="farm-overview-note">
@@ -770,6 +786,7 @@
     </nav>
   </main>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const STORAGE_KEY = "meshHmiLayoutV1";
     const fallbackLayout = {
@@ -842,9 +859,12 @@
     const metricCards = document.querySelectorAll(".metric");
     const floorPlanSvg = document.getElementById("floorPlanSvg");
     const farmOverview = document.getElementById("farmOverview");
+    const farmOverviewMap = document.getElementById("farmOverviewMap");
     const farmOverviewHouse = document.getElementById("farmOverviewHouse");
     const farmOverviewAddress = document.getElementById("farmOverviewAddress");
     const farmOverviewDirection = document.getElementById("farmOverviewDirection");
+    let customerOverviewMap = null;
+    let customerOverviewPolygon = null;
 
     let scene3d;
     let camera3d;
@@ -882,6 +902,90 @@
         : `${length}m × ${width}m`;
     }
 
+    function totalGreenhouseWidthM() {
+      const width = Number(greenhouse.widthM) || 32;
+      const gap = Number(greenhouse.dongGapM) || 0;
+      return width * dongCount + gap * (dongCount - 1);
+    }
+
+    function metersToLatLng(center, eastM, northM) {
+      const lat = center.lat + northM / 111320;
+      const lng = center.lng + eastM / (111320 * Math.cos(center.lat * Math.PI / 180));
+      return [lat, lng];
+    }
+
+    function greenhouseCorners(center, length, totalWidth, headingDeg) {
+      const heading = headingDeg * Math.PI / 180;
+      const along = { east: Math.sin(heading), north: Math.cos(heading) };
+      const across = { east: Math.cos(heading), north: -Math.sin(heading) };
+      const halfLength = length / 2;
+      const halfWidth = totalWidth / 2;
+      return [
+        [halfLength, -halfWidth],
+        [halfLength, halfWidth],
+        [-halfLength, halfWidth],
+        [-halfLength, -halfWidth]
+      ].map(([longM, crossM]) => {
+        const east = along.east * longM + across.east * crossM;
+        const north = along.north * longM + across.north * crossM;
+        return metersToLatLng(center, east, north);
+      });
+    }
+
+    function renderFarmOverviewMap() {
+      const mapPlacement = greenhouse.mapPlacement || {};
+      const farmMap = layoutData.farm?.map || {};
+      const centerLat = Number(mapPlacement.centerLat) || Number(farmMap.centerLat);
+      const centerLng = Number(mapPlacement.centerLng) || Number(farmMap.centerLng);
+      if (!window.L || !centerLat || !centerLng) {
+        farmOverviewMap.style.display = "none";
+        farmOverviewHouse.style.display = "grid";
+        return false;
+      }
+
+      const center = { lat: centerLat, lng: centerLng };
+      const length = Number(greenhouse.lengthM) || 72;
+      const totalWidth = totalGreenhouseWidthM();
+      const heading = Number(mapPlacement.headingDeg ?? greenhouse.layout?.rotationDeg ?? greenhouse.northRotationDeg) || 0;
+      const corners = greenhouseCorners(center, length, totalWidth, heading);
+      farmOverviewMap.style.display = "block";
+      farmOverviewHouse.style.display = "none";
+
+      if (!customerOverviewMap) {
+        customerOverviewMap = L.map(farmOverviewMap, {
+          center: [center.lat, center.lng],
+          zoom: Number(farmMap.zoom) || 18,
+          zoomControl: false,
+          attributionControl: false,
+          dragging: false,
+          scrollWheelZoom: false,
+          touchZoom: false,
+          doubleClickZoom: false,
+          boxZoom: false,
+          keyboard: false
+        });
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 21,
+          attribution: "&copy; OpenStreetMap"
+        }).addTo(customerOverviewMap);
+      }
+
+      if (!customerOverviewPolygon) {
+        customerOverviewPolygon = L.polygon(corners, {
+          color: "#43b987",
+          weight: 2,
+          fillColor: "#43b987",
+          fillOpacity: .28
+        }).addTo(customerOverviewMap);
+      } else {
+        customerOverviewPolygon.setLatLngs(corners);
+      }
+
+      customerOverviewMap.fitBounds(customerOverviewPolygon.getBounds().pad(.9), { animate: false, maxZoom: 19 });
+      setTimeout(() => customerOverviewMap.invalidateSize(), 60);
+      return true;
+    }
+
     function renderTabs() {
       tabsWrap.innerHTML = Array.from({ length: dongCount }, (_, index) => {
         const tone = index === 2 ? " warn" : "";
@@ -905,11 +1009,13 @@
       const mapW = Math.max(16, Math.min(50, (totalWidth / maxDimension) * 42));
       const mapH = Math.max(26, Math.min(70, (length / maxDimension) * 58));
       const rotation = Number(layout.rotationDeg ?? greenhouse.northRotationDeg) || 0;
+      const hasRealMap = renderFarmOverviewMap();
       farmOverview.style.setProperty("--farm-x", `${mapX}%`);
       farmOverview.style.setProperty("--farm-y", `${mapY}%`);
       farmOverview.style.setProperty("--farm-w", `${mapW}%`);
       farmOverview.style.setProperty("--farm-h", `${mapH}%`);
       farmOverview.style.setProperty("--farm-rotation", `${rotation}deg`);
+      if (!hasRealMap) farmOverviewHouse.style.display = "grid";
       farmOverviewHouse.textContent = dongCount > 1 ? `${dongCount}동` : greenhouse.name || "1동";
       farmOverviewAddress.textContent = layoutData.farm?.address || "농장 주소";
       farmOverviewDirection.textContent = `${greenhouse.axisLabel || "남북"} · ${Math.round(Number(greenhouse.northRotationDeg) || 0)}°`;
