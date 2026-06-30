@@ -409,44 +409,30 @@
     .farm-map-head b { font-size: 14px; }
     .farm-map-head span { color: var(--muted); font-size: 11px; }
 
-    .farm-map-search {
-      position: absolute;
-      z-index: 4;
-      left: 14px;
-      right: 14px;
-      bottom: 13px;
+    .address-action {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      pointer-events: none;
+      margin-top: 8px;
     }
 
-    .farm-map-search button,
-    .farm-map-search span {
-      pointer-events: auto;
-    }
-
-    .farm-map-search button {
-      min-height: 33px;
-      border-color: rgba(214, 232, 224, .28);
-      background: rgba(15, 19, 21, .84);
-      color: #e8fff5;
+    .address-action button {
+      flex: 0 0 auto;
+      min-height: 35px;
+      border-color: rgba(64, 201, 138, .55);
+      background: rgba(16, 68, 47, .92);
+      color: #dfffee;
       font-size: 12px;
       font-weight: 900;
-      backdrop-filter: blur(10px);
     }
 
-    .farm-map-search span {
+    .address-action span {
       min-width: 0;
       color: var(--muted);
       font-size: 11px;
-      text-align: right;
-      padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 999px;
-      background: rgba(15, 19, 21, .76);
-      backdrop-filter: blur(10px);
+      line-height: 1.35;
+      text-align: left;
     }
 
     .farm-map-tools {
@@ -969,6 +955,10 @@
         <div class="field">
           <label for="address">주소</label>
           <input id="address" value="충북 진천군 이월면 진광로 928-29" />
+          <div class="address-action">
+            <button id="mapSearchAddress" type="button">주소로 이동</button>
+            <span id="mapSearchStatus">Enter 또는 버튼으로 위성뷰 이동</span>
+          </div>
         </div>
         <div class="grid-2">
           <div class="field">
@@ -1151,10 +1141,6 @@
             <button type="button" data-map-adjust="width-plus">폭 +</button>
           </div>
           <div class="farm-map-help">주황 핸들은 회전, 초록 마커는 이동, 노란 핸들은 크기 조절</div>
-          <div class="farm-map-search">
-            <button id="mapSearchAddress" type="button">주소로 이동</button>
-            <span id="mapSearchStatus">주소 입력 후 위성뷰에서 온실을 맞춥니다.</span>
-          </div>
           <div class="farm-map-fallback" id="farmMapFallback">지도를 불러오지 못했습니다. 네트워크 연결 후 다시 열어주세요.</div>
         </div>
 
@@ -2239,6 +2225,11 @@
     document.getElementById("mapSatellite").addEventListener("click", () => setBaseMapProvider("satellite"));
     document.getElementById("mapStreet").addEventListener("click", () => setBaseMapProvider("street"));
     document.getElementById("mapSearchAddress").addEventListener("click", geocodeAddressToMap);
+    el.address.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      geocodeAddressToMap();
+    });
 
     document.querySelector(".farm-map-adjust").addEventListener("pointerdown", event => {
       const button = event.target.closest("[data-map-adjust]");
@@ -2252,10 +2243,11 @@
     document.querySelector(".farm-map-adjust").addEventListener("pointercancel", stopMapAdjustRepeat);
     document.querySelector(".farm-map-adjust").addEventListener("pointerleave", stopMapAdjustRepeat);
 
-    [el.farmName, el.houseName, el.address, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
+    [el.farmName, el.houseName, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
       input.addEventListener("input", render);
       input.addEventListener("change", render);
     });
+    el.address.addEventListener("change", render);
 
     el.northRotation.addEventListener("input", () => {
       syncNorthRotation(Number(el.northRotation.value));
