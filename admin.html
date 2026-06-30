@@ -483,6 +483,9 @@
       font-size: 12px;
       font-weight: 900;
       backdrop-filter: blur(10px);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .farm-map-help {
@@ -960,6 +963,10 @@
             <span id="mapSearchStatus">Enter 또는 버튼으로 위성뷰 이동</span>
           </div>
         </div>
+        <div class="field">
+          <label for="postalCode">우편번호</label>
+          <input id="postalCode" value="27815" inputmode="numeric" placeholder="예: 27815" />
+        </div>
         <div class="grid-2">
           <div class="field">
             <label for="houseName">온실명</label>
@@ -1213,7 +1220,7 @@
         label: "뤁스퀘어 공식 지도 좌표",
         lat: ROOTSQUARE_COORDINATE.lat,
         lng: ROOTSQUARE_COORDINATE.lng,
-        patterns: ["928-27", "928–27", "뤁스퀘어", "루트스퀘어", "rootsquare"]
+        patterns: ["928-27", "928 27", "진광로928-27", "진광로 928-27", "928–27", "뤁스퀘어", "루트스퀘어", "rootsquare"]
       }
     ];
     const TILE_SOURCES = {
@@ -1285,6 +1292,7 @@
       farmName: document.getElementById("farmName"),
       houseName: document.getElementById("houseName"),
       address: document.getElementById("address"),
+      postalCode: document.getElementById("postalCode"),
       crop: document.getElementById("crop"),
       lengthM: document.getElementById("lengthM"),
       widthM: document.getElementById("widthM"),
@@ -1652,7 +1660,7 @@
     function startMapAdjustRepeat(action) {
       stopMapAdjustRepeat();
       adjustGreenhouse(action);
-      mapAdjustTimer = setInterval(() => adjustGreenhouse(action), 90);
+      mapAdjustTimer = setInterval(() => adjustGreenhouse(action), 65);
     }
 
     function greenhouseLabel() {
@@ -1850,6 +1858,7 @@
 
     async function geocodeAddressToMap() {
       const query = el.address.value.trim();
+      const postalCode = el.postalCode.value.trim();
       if (!query) {
         el.mapSearchStatus.textContent = "주소를 먼저 입력해주세요.";
         return;
@@ -1871,7 +1880,10 @@
         }
         const queryVariants = Array.from(new Set([
           query,
+          postalCode ? `${query} ${postalCode}` : "",
+          postalCode ? `${query}, ${postalCode}, 대한민국` : "",
           query.replace(/\s+\d+(-\d+)?\s*$/, "").trim(),
+          postalCode ? `${query.replace(/\s+\d+(-\d+)?\s*$/, "").trim()} ${postalCode}` : "",
           query.replace(/\s+\d+(-\d+)?\s*$/, "").replace(/\s+\S+로$/, "").trim(),
           `${query} 대한민국`
         ].filter(Boolean)));
@@ -1981,6 +1993,7 @@
         farm: {
           name: el.farmName.value,
           address: el.address.value,
+          postalCode: el.postalCode.value,
           map: {
             provider: state.map.provider,
             centerLat: state.map.centerLat,
@@ -2111,6 +2124,7 @@
       const greenhouse = data.greenhouse || {};
       setValue(el.farmName, farm.name);
       setValue(el.address, farm.address);
+      setValue(el.postalCode, farm.postalCode);
       if (farm.map) {
         state.map.provider = TILE_SOURCES[farm.map.provider] ? farm.map.provider : state.map.provider;
         state.map.centerLat = Number(farm.map.centerLat) || state.map.centerLat;
@@ -2291,20 +2305,31 @@
       event.preventDefault();
       geocodeAddressToMap();
     });
+    el.postalCode.addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      geocodeAddressToMap();
+    });
 
-    document.querySelector(".farm-map-adjust").addEventListener("pointerdown", event => {
+    const mapAdjustPanel = document.querySelector(".farm-map-adjust");
+    mapAdjustPanel.addEventListener("pointerdown", event => {
       const button = event.target.closest("[data-map-adjust]");
       if (!button) return;
       event.preventDefault();
-      button.setPointerCapture(event.pointerId);
+      try {
+        if (button.setPointerCapture && event.pointerId !== undefined) button.setPointerCapture(event.pointerId);
+      } catch (error) {
+        // Some mobile/browser contexts do not allow pointer capture on synthetic or interrupted gestures.
+      }
       startMapAdjustRepeat(button.dataset.mapAdjust);
     });
 
-    document.querySelector(".farm-map-adjust").addEventListener("pointerup", stopMapAdjustRepeat);
-    document.querySelector(".farm-map-adjust").addEventListener("pointercancel", stopMapAdjustRepeat);
-    document.querySelector(".farm-map-adjust").addEventListener("pointerleave", stopMapAdjustRepeat);
+    mapAdjustPanel.addEventListener("contextmenu", event => event.preventDefault());
+    window.addEventListener("pointerup", stopMapAdjustRepeat);
+    window.addEventListener("pointercancel", stopMapAdjustRepeat);
+    window.addEventListener("blur", stopMapAdjustRepeat);
 
-    [el.farmName, el.houseName, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
+    [el.farmName, el.houseName, el.postalCode, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
       input.addEventListener("input", render);
       input.addEventListener("change", render);
     });
