@@ -326,6 +326,72 @@
         #f5fbf8;
     }
 
+    .farm-overview {
+      min-height: 156px;
+      background:
+        linear-gradient(122deg, transparent 0 48%, rgba(184, 172, 109, .24) 48% 52%, transparent 52%),
+        linear-gradient(18deg, transparent 0 58%, rgba(86, 140, 111, .16) 58% 62%, transparent 62%),
+        linear-gradient(90deg, rgba(67, 91, 82, .045) 1px, transparent 1px),
+        linear-gradient(rgba(67, 91, 82, .045) 1px, transparent 1px),
+        #f7fbf8;
+      background-size: auto, auto, 20px 20px, 20px 20px, auto;
+    }
+
+    .farm-overview::before {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(67, 185, 135, .18);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 18% 75%, rgba(67, 185, 135, .18), transparent 30%),
+        radial-gradient(circle at 78% 28%, rgba(54, 168, 214, .12), transparent 28%);
+      pointer-events: none;
+    }
+
+    .farm-overview-house {
+      position: absolute;
+      left: var(--farm-x, 50%);
+      top: var(--farm-y, 50%);
+      width: var(--farm-w, 34%);
+      height: var(--farm-h, 52%);
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--green);
+      border-radius: 10px;
+      background: rgba(67, 185, 135, .22);
+      color: #1f7660;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 12px 26px rgba(45, 80, 69, .14), inset 0 0 0 1px rgba(255,255,255,.72);
+      transform: translate(-50%, -50%) rotate(var(--farm-rotation, 0deg));
+    }
+
+    .farm-overview-house::before {
+      content: "";
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 22%;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(33, 128, 100, .32);
+      box-shadow: 0 18px 0 rgba(33, 128, 100, .25), 0 36px 0 rgba(33, 128, 100, .18);
+    }
+
+    .farm-overview-note {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
     #greenhouse3d {
       position: relative;
       z-index: 1;
@@ -636,6 +702,14 @@
           <span id="planSize">72m × 8m</span>
         </div>
         <div class="hmi-stack">
+          <div class="view-panel farm-overview" id="farmOverview">
+            <span class="view-label">농장 배치</span>
+            <div class="farm-overview-house" id="farmOverviewHouse">1동</div>
+            <div class="farm-overview-note">
+              <span id="farmOverviewAddress">충북 진천군 이월면 진광로 928-29</span>
+              <span id="farmOverviewDirection">남북 · 0°</span>
+            </div>
+          </div>
           <div class="view-panel three-panel">
             <span class="view-label">3D 뷰</span>
             <span class="touch-hint">상하좌우 회전 · 두 손가락 줌</span>
@@ -767,6 +841,10 @@
     const alertBody = document.getElementById("alertBody");
     const metricCards = document.querySelectorAll(".metric");
     const floorPlanSvg = document.getElementById("floorPlanSvg");
+    const farmOverview = document.getElementById("farmOverview");
+    const farmOverviewHouse = document.getElementById("farmOverviewHouse");
+    const farmOverviewAddress = document.getElementById("farmOverviewAddress");
+    const farmOverviewDirection = document.getElementById("farmOverviewDirection");
 
     let scene3d;
     let camera3d;
@@ -813,6 +891,28 @@
       tabsWrap.querySelectorAll(".dong-tab").forEach(tab => {
         tab.addEventListener("click", () => selectDong(Number(tab.dataset.dong)));
       });
+    }
+
+    function renderFarmOverview() {
+      const length = Number(greenhouse.lengthM) || 72;
+      const width = Number(greenhouse.widthM) || 32;
+      const gap = Number(greenhouse.dongGapM) || 0;
+      const totalWidth = width * dongCount + gap * (dongCount - 1);
+      const maxDimension = Math.max(length, totalWidth, 1);
+      const layout = greenhouse.layout || {};
+      const mapX = Math.max(8, Math.min(92, Number(layout.xPercent) || 50));
+      const mapY = Math.max(12, Math.min(88, Number(layout.yPercent) || 50));
+      const mapW = Math.max(16, Math.min(50, (totalWidth / maxDimension) * 42));
+      const mapH = Math.max(26, Math.min(70, (length / maxDimension) * 58));
+      const rotation = Number(layout.rotationDeg ?? greenhouse.northRotationDeg) || 0;
+      farmOverview.style.setProperty("--farm-x", `${mapX}%`);
+      farmOverview.style.setProperty("--farm-y", `${mapY}%`);
+      farmOverview.style.setProperty("--farm-w", `${mapW}%`);
+      farmOverview.style.setProperty("--farm-h", `${mapH}%`);
+      farmOverview.style.setProperty("--farm-rotation", `${rotation}deg`);
+      farmOverviewHouse.textContent = dongCount > 1 ? `${dongCount}동` : greenhouse.name || "1동";
+      farmOverviewAddress.textContent = layoutData.farm?.address || "농장 주소";
+      farmOverviewDirection.textContent = `${greenhouse.axisLabel || "남북"} · ${Math.round(Number(greenhouse.northRotationDeg) || 0)}°`;
     }
 
     function renderFloorPlan(index) {
@@ -1218,6 +1318,7 @@
 
     document.getElementById("farmName").textContent = layoutData.farm?.name || "루트스퀘어";
     renderTabs();
+    renderFarmOverview();
     updateHmiTone();
     selectDong(0);
     loadThreeScene();
