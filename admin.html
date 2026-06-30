@@ -531,6 +531,16 @@
       cursor: grab;
     }
 
+    .greenhouse-map-footprint {
+      cursor: grab;
+    }
+
+    .greenhouse-map-footprint:active,
+    .greenhouse-map-label:active,
+    .greenhouse-map-rotate:active {
+      cursor: grabbing;
+    }
+
     .greenhouse-map-resize {
       width: 22px;
       height: 22px;
@@ -1032,8 +1042,8 @@
         <div class="field">
           <label for="northRotation">지도 북쪽 보정</label>
           <div class="range-row">
-            <input id="northRotation" type="range" min="-180" max="180" step="5" value="0" />
-            <input id="northNumber" type="number" min="-180" max="180" step="5" value="0" />
+            <input id="northRotation" type="range" min="-180" max="180" step="0.1" value="0" />
+            <input id="northNumber" type="number" min="-180" max="180" step="0.1" value="0" />
           </div>
         </div>
         <div class="grid-2">
@@ -1133,8 +1143,8 @@
             <button id="mapFitFarm" type="button">맞춤</button>
           </div>
           <div class="farm-map-adjust" aria-label="온실 외곽 빠른 조정">
-            <button type="button" data-map-adjust="rotate-left">좌회전 5°</button>
-            <button type="button" data-map-adjust="rotate-right">우회전 5°</button>
+            <button type="button" data-map-adjust="rotate-left">좌회전</button>
+            <button type="button" data-map-adjust="rotate-right">우회전</button>
             <button type="button" data-map-adjust="length-minus">길이 -</button>
             <button type="button" data-map-adjust="length-plus">길이 +</button>
             <button type="button" data-map-adjust="width-minus">폭 -</button>
@@ -1249,6 +1259,7 @@
     let greenhouseCenterMarker = null;
     let greenhouseResizeMarker = null;
     let greenhouseRotateMarker = null;
+    let mapAdjustTimer = null;
 
     const typeNames = {
       glass: "Venlo 유리온실",
@@ -1308,6 +1319,16 @@
 
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
+    }
+
+    function roundTo(value, precision = 1) {
+      const factor = 10 ** precision;
+      return Math.round(value * factor) / factor;
+    }
+
+    function displayNumber(value, precision = 1) {
+      const rounded = roundTo(value, precision);
+      return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(precision);
     }
 
     function num(input, fallback) {
@@ -1535,9 +1556,9 @@
     }
 
     function syncNorthRotation(value) {
-      state.northRotation = clamp(Math.round(normalizeAngle(value)), -180, 180);
+      state.northRotation = clamp(roundTo(normalizeAngle(value), 1), -180, 180);
       el.northRotation.value = state.northRotation;
-      el.northNumber.value = state.northRotation;
+      el.northNumber.value = displayNumber(state.northRotation, 1);
     }
 
     function syncLayoutInputsFromMap() {
@@ -1560,26 +1581,80 @@
       const dongCount = clamp(num(el.dongCount, 1), 1, 8);
       const dongGapM = clamp(num(el.dongGapM, 4), 0, 30);
       const gapWidth = dongGapM * (dongCount - 1);
-      const nextLength = clamp(Math.round(projectedLength), 10, 240);
-      const nextWidth = clamp(Math.round((projectedWidth - gapWidth) / dongCount), 4, 80);
-      el.lengthM.value = nextLength;
-      el.widthM.value = nextWidth;
+      const nextLength = clamp(roundTo(projectedLength, 1), 10, 240);
+      const nextWidth = clamp(roundTo((projectedWidth - gapWidth) / dongCount, 1), 4, 80);
+      el.lengthM.value = displayNumber(nextLength, 1);
+      el.widthM.value = displayNumber(nextWidth, 1);
     }
 
     function updateGreenhouseFromRotate(latLng) {
       syncNorthRotation(bearingFromCenter(latLng) - axisAngle());
     }
 
+    function moveGreenhouseCenter(latLng) {
+      state.map.houseLat = latLng.lat;
+      state.map.houseLng = latLng.lng;
+      syncLayoutInputsFromMap();
+    }
+
+    function refreshMapEditingLayers() {
+      updateFarmLeafletOverlay();
+      renderFootprint();
+      renderMetrics();
+      renderJson();
+    }
+
+    function startFootprintDrag(event) {
+      if (!leafletMap) return;
+      L.DomEvent.stop(event);
+      const startLatLng = event.latlng;
+      const startCenter = greenhouseCenter();
+      leafletMap.dragging.disable();
+
+      function move(moveEvent) {
+        if (!moveEvent.latlng) return;
+        const latDelta = moveEvent.latlng.lat - startLatLng.lat;
+        const lngDelta = moveEvent.latlng.lng - startLatLng.lng;
+        moveGreenhouseCenter({
+          lat: startCenter.lat + latDelta,
+          lng: startCenter.lng + lngDelta
+        });
+        refreshMapEditingLayers();
+      }
+
+      function up() {
+        leafletMap.off("mousemove touchmove", move);
+        leafletMap.off("mouseup touchend", up);
+        leafletMap.dragging.enable();
+        render();
+      }
+
+      leafletMap.on("mousemove touchmove", move);
+      leafletMap.on("mouseup touchend", up);
+    }
+
     function adjustGreenhouse(action) {
       const length = num(el.lengthM, 72);
       const width = num(el.widthM, 32);
-      if (action === "rotate-left") syncNorthRotation(state.northRotation - 5);
-      if (action === "rotate-right") syncNorthRotation(state.northRotation + 5);
-      if (action === "length-minus") el.lengthM.value = clamp(length - 2, 10, 240);
-      if (action === "length-plus") el.lengthM.value = clamp(length + 2, 10, 240);
-      if (action === "width-minus") el.widthM.value = clamp(width - 1, 4, 80);
-      if (action === "width-plus") el.widthM.value = clamp(width + 1, 4, 80);
+      if (action === "rotate-left") syncNorthRotation(state.northRotation - .5);
+      if (action === "rotate-right") syncNorthRotation(state.northRotation + .5);
+      if (action === "length-minus") el.lengthM.value = displayNumber(clamp(length - .5, 10, 240), 1);
+      if (action === "length-plus") el.lengthM.value = displayNumber(clamp(length + .5, 10, 240), 1);
+      if (action === "width-minus") el.widthM.value = displayNumber(clamp(width - .2, 4, 80), 1);
+      if (action === "width-plus") el.widthM.value = displayNumber(clamp(width + .2, 4, 80), 1);
       render();
+    }
+
+    function stopMapAdjustRepeat() {
+      if (!mapAdjustTimer) return;
+      clearInterval(mapAdjustTimer);
+      mapAdjustTimer = null;
+    }
+
+    function startMapAdjustRepeat(action) {
+      stopMapAdjustRepeat();
+      adjustGreenhouse(action);
+      mapAdjustTimer = setInterval(() => adjustGreenhouse(action), 90);
     }
 
     function greenhouseLabel() {
@@ -1649,8 +1724,11 @@
           color: "#40c98a",
           weight: 3,
           fillColor: "#40c98a",
-          fillOpacity: .24
+          fillOpacity: .24,
+          className: "greenhouse-map-footprint"
         }).addTo(leafletMap);
+        greenhousePolygon.on("mousedown", startFootprintDrag);
+        greenhousePolygon.on("touchstart", startFootprintDrag);
       } else {
         greenhousePolygon.setLatLngs(corners);
       }
@@ -1664,14 +1742,8 @@
       if (!greenhouseCenterMarker) {
         greenhouseCenterMarker = L.marker(centerLatLng, { icon: labelIcon, draggable: true }).addTo(leafletMap);
         greenhouseCenterMarker.on("drag", event => {
-          const latLng = event.target.getLatLng();
-          state.map.houseLat = latLng.lat;
-          state.map.houseLng = latLng.lng;
-          syncLayoutInputsFromMap();
-          updateFarmLeafletOverlay();
-          renderFootprint();
-          renderMetrics();
-          renderJson();
+          moveGreenhouseCenter(event.target.getLatLng());
+          refreshMapEditingLayers();
         });
       } else {
         greenhouseCenterMarker.setLatLng(centerLatLng);
@@ -1688,10 +1760,7 @@
         greenhouseResizeMarker = L.marker(handleLatLng, { icon: resizeIcon, draggable: true }).addTo(leafletMap);
         greenhouseResizeMarker.on("drag", event => {
           updateGreenhouseFromResize(event.target.getLatLng());
-          updateFarmLeafletOverlay();
-          renderFootprint();
-          renderMetrics();
-          renderJson();
+          refreshMapEditingLayers();
         });
         greenhouseResizeMarker.on("dragend", render);
       } else {
@@ -1709,10 +1778,7 @@
         greenhouseRotateMarker = L.marker(rotateLatLng, { icon: rotateIcon, draggable: true }).addTo(leafletMap);
         greenhouseRotateMarker.on("drag", event => {
           updateGreenhouseFromRotate(event.target.getLatLng());
-          updateFarmLeafletOverlay();
-          renderFootprint();
-          renderMetrics();
-          renderJson();
+          refreshMapEditingLayers();
         });
         greenhouseRotateMarker.on("dragend", render);
       } else {
@@ -2174,11 +2240,17 @@
     document.getElementById("mapStreet").addEventListener("click", () => setBaseMapProvider("street"));
     document.getElementById("mapSearchAddress").addEventListener("click", geocodeAddressToMap);
 
-    document.querySelector(".farm-map-adjust").addEventListener("click", event => {
+    document.querySelector(".farm-map-adjust").addEventListener("pointerdown", event => {
       const button = event.target.closest("[data-map-adjust]");
       if (!button) return;
-      adjustGreenhouse(button.dataset.mapAdjust);
+      event.preventDefault();
+      button.setPointerCapture(event.pointerId);
+      startMapAdjustRepeat(button.dataset.mapAdjust);
     });
+
+    document.querySelector(".farm-map-adjust").addEventListener("pointerup", stopMapAdjustRepeat);
+    document.querySelector(".farm-map-adjust").addEventListener("pointercancel", stopMapAdjustRepeat);
+    document.querySelector(".farm-map-adjust").addEventListener("pointerleave", stopMapAdjustRepeat);
 
     [el.farmName, el.houseName, el.address, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
       input.addEventListener("input", render);
