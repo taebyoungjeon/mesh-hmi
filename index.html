@@ -789,6 +789,18 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const STORAGE_KEY = "meshHmiLayoutV1";
+    const TILE_SOURCES = {
+      satellite: {
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        maxZoom: 19,
+        attribution: "Tiles &copy; Esri"
+      },
+      street: {
+        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        maxZoom: 21,
+        attribution: "&copy; OpenStreetMap"
+      }
+    };
     const fallbackLayout = {
       farm: { name: "루트스퀘어", address: "충북 진천군 이월면 진광로 928-29" },
       greenhouse: {
@@ -952,6 +964,8 @@
       farmOverviewHouse.style.display = "none";
 
       if (!customerOverviewMap) {
+        const provider = TILE_SOURCES[farmMap.provider] ? farmMap.provider : "satellite";
+        const source = TILE_SOURCES[provider];
         customerOverviewMap = L.map(farmOverviewMap, {
           center: [center.lat, center.lng],
           zoom: Number(farmMap.zoom) || 18,
@@ -964,9 +978,9 @@
           boxZoom: false,
           keyboard: false
         });
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          maxZoom: 21,
-          attribution: "&copy; OpenStreetMap"
+        L.tileLayer(source.url, {
+          maxZoom: source.maxZoom,
+          attribution: source.attribution
         }).addTo(customerOverviewMap);
       }
 
