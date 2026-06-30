@@ -477,6 +477,28 @@
       color: #dfffee;
     }
 
+    .farm-map-adjust {
+      position: absolute;
+      z-index: 4;
+      left: 14px;
+      top: 58px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: min(520px, calc(100% - 28px));
+    }
+
+    .farm-map-adjust button {
+      min-height: 34px;
+      padding: 0 10px;
+      border-color: rgba(214, 232, 224, .28);
+      background: rgba(15, 19, 21, .82);
+      color: #e8fff5;
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(10px);
+    }
+
     .farm-map-help {
       position: absolute;
       right: 14px;
@@ -517,6 +539,21 @@
       background: #ffd45d;
       box-shadow: 0 10px 24px rgba(0,0,0,.25);
       cursor: nwse-resize;
+    }
+
+    .greenhouse-map-rotate {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(255,255,255,.9);
+      border-radius: 50%;
+      background: #ff8b45;
+      color: #2a1204;
+      font-size: 16px;
+      font-weight: 950;
+      box-shadow: 0 10px 24px rgba(0,0,0,.28);
+      cursor: grab;
     }
 
     .farm-map-fallback {
@@ -1094,7 +1131,15 @@
             <button id="mapZoomIn" type="button" aria-label="지도 확대">+</button>
             <button id="mapFitFarm" type="button">맞춤</button>
           </div>
-          <div class="farm-map-help">지번 검색 후 위성뷰에서 초록 마커 이동, 노란 핸들로 온실 외곽 확정</div>
+          <div class="farm-map-adjust" aria-label="온실 외곽 빠른 조정">
+            <button type="button" data-map-adjust="rotate-left">좌회전 5°</button>
+            <button type="button" data-map-adjust="rotate-right">우회전 5°</button>
+            <button type="button" data-map-adjust="length-minus">길이 -</button>
+            <button type="button" data-map-adjust="length-plus">길이 +</button>
+            <button type="button" data-map-adjust="width-minus">폭 -</button>
+            <button type="button" data-map-adjust="width-plus">폭 +</button>
+          </div>
+          <div class="farm-map-help">주황 핸들은 회전, 초록 마커는 이동, 노란 핸들은 크기 조절</div>
           <div class="farm-map-search">
             <button id="mapSearchAddress" type="button">주소로 이동</button>
             <span id="mapSearchStatus">주소 입력 후 위성뷰에서 온실을 맞춥니다.</span>
@@ -1202,6 +1247,7 @@
     let greenhousePolygon = null;
     let greenhouseCenterMarker = null;
     let greenhouseResizeMarker = null;
+    let greenhouseRotateMarker = null;
 
     const typeNames = {
       glass: "Venlo 유리온실",
@@ -1464,6 +1510,35 @@
       return metersToLatLng(center, east, north);
     }
 
+    function rotateHandleLatLng() {
+      const center = greenhouseCenter();
+      const length = num(el.lengthM, 72);
+      const totalWidth = totalGreenhouseWidthM();
+      const heading = totalRotation() * Math.PI / 180;
+      const along = { east: Math.sin(heading), north: Math.cos(heading) };
+      const distance = length / 2 + Math.max(8, Math.min(18, totalWidth * .18));
+      return metersToLatLng(center, along.east * distance, along.north * distance);
+    }
+
+    function normalizeAngle(deg) {
+      let value = deg;
+      while (value > 180) value -= 360;
+      while (value < -180) value += 360;
+      return value;
+    }
+
+    function bearingFromCenter(latLng) {
+      const center = greenhouseCenter();
+      const offset = latLngToMeters(center, latLng);
+      return Math.atan2(offset.east, offset.north) * 180 / Math.PI;
+    }
+
+    function syncNorthRotation(value) {
+      state.northRotation = clamp(Math.round(normalizeAngle(value)), -180, 180);
+      el.northRotation.value = state.northRotation;
+      el.northNumber.value = state.northRotation;
+    }
+
     function syncLayoutInputsFromMap() {
       if (!leafletMap) return;
       const point = leafletMap.latLngToContainerPoint(greenhouseCenter());
@@ -1488,6 +1563,22 @@
       const nextWidth = clamp(Math.round((projectedWidth - gapWidth) / dongCount), 4, 80);
       el.lengthM.value = nextLength;
       el.widthM.value = nextWidth;
+    }
+
+    function updateGreenhouseFromRotate(latLng) {
+      syncNorthRotation(bearingFromCenter(latLng) - axisAngle());
+    }
+
+    function adjustGreenhouse(action) {
+      const length = num(el.lengthM, 72);
+      const width = num(el.widthM, 32);
+      if (action === "rotate-left") syncNorthRotation(state.northRotation - 5);
+      if (action === "rotate-right") syncNorthRotation(state.northRotation + 5);
+      if (action === "length-minus") el.lengthM.value = clamp(length - 2, 10, 240);
+      if (action === "length-plus") el.lengthM.value = clamp(length + 2, 10, 240);
+      if (action === "width-minus") el.widthM.value = clamp(width - 1, 4, 80);
+      if (action === "width-plus") el.widthM.value = clamp(width + 1, 4, 80);
+      render();
     }
 
     function greenhouseLabel() {
@@ -1550,6 +1641,7 @@
       const corners = greenhouseCorners(center, length, totalWidth, totalRotation());
       const centerLatLng = [center.lat, center.lng];
       const handleLatLng = resizeHandleLatLng();
+      const rotateLatLng = rotateHandleLatLng();
 
       if (!greenhousePolygon) {
         greenhousePolygon = L.polygon(corners, {
@@ -1604,6 +1696,27 @@
       } else {
         greenhouseResizeMarker.setLatLng(handleLatLng);
         greenhouseResizeMarker.setIcon(resizeIcon);
+      }
+
+      const rotateIcon = L.divIcon({
+        className: "",
+        html: `<div class="greenhouse-map-rotate" title="온실 회전">↻</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      });
+      if (!greenhouseRotateMarker) {
+        greenhouseRotateMarker = L.marker(rotateLatLng, { icon: rotateIcon, draggable: true }).addTo(leafletMap);
+        greenhouseRotateMarker.on("drag", event => {
+          updateGreenhouseFromRotate(event.target.getLatLng());
+          updateFarmLeafletOverlay();
+          renderFootprint();
+          renderMetrics();
+          renderJson();
+        });
+        greenhouseRotateMarker.on("dragend", render);
+      } else {
+        greenhouseRotateMarker.setLatLng(rotateLatLng);
+        greenhouseRotateMarker.setIcon(rotateIcon);
       }
     }
 
@@ -2059,20 +2172,24 @@
     document.getElementById("mapStreet").addEventListener("click", () => setBaseMapProvider("street"));
     document.getElementById("mapSearchAddress").addEventListener("click", geocodeAddressToMap);
 
+    document.querySelector(".farm-map-adjust").addEventListener("click", event => {
+      const button = event.target.closest("[data-map-adjust]");
+      if (!button) return;
+      adjustGreenhouse(button.dataset.mapAdjust);
+    });
+
     [el.farmName, el.houseName, el.address, el.crop, el.lengthM, el.widthM, el.dongCount, el.dongGapM, el.spanCount, el.bedCount, el.layoutX, el.layoutY].forEach(input => {
       input.addEventListener("input", render);
       input.addEventListener("change", render);
     });
 
     el.northRotation.addEventListener("input", () => {
-      state.northRotation = Number(el.northRotation.value);
-      el.northNumber.value = state.northRotation;
+      syncNorthRotation(Number(el.northRotation.value));
       render();
     });
 
     el.northNumber.addEventListener("input", () => {
-      state.northRotation = clamp(Number(el.northNumber.value) || 0, -180, 180);
-      el.northRotation.value = state.northRotation;
+      syncNorthRotation(Number(el.northNumber.value) || 0);
       render();
     });
 
