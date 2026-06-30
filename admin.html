@@ -954,7 +954,7 @@
         </div>
         <div class="field">
           <label for="address">주소</label>
-          <input id="address" value="충북 진천군 이월면 진광로 928-29" />
+          <input id="address" value="충북 진천군 이월면 진광로 928-27" />
           <div class="address-action">
             <button id="mapSearchAddress" type="button">주소로 이동</button>
             <span id="mapSearchStatus">Enter 또는 버튼으로 위성뷰 이동</span>
@@ -1123,7 +1123,7 @@
           <div class="farm-leaflet-map" id="farmLeafletMap"></div>
           <div class="farm-map-head">
             <b>농장 지도 배치</b>
-            <span id="farmMapAddress">충북 진천군 이월면 진광로 928-29</span>
+            <span id="farmMapAddress">충북 진천군 이월면 진광로 928-27</span>
           </div>
           <div class="farm-map-tools" aria-label="지도 조작">
             <button id="mapSatellite" class="active" type="button">위성</button>
@@ -1206,7 +1206,16 @@
   <script>
     const STORAGE_KEY = "meshHmiLayoutV1";
     const SAVED_STORAGE_KEY = "meshHmiSavedLayoutV1";
-    const DEFAULT_FARM_CENTER = { lat: 36.9219, lng: 127.4387 };
+    const ROOTSQUARE_COORDINATE = { lat: 36.9428622, lng: 127.4317318 };
+    const DEFAULT_FARM_CENTER = ROOTSQUARE_COORDINATE;
+    const KNOWN_ADDRESS_POINTS = [
+      {
+        label: "뤁스퀘어 공식 지도 좌표",
+        lat: ROOTSQUARE_COORDINATE.lat,
+        lng: ROOTSQUARE_COORDINATE.lng,
+        patterns: ["928-27", "928–27", "뤁스퀘어", "루트스퀘어", "rootsquare"]
+      }
+    ];
     const TILE_SOURCES = {
       satellite: {
         url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -1811,6 +1820,34 @@
       render();
     }
 
+    function normalizeAddress(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[–—]/g, "-")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function knownAddressPoint(query) {
+      const normalized = normalizeAddress(query);
+      return KNOWN_ADDRESS_POINTS.find(point =>
+        point.patterns.some(pattern => normalized.includes(normalizeAddress(pattern)))
+      );
+    }
+
+    function moveMapToResolvedAddress(lat, lng, zoom, statusText) {
+      state.map.centerLat = lat;
+      state.map.centerLng = lng;
+      state.map.houseLat = lat;
+      state.map.houseLng = lng;
+      state.map.zoom = zoom;
+      setBaseMapProvider("satellite");
+      leafletMap.setView([lat, lng], zoom);
+      syncLayoutInputsFromMap();
+      el.mapSearchStatus.textContent = statusText;
+      render();
+    }
+
     async function geocodeAddressToMap() {
       const query = el.address.value.trim();
       if (!query) {
@@ -1820,6 +1857,18 @@
       initFarmLeafletMap();
       el.mapSearchStatus.textContent = "주소 좌표를 찾는 중...";
       try {
+        const source = TILE_SOURCES.satellite;
+        const targetZoom = Math.min(source.maxZoom, source.defaultZoom);
+        const knownPoint = knownAddressPoint(query);
+        if (knownPoint) {
+          moveMapToResolvedAddress(
+            knownPoint.lat,
+            knownPoint.lng,
+            targetZoom,
+            `${knownPoint.label}로 이동했습니다. 위성뷰에서 온실 외곽을 맞춰주세요.`
+          );
+          return;
+        }
         const queryVariants = Array.from(new Set([
           query,
           query.replace(/\s+\d+(-\d+)?\s*$/, "").trim(),
@@ -1844,19 +1893,10 @@
         const lat = Number(picked.lat);
         const lng = Number(picked.lon);
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("invalid coordinate");
-        state.map.centerLat = lat;
-        state.map.centerLng = lng;
-        state.map.houseLat = lat;
-        state.map.houseLng = lng;
-        const source = TILE_SOURCES.satellite;
-        state.map.zoom = Math.min(source.maxZoom, source.defaultZoom);
-        setBaseMapProvider("satellite");
-        leafletMap.setView([lat, lng], state.map.zoom);
-        syncLayoutInputsFromMap();
-        el.mapSearchStatus.textContent = picked.query === query
+        const statusText = picked.query === query
           ? "위성뷰로 이동했습니다. 초록 마커와 노란 핸들로 온실 외곽을 맞춰주세요."
           : `근접 주소(${picked.query})로 이동했습니다. 위성뷰에서 위치를 보정해주세요.`;
-        render();
+        moveMapToResolvedAddress(lat, lng, targetZoom, statusText);
       } catch (error) {
         el.mapSearchStatus.textContent = "주소 이동 실패. 네트워크 또는 주소 표기를 확인해주세요.";
       }
