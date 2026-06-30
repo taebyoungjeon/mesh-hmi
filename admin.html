@@ -1210,12 +1210,15 @@
     const TILE_SOURCES = {
       satellite: {
         url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        maxZoom: 19,
+        maxZoom: 18,
+        maxNativeZoom: 18,
+        defaultZoom: 17,
         attribution: "Tiles &copy; Esri"
       },
       street: {
         url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         maxZoom: 21,
+        defaultZoom: 18,
         attribution: "&copy; OpenStreetMap"
       }
     };
@@ -1233,7 +1236,7 @@
         provider: "satellite",
         centerLat: DEFAULT_FARM_CENTER.lat,
         centerLng: DEFAULT_FARM_CENTER.lng,
-        zoom: 18,
+        zoom: 17,
         houseLat: DEFAULT_FARM_CENTER.lat,
         houseLng: DEFAULT_FARM_CENTER.lng
       }
@@ -1679,11 +1682,23 @@
       const nextProvider = TILE_SOURCES[provider] ? provider : "satellite";
       const source = TILE_SOURCES[nextProvider];
       if (baseMapLayer) leafletMap.removeLayer(baseMapLayer);
+      let tileErrorHandled = false;
       baseMapLayer = L.tileLayer(source.url, {
         maxZoom: source.maxZoom,
+        maxNativeZoom: source.maxNativeZoom || source.maxZoom,
         attribution: source.attribution
       }).addTo(leafletMap);
+      baseMapLayer.on("tileerror", () => {
+        if (tileErrorHandled || state.map.provider !== "satellite") return;
+        tileErrorHandled = true;
+        if (leafletMap.getZoom() > source.defaultZoom) {
+          leafletMap.setZoom(source.defaultZoom);
+        }
+        el.mapSearchStatus.textContent = "해당 배율의 위성 타일이 부족해 안전 배율로 조정했습니다.";
+      });
       state.map.provider = nextProvider;
+      leafletMap.setMaxZoom(source.maxZoom);
+      if (leafletMap.getZoom() > source.maxZoom) leafletMap.setZoom(source.maxZoom);
       document.getElementById("mapSatellite").classList.toggle("active", nextProvider === "satellite");
       document.getElementById("mapStreet").classList.toggle("active", nextProvider === "street");
     }
@@ -1782,7 +1797,11 @@
 
     function fitFarmOnMap() {
       if (!leafletMap || !greenhousePolygon) return;
-      leafletMap.fitBounds(greenhousePolygon.getBounds().pad(.8), { animate: true, maxZoom: 19 });
+      const source = TILE_SOURCES[state.map.provider] || TILE_SOURCES.satellite;
+      leafletMap.fitBounds(greenhousePolygon.getBounds().pad(.8), {
+        animate: true,
+        maxZoom: Math.min(source.maxZoom, 18)
+      });
     }
 
     function placeGreenhouseAtMapClick(event) {
@@ -1829,7 +1848,8 @@
         state.map.centerLng = lng;
         state.map.houseLat = lat;
         state.map.houseLng = lng;
-        state.map.zoom = Math.max(Number(state.map.zoom) || 18, 18);
+        const source = TILE_SOURCES.satellite;
+        state.map.zoom = Math.min(source.maxZoom, source.defaultZoom);
         setBaseMapProvider("satellite");
         leafletMap.setView([lat, lng], state.map.zoom);
         syncLayoutInputsFromMap();
@@ -2055,7 +2075,8 @@
         state.map.provider = TILE_SOURCES[farm.map.provider] ? farm.map.provider : state.map.provider;
         state.map.centerLat = Number(farm.map.centerLat) || state.map.centerLat;
         state.map.centerLng = Number(farm.map.centerLng) || state.map.centerLng;
-        state.map.zoom = Number(farm.map.zoom) || state.map.zoom;
+        const source = TILE_SOURCES[state.map.provider] || TILE_SOURCES.satellite;
+        state.map.zoom = clamp(Number(farm.map.zoom) || state.map.zoom, 1, source.maxZoom);
       }
       setValue(el.houseName, greenhouse.name);
       setValue(el.crop, greenhouse.crop);

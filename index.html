@@ -792,12 +792,15 @@
     const TILE_SOURCES = {
       satellite: {
         url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        maxZoom: 19,
+        maxZoom: 18,
+        maxNativeZoom: 18,
+        defaultZoom: 17,
         attribution: "Tiles &copy; Esri"
       },
       street: {
         url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         maxZoom: 21,
+        defaultZoom: 18,
         attribution: "&copy; OpenStreetMap"
       }
     };
@@ -966,9 +969,11 @@
       if (!customerOverviewMap) {
         const provider = TILE_SOURCES[farmMap.provider] ? farmMap.provider : "satellite";
         const source = TILE_SOURCES[provider];
+        const startZoom = Math.min(Number(farmMap.zoom) || source.defaultZoom, source.maxZoom);
         customerOverviewMap = L.map(farmOverviewMap, {
           center: [center.lat, center.lng],
-          zoom: Number(farmMap.zoom) || 18,
+          zoom: startZoom,
+          maxZoom: source.maxZoom,
           zoomControl: false,
           attributionControl: false,
           dragging: false,
@@ -980,6 +985,7 @@
         });
         L.tileLayer(source.url, {
           maxZoom: source.maxZoom,
+          maxNativeZoom: source.maxNativeZoom || source.maxZoom,
           attribution: source.attribution
         }).addTo(customerOverviewMap);
       }
@@ -995,7 +1001,8 @@
         customerOverviewPolygon.setLatLngs(corners);
       }
 
-      customerOverviewMap.fitBounds(customerOverviewPolygon.getBounds().pad(.9), { animate: false, maxZoom: 19 });
+      const source = TILE_SOURCES[layoutData.farm?.map?.provider] || TILE_SOURCES.satellite;
+      customerOverviewMap.fitBounds(customerOverviewPolygon.getBounds().pad(.9), { animate: false, maxZoom: source.maxZoom });
       setTimeout(() => customerOverviewMap.invalidateSize(), 60);
       return true;
     }
