@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>삼성물산 리야드 딸기 스마트팜 검토 요약 | MESH</title>
+  <meta name="description" content="사우디 리야드 3,300m2 딸기 스마트팜 테스트베드 자료 요약, CAPEX 원화 환산, MESH API 연동 참여안">
+  <style>
+    :root {
+      --paper: #fbfcf8;
+      --ink: #17221d;
+      --muted: #65716c;
+      --line: #d9ded6;
+      --green: #1d6b4a;
+      --green-2: #e5f3ea;
+      --blue: #245b7b;
+      --blue-2: #e7f1f6;
+      --amber: #9b6a18;
+      --amber-2: #fbf2df;
+      --slate: #25313a;
+      --white: #ffffff;
+      --shadow: 0 18px 52px rgba(26, 39, 31, .13);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.58;
+      letter-spacing: 0;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(217, 222, 214, .9);
+      background: rgba(251, 252, 248, .92);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 900;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--green);
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .navlinks a,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--white);
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      border-color: #1d6b4a;
+      background: var(--green);
+      color: #fff;
+    }
+
+    .hero {
+      padding: 34px 0 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 18px 0 0;
+      color: #3c4b45;
+      font-size: 18px;
+      line-height: 1.58;
+    }
+
+    .hero-media {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-media img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    main {
+      display: grid;
+      gap: 22px;
+      padding-bottom: 54px;
+    }
+
+    section {
+      scroll-margin-top: 86px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 8px 28px rgba(26, 39, 31, .06);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #edf0ea;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--slate);
+      font-size: 25px;
+      line-height: 1.22;
+      letter-spacing: 0;
+    }
+
+    .note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      min-height: 126px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8faf6;
+    }
+
+    .metric b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.32;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--green);
+      font-size: 24px;
+      line-height: 1.18;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: #41504a;
+      font-size: 13px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8faf6;
+    }
+
+    .panel.blue { background: var(--blue-2); border-color: #c8dce8; }
+    .panel.green { background: var(--green-2); border-color: #c8e2d2; }
+    .panel.amber { background: var(--amber-2); border-color: #ead7af; }
+
+    h3 {
+      margin: 0 0 10px;
+      color: var(--slate);
+      font-size: 18px;
+      line-height: 1.28;
+      letter-spacing: 0;
+    }
+
+    p { margin: 0 0 10px; }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    li { margin: 5px 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef3ed;
+      color: var(--slate);
+      font-weight: 950;
+    }
+
+    td.num, th.num {
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    tr.total td {
+      background: #f0f7f2;
+      color: var(--green);
+      font-weight: 950;
+    }
+
+    .exchange {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .mini b {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mini strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--blue);
+      font-size: 20px;
+      line-height: 1.22;
+    }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    figure img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    figcaption {
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .api-flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      min-height: 118px;
+      padding: 14px;
+      border: 1px solid #c8dce8;
+      border-radius: 8px;
+      background: #f6fbfd;
+    }
+
+    .flow-step b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 13px;
+    }
+
+    .flow-step span {
+      color: #394a55;
+      font-size: 13px;
+    }
+
+    .pdf-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .pdf-frame {
+      width: 100%;
+      height: min(78vh, 780px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #edf0ea;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .risk {
+      border-left: 5px solid var(--amber);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .two-col,
+      .image-row {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid,
+      .exchange {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .api-flow {
+        grid-template-columns: 1fr;
+      }
+
+      .nav { align-items: flex-start; padding: 12px 0; flex-direction: column; }
+      .navlinks { justify-content: flex-start; }
+      section { padding: 20px; }
+      .note { text-align: left; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      table { font-size: 13px; }
+      th, td { padding: 9px 8px; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 22px, 1180px); }
+      .summary-grid,
+      .exchange {
+        grid-template-columns: 1fr;
+      }
+      .navlinks a, .button { width: 100%; }
+      .navlinks { width: 100%; }
+      h1 { font-size: 31px; }
+      .lead { font-size: 16px; }
+      .pdf-frame { height: 520px; }
+    }
+
+    @media print {
+      header { position: static; }
+      .hero-media, .pdf-frame { box-shadow: none; }
+      .pdf-frame, .pdf-tools { display: none; }
+      section { page-break-inside: avoid; box-shadow: none; }
+      body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="mark">M</div>
+        <div>
+          MESH Project Brief
+          <span>Samsung C&T Riyadh Strawberry Smart Farm</span>
+        </div>
+      </div>
+      <nav class="navlinks" aria-label="page sections">
+        <a href="#summary">요약</a>
+        <a href="#capex">CAPEX</a>
+        <a href="#mesh-api">MESH API</a>
+        <a href="#original">원본 PDF</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">External Share Draft · 2026.07.01</p>
+        <h1>리야드 딸기 스마트팜 테스트베드 검토 요약</h1>
+        <p class="lead">
+          삼성물산 리야드 법인 발표자료를 기준으로, 사우디 리야드 3,300m2 규모의
+          IoT 기반 유리온실 테스트베드 사업 구조와 원화 환산 CAPEX, MESH API 연동 참여안을 정리했습니다.
+        </p>
+        <div class="chips">
+          <span class="chip">기본안: IoT 기반 유리온실</span>
+          <span class="chip">위치: Riyadh, KSA</span>
+          <span class="chip">Stage 1: 2027-2028</span>
+          <span class="chip">환율: 1 SAR = 415 KRW</span>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="assets/cover.png" alt="Zero-Mile Innovation proposal cover">
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section id="summary">
+      <div class="section-head">
+        <h2>프로젝트 핵심</h2>
+        <p class="note">원본: 2026.06.28 삼성물산 리야드법인 발표자료 스캔본</p>
+      </div>
+      <div class="summary-grid">
+        <div class="metric">
+          <b>사업 방향</b>
+          <strong>Zero-Mile</strong>
+          <span>수입 딸기 의존을 줄이고 리야드 현지에서 프리미엄 PB 딸기 생산</span>
+        </div>
+        <div class="metric">
+          <b>1단계 시설</b>
+          <strong>3,300m2</strong>
+          <span>IoT 기반 유리온실 테스트베드. 수직농장은 비교 검토 옵션</span>
+        </div>
+        <div class="metric">
+          <b>1단계 투자비</b>
+          <strong>약 41.5억 원</strong>
+          <span>10 million SAR 기준, 토지는 파트너 제공 가정</span>
+        </div>
+        <div class="metric">
+          <b>사업성 기준</b>
+          <strong>IRR 15%</strong>
+          <span>목표 수확량 16kg/m2/year, 도매가 45 SAR/kg 가정</span>
+        </div>
+      </div>
+
+      <div class="two-col" style="margin-top:18px;">
+        <div class="panel green">
+          <h3>자료상 사업 구조</h3>
+          <ul>
+            <li>SPC 주주 후보: KSA Government, Samsung, Local Partner, Off-Taker</li>
+            <li>금융기관 후보: KSA ADF, Korea Government Fund, Private Investor</li>
+            <li>EPC + O&M 역할: local partner main, Samsung sub 구조로 제시</li>
+            <li>Stage 1 성공 이후 Jeddah, Dammam 및 매장 내 쇼룸형 스마트팜 확장 검토</li>
+          </ul>
+        </div>
+        <div class="panel blue">
+          <h3>우리 참여 여지</h3>
+          <ul>
+            <li>CAPEX/OPEX와 수확량 시나리오 재검증</li>
+            <li>MEP, HVAC, 수처리, 양액, 전력부하 중심 시설 검토</li>
+            <li>삼성 Bynd IoT 플랫폼과 MESH API 연동 설계 및 현장 데이터 표준화</li>
+            <li>딸기 생육 레시피, 원격 모니터링, 수확량/품질 KPI 운영안 지원</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="capex">
+      <div class="section-head">
+        <h2>시설 CAPEX 원화 환산</h2>
+        <p class="note">적용 환율: 1 SAR = 415 KRW, 2026.07.01 조회 기준 반올림</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th class="num">SAR</th>
+            <th class="num">KRW</th>
+            <th class="num">억원 환산</th>
+            <th>검토 포인트</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Design &amp; Project Management</td>
+            <td class="num">500,000</td>
+            <td class="num">207,500,000</td>
+            <td class="num">2.08억</td>
+            <td>기본설계, 실시설계, 프로젝트 관리 범위 명확화 필요</td>
+          </tr>
+          <tr>
+            <td>Structure &amp; Construction</td>
+            <td class="num">2,500,000</td>
+            <td class="num">1,037,500,000</td>
+            <td class="num">10.38억</td>
+            <td>유리온실 구조, 기초, 차광, 현지 시공 단가 검증</td>
+          </tr>
+          <tr>
+            <td>MEP &amp; HVAC</td>
+            <td class="num">3,500,000</td>
+            <td class="num">1,452,500,000</td>
+            <td class="num">14.53억</td>
+            <td>리야드 고온 환경의 냉방부하, 습도제어, 전력 피크가 핵심</td>
+          </tr>
+          <tr>
+            <td>Nutrient &amp; Water Treatment System</td>
+            <td class="num">1,000,000</td>
+            <td class="num">415,000,000</td>
+            <td class="num">4.15억</td>
+            <td>원수 수질, 여과, 살균, 양액 재순환, 배액 처리 조건 확인</td>
+          </tr>
+          <tr>
+            <td>Automation &amp; IoT</td>
+            <td class="num">1,500,000</td>
+            <td class="num">622,500,000</td>
+            <td class="num">6.23억</td>
+            <td>센서, 제어기, 게이트웨이, Bynd-MESH API 연동 범위 정의</td>
+          </tr>
+          <tr>
+            <td>Logistics &amp; Infra</td>
+            <td class="num">1,000,000</td>
+            <td class="num">415,000,000</td>
+            <td class="num">4.15억</td>
+            <td>수확 후 예냉, 포장, 매장/물류센터 연계 동선 확인</td>
+          </tr>
+          <tr class="total">
+            <td>Total CAPEX</td>
+            <td class="num">10,000,000</td>
+            <td class="num">4,150,000,000</td>
+            <td class="num">41.50억</td>
+            <td>Stage 1 테스트베드 기준. Stage 2 약 100M SAR는 약 415억 원 규모</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="exchange">
+        <div class="mini">
+          <b>도매가 기준</b>
+          <strong>45 SAR/kg = 18,675원/kg</strong>
+        </div>
+        <div class="mini">
+          <b>전기단가 기준</b>
+          <strong>0.18 SAR/kWh = 약 75원/kWh</strong>
+        </div>
+        <div class="mini">
+          <b>연간 OPEX 기준</b>
+          <strong>642,000 SAR = 약 2.66억 원</strong>
+        </div>
+      </div>
+
+      <div class="image-row">
+        <figure>
+          <img src="assets/financial-analysis.png" alt="Financial analysis page from source proposal">
+          <figcaption>원본 자료의 Financial Analysis 페이지. 목표 수확량, 가격, CAPEX, IRR 민감도 기준이 포함되어 있습니다.</figcaption>
+        </figure>
+        <div class="panel amber risk">
+          <h3>사업성 검증에서 먼저 볼 부분</h3>
+          <ul>
+            <li>자료상 수확량은 16kg/m2/year이나, 손메모상 12kg 또는 30kg 재검토 흔적이 있습니다.</li>
+            <li>딸기 도매가 45 SAR/kg은 원화 약 18,675원/kg입니다. 오프테이크 가격 로직이 확정돼야 IRR이 안정됩니다.</li>
+            <li>MEP &amp; HVAC가 총 CAPEX의 35% 수준이므로 냉방부하와 전력계약 조건이 핵심 리스크입니다.</li>
+            <li>물 사용량, 배액 재활용률, 원수 수질, 양액비, 포장/콜드체인 비용을 별도 산정해야 합니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="mesh-api">
+      <div class="section-head">
+        <h2>Samsung Bynd IoT + MESH API 연동 참여안</h2>
+        <p class="note">Bynd를 상위 IoT 플랫폼으로 두고, MESH는 농장 운영 데이터 계층을 보강</p>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>제안 포지션</h3>
+          <p>
+            삼성 Bynd IoT 플랫폼이 설비 통합, 데이터 수집, 사용자 접근, AI Agent를 담당하는 구조라면,
+            MESH는 재배·시설·품질 운영 데이터를 표준 API로 정리해 Bynd와 연결하는 실무형 연동 레이어를 지원할 수 있습니다.
+          </p>
+          <ul>
+            <li>센서/제어 데이터 표준화: 온습도, CO2, EC/pH, 광량, 배지수분, 냉방/양액 장비 상태</li>
+            <li>재배 KPI 모델링: 구역별 생육, 착과, 수확량, Brix, 등급, 폐기율</li>
+            <li>원격 운영 화면: 현장 HMI, 관리자 대시보드, 알람, 작업지시</li>
+            <li>AI 분석 준비: 생육 레시피 이력, 환경 편차, 생산성/에너지 상관 분석</li>
+          </ul>
+        </div>
+        <figure>
+          <img src="assets/bynd-iot.png" alt="Bynd IoT system page from source proposal">
+          <figcaption>원본 자료의 Bynd IoT System 페이지. Connectivity, Data Intelligence, Accessibility, AI Agent가 핵심 축입니다.</figcaption>
+        </figure>
+      </div>
+
+      <div class="api-flow" style="margin-top:18px;">
+        <div class="flow-step">
+          <b>01. Field Devices</b>
+          <span>센서, HVAC, 양액기, 조명, 수처리, 계측기 데이터 수집</span>
+        </div>
+        <div class="flow-step">
+          <b>02. MESH Gateway</b>
+          <span>프로토콜 변환, 장비 태그 정리, 장애/누락 데이터 보정</span>
+        </div>
+        <div class="flow-step">
+          <b>03. MESH API</b>
+          <span>REST/Webhook 기반 표준 API, 이벤트 로그, KPI 데이터 제공</span>
+        </div>
+        <div class="flow-step">
+          <b>04. Samsung Bynd</b>
+          <span>상위 통합, 사용자 권한, 앱/웹 접근, AI Agent 연결</span>
+        </div>
+        <div class="flow-step">
+          <b>05. Operation</b>
+          <span>알라시드/삼성/운영팀 대시보드, 수확·품질·에너지 의사결정</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="participation">
+      <div class="section-head">
+        <h2>후속 제안 패키지</h2>
+        <p class="note">삼성·도화 협의용으로 바로 꺼낼 수 있는 범위</p>
+      </div>
+      <div class="two-col">
+        <div class="panel green">
+          <h3>1단계: Desk Study</h3>
+          <ul>
+            <li>원본 발표자료 기반 CAPEX/OPEX 재산정</li>
+            <li>리야드 기후 기준 HVAC·전력부하 1차 검토</li>
+            <li>딸기 수확량 12/16/20/30kg 시나리오별 IRR 민감도</li>
+            <li>오프테이크 가격, 품질등급, 납품수량 조건표 작성</li>
+          </ul>
+        </div>
+        <div class="panel blue">
+          <h3>2단계: Technical Package</h3>
+          <ul>
+            <li>유리온실 vs 실내수직농장 시설 대안 비교</li>
+            <li>센서/제어/네트워크 아키텍처와 Bynd-MESH API 명세</li>
+            <li>재배 운영 KPI와 원격관리 대시보드 목업</li>
+            <li>EPC, O&M, 데이터 운영 역할분담표</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="original">
+      <div class="section-head">
+        <h2>원본 파일 및 요약본</h2>
+        <p class="note">외부 공유 전 원본 PDF 공개 권한 확인 필요</p>
+      </div>
+      <div class="pdf-tools">
+        <a class="button primary" href="assets/samsung-riyadh-strawberry-proposal-scan-20260628.pdf" target="_blank" rel="noopener">원본 PDF 새 창으로 보기</a>
+        <a class="button" href="assets/samsung-riyadh-strawberry-proposal-scan-20260628.pdf" download>원본 PDF 다운로드</a>
+        <a class="button" href="#summary">요약본으로 이동</a>
+      </div>
+      <iframe class="pdf-frame" src="assets/samsung-riyadh-strawberry-proposal-scan-20260628.pdf" title="Samsung C&T Riyadh strawberry smart farm source PDF"></iframe>
+      <p class="footer-note">
+        주의: 본 페이지는 제공된 스캔 자료를 바탕으로 작성한 공유용 초안입니다. 환율은 2026.07.01 공개 조회값을 참고해 1 SAR = 415 KRW로 단순 환산했으며,
+        실제 계약·송금·회계 적용 환율, 세금, 관세, 금융비용, 현지 시공 단가에 따라 금액은 달라질 수 있습니다.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
