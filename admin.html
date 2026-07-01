@@ -973,6 +973,10 @@
         <div class="field">
           <label for="postalCode">우편번호</label>
           <input id="postalCode" value="27815" inputmode="numeric" placeholder="예: 27815" />
+          <div class="address-action">
+            <button id="mapSearchPostal" type="button">우편번호로 이동</button>
+            <span>주소 검색이 애매할 때 우편번호 중심으로 먼저 이동</span>
+          </div>
         </div>
         <div class="grid-2">
           <div class="field">
@@ -1668,6 +1672,50 @@
       move(event.originalEvent || event);
     }
 
+    function startGreenhouseCenterDrag(event) {
+      if (!leafletMap) return;
+      L.DomEvent.stop(event);
+      const startPoint = clientPointFromEvent(event.originalEvent || event);
+      if (!startPoint) return;
+      const startRect = leafletMap.getContainer().getBoundingClientRect();
+      const startContainerPoint = L.point(startPoint.x - startRect.left, startPoint.y - startRect.top);
+      const startCenterPoint = leafletMap.latLngToContainerPoint(greenhouseCenter());
+      const grabOffset = {
+        x: startContainerPoint.x - startCenterPoint.x,
+        y: startContainerPoint.y - startCenterPoint.y
+      };
+      setLeafletGestureEnabled(false);
+      const container = leafletMap.getContainer();
+      container.classList.add("is-editing-greenhouse");
+
+      function move(moveEvent) {
+        const point = clientPointFromEvent(moveEvent);
+        if (!point) return;
+        moveEvent.preventDefault();
+        const rect = container.getBoundingClientRect();
+        const centerPoint = L.point(point.x - rect.left - grabOffset.x, point.y - rect.top - grabOffset.y);
+        moveGreenhouseCenter(leafletMap.containerPointToLatLng(centerPoint));
+        refreshMapEditingLayers();
+      }
+
+      function up() {
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", up);
+        document.removeEventListener("touchmove", move);
+        document.removeEventListener("touchend", up);
+        document.removeEventListener("touchcancel", up);
+        container.classList.remove("is-editing-greenhouse");
+        setLeafletGestureEnabled(true);
+        render();
+      }
+
+      document.addEventListener("mousemove", move, { passive: false });
+      document.addEventListener("mouseup", up);
+      document.addEventListener("touchmove", move, { passive: false });
+      document.addEventListener("touchend", up);
+      document.addEventListener("touchcancel", up);
+    }
+
     function moveGreenhouseCenter(latLng) {
       state.map.houseLat = latLng.lat;
       state.map.houseLng = latLng.lng;
@@ -1829,11 +1877,8 @@
         iconAnchor: [24, 16]
       });
       if (!greenhouseCenterMarker) {
-        greenhouseCenterMarker = L.marker(centerLatLng, { icon: labelIcon, draggable: true }).addTo(leafletMap);
-        greenhouseCenterMarker.on("drag", event => {
-          moveGreenhouseCenter(event.target.getLatLng());
-          refreshMapEditingLayers();
-        });
+        greenhouseCenterMarker = L.marker(centerLatLng, { icon: labelIcon, draggable: false }).addTo(leafletMap);
+        greenhouseCenterMarker.on("mousedown touchstart", startGreenhouseCenterDrag);
       } else {
         greenhouseCenterMarker.setLatLng(centerLatLng);
         greenhouseCenterMarker.setIcon(labelIcon);
@@ -1970,7 +2015,7 @@
         tokens.road ? `${tokens.road} ${tokens.cityParts} 대한민국` : "",
         postalCode ? `${postalCode} 대한민국` : ""
       ];
-      return Array.from(new Set(variants.filter(Boolean)));
+      return Array.from(new Set(variants.map(variant => variant.trim()).filter(Boolean)));
     }
 
     function scoreGeocodeResult(result, variant, query, postalCode) {
@@ -2003,15 +2048,19 @@
       render();
     }
 
-    async function geocodeAddressToMap() {
-      const query = el.address.value.trim();
+    async function geocodeAddressToMap(options = {}) {
+      const query = options.postalOnly ? "" : el.address.value.trim();
       const postalCode = el.postalCode.value.trim();
       if (!query && !postalCode) {
         el.mapSearchStatus.textContent = "주소 또는 우편번호를 먼저 입력해주세요.";
         return;
       }
+      if (options.postalOnly && !postalCode) {
+        el.mapSearchStatus.textContent = "우편번호를 먼저 입력해주세요.";
+        return;
+      }
       initFarmLeafletMap();
-      el.mapSearchStatus.textContent = "주소 좌표를 찾는 중...";
+      el.mapSearchStatus.textContent = options.postalOnly ? "우편번호 기준 좌표를 찾는 중..." : "주소 좌표를 찾는 중...";
       try {
         const source = TILE_SOURCES.satellite;
         const targetZoom = Math.min(source.maxZoom, source.defaultZoom);
@@ -2025,7 +2074,9 @@
           );
           return;
         }
-        const queryVariants = buildAddressQueryVariants(query, postalCode);
+        const queryVariants = options.postalOnly
+          ? buildAddressQueryVariants("", postalCode)
+          : buildAddressQueryVariants(query, postalCode);
         let picked = null;
         for (const variant of queryVariants) {
           const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=kr&q=${encodeURIComponent(variant)}`;
@@ -2049,9 +2100,11 @@
         const lng = Number(picked.lon);
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("invalid coordinate");
         const exactEnough = picked.score >= 80;
-        const statusText = exactEnough && picked.query === compactAddress(query)
-          ? "위성뷰로 이동했습니다. 초록 마커와 노란 핸들로 온실 외곽을 맞춰주세요."
-          : `근접 주소(${picked.query})로 이동했습니다. 위성뷰에서 위치를 보정해주세요.`;
+        const statusText = options.postalOnly
+          ? `우편번호(${postalCode}) 기준으로 이동했습니다. 위성뷰에서 위치를 보정해주세요.`
+          : exactEnough && picked.query === compactAddress(query)
+            ? "위성뷰로 이동했습니다. 초록 마커와 노란 핸들로 온실 외곽을 맞춰주세요."
+            : `근접 주소(${picked.query})로 이동했습니다. 위성뷰에서 위치를 보정해주세요.`;
         moveMapToResolvedAddress(lat, lng, exactEnough ? targetZoom : Math.min(targetZoom, 16), statusText);
       } catch (error) {
         el.mapSearchStatus.textContent = "주소 이동 실패. 네트워크 또는 주소 표기를 확인해주세요.";
@@ -2444,6 +2497,7 @@
     document.getElementById("mapSatellite").addEventListener("click", () => setBaseMapProvider("satellite"));
     document.getElementById("mapStreet").addEventListener("click", () => setBaseMapProvider("street"));
     document.getElementById("mapSearchAddress").addEventListener("click", geocodeAddressToMap);
+    document.getElementById("mapSearchPostal").addEventListener("click", () => geocodeAddressToMap({ postalOnly: true }));
     el.address.addEventListener("keydown", event => {
       if (event.key !== "Enter") return;
       event.preventDefault();
