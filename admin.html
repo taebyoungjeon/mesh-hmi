@@ -1280,6 +1280,7 @@
     let greenhousePolygon = null;
     let greenhouseCenterMarker = null;
     let greenhouseResizeMarker = null;
+    let greenhouseResizeOppositeMarker = null;
     let greenhouseRotateMarker = null;
     let mapAdjustTimer = null;
 
@@ -1543,15 +1544,15 @@
       };
     }
 
-    function resizeHandleLatLng() {
+    function resizeHandleLatLng(direction = 1) {
       const center = greenhouseCenter();
       const length = num(el.lengthM, 72);
       const totalWidth = totalGreenhouseWidthM();
       const heading = totalRotation() * Math.PI / 180;
       const along = { east: Math.sin(heading), north: Math.cos(heading) };
       const across = { east: Math.cos(heading), north: -Math.sin(heading) };
-      const east = along.east * (length / 2) + across.east * (totalWidth / 2);
-      const north = along.north * (length / 2) + across.north * (totalWidth / 2);
+      const east = direction * (along.east * (length / 2) + across.east * (totalWidth / 2));
+      const north = direction * (along.north * (length / 2) + across.north * (totalWidth / 2));
       return metersToLatLng(center, east, north);
     }
 
@@ -1854,6 +1855,7 @@
       const corners = greenhouseCorners(center, length, totalWidth, totalRotation());
       const centerLatLng = [center.lat, center.lng];
       const handleLatLng = resizeHandleLatLng();
+      const oppositeHandleLatLng = resizeHandleLatLng(-1);
       const rotateLatLng = rotateHandleLatLng();
 
       if (!greenhousePolygon) {
@@ -1896,6 +1898,14 @@
       } else {
         greenhouseResizeMarker.setLatLng(handleLatLng);
         greenhouseResizeMarker.setIcon(resizeIcon);
+      }
+
+      if (!greenhouseResizeOppositeMarker) {
+        greenhouseResizeOppositeMarker = L.marker(oppositeHandleLatLng, { icon: resizeIcon, draggable: false }).addTo(leafletMap);
+        greenhouseResizeOppositeMarker.on("mousedown touchstart", event => startGreenhouseHandleDrag("resize", event));
+      } else {
+        greenhouseResizeOppositeMarker.setLatLng(oppositeHandleLatLng);
+        greenhouseResizeOppositeMarker.setIcon(resizeIcon);
       }
 
       const rotateIcon = L.divIcon({
