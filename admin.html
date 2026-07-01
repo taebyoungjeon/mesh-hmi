@@ -526,6 +526,7 @@
 
     .greenhouse-map-footprint:active,
     .greenhouse-map-label:active,
+    .greenhouse-map-resize:active,
     .greenhouse-map-rotate:active {
       cursor: grabbing;
     }
@@ -538,6 +539,9 @@
       background: #ffd45d;
       box-shadow: 0 10px 24px rgba(0,0,0,.25);
       cursor: nwse-resize;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .greenhouse-map-rotate {
@@ -553,6 +557,9 @@
       font-weight: 950;
       box-shadow: 0 10px 24px rgba(0,0,0,.28);
       cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .farm-map-fallback {
@@ -1603,6 +1610,64 @@
       syncNorthRotation(bearingFromCenter(latLng) - axisAngle());
     }
 
+    function clientPointFromEvent(event) {
+      const source = event.touches?.[0] || event.changedTouches?.[0] || event;
+      if (!source || typeof source.clientX !== "number" || typeof source.clientY !== "number") return null;
+      return { x: source.clientX, y: source.clientY };
+    }
+
+    function latLngFromClientPoint(point) {
+      const container = leafletMap.getContainer();
+      const rect = container.getBoundingClientRect();
+      return leafletMap.containerPointToLatLng(L.point(point.x - rect.left, point.y - rect.top));
+    }
+
+    function setLeafletGestureEnabled(enabled) {
+      if (!leafletMap) return;
+      const action = enabled ? "enable" : "disable";
+      ["dragging", "touchZoom", "doubleClickZoom", "scrollWheelZoom", "boxZoom", "keyboard"].forEach(name => {
+        if (leafletMap[name]?.[action]) leafletMap[name][action]();
+      });
+    }
+
+    function startGreenhouseHandleDrag(type, event) {
+      if (!leafletMap) return;
+      L.DomEvent.stop(event);
+      const startPoint = clientPointFromEvent(event.originalEvent || event);
+      if (!startPoint) return;
+      setLeafletGestureEnabled(false);
+      const container = leafletMap.getContainer();
+      container.classList.add("is-editing-greenhouse");
+
+      function move(moveEvent) {
+        const point = clientPointFromEvent(moveEvent);
+        if (!point) return;
+        moveEvent.preventDefault();
+        const latLng = latLngFromClientPoint(point);
+        if (type === "resize") updateGreenhouseFromResize(latLng);
+        if (type === "rotate") updateGreenhouseFromRotate(latLng);
+        refreshMapEditingLayers();
+      }
+
+      function up() {
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", up);
+        document.removeEventListener("touchmove", move);
+        document.removeEventListener("touchend", up);
+        document.removeEventListener("touchcancel", up);
+        container.classList.remove("is-editing-greenhouse");
+        setLeafletGestureEnabled(true);
+        render();
+      }
+
+      document.addEventListener("mousemove", move, { passive: false });
+      document.addEventListener("mouseup", up);
+      document.addEventListener("touchmove", move, { passive: false });
+      document.addEventListener("touchend", up);
+      document.addEventListener("touchcancel", up);
+      move(event.originalEvent || event);
+    }
+
     function moveGreenhouseCenter(latLng) {
       state.map.houseLat = latLng.lat;
       state.map.houseLng = latLng.lng;
@@ -1781,12 +1846,8 @@
         iconAnchor: [12, 12]
       });
       if (!greenhouseResizeMarker) {
-        greenhouseResizeMarker = L.marker(handleLatLng, { icon: resizeIcon, draggable: true }).addTo(leafletMap);
-        greenhouseResizeMarker.on("drag", event => {
-          updateGreenhouseFromResize(event.target.getLatLng());
-          refreshMapEditingLayers();
-        });
-        greenhouseResizeMarker.on("dragend", render);
+        greenhouseResizeMarker = L.marker(handleLatLng, { icon: resizeIcon, draggable: false }).addTo(leafletMap);
+        greenhouseResizeMarker.on("mousedown touchstart", event => startGreenhouseHandleDrag("resize", event));
       } else {
         greenhouseResizeMarker.setLatLng(handleLatLng);
         greenhouseResizeMarker.setIcon(resizeIcon);
@@ -1799,12 +1860,8 @@
         iconAnchor: [16, 16]
       });
       if (!greenhouseRotateMarker) {
-        greenhouseRotateMarker = L.marker(rotateLatLng, { icon: rotateIcon, draggable: true }).addTo(leafletMap);
-        greenhouseRotateMarker.on("drag", event => {
-          updateGreenhouseFromRotate(event.target.getLatLng());
-          refreshMapEditingLayers();
-        });
-        greenhouseRotateMarker.on("dragend", render);
+        greenhouseRotateMarker = L.marker(rotateLatLng, { icon: rotateIcon, draggable: false }).addTo(leafletMap);
+        greenhouseRotateMarker.on("mousedown touchstart", event => startGreenhouseHandleDrag("rotate", event));
       } else {
         greenhouseRotateMarker.setLatLng(rotateLatLng);
         greenhouseRotateMarker.setIcon(rotateIcon);
