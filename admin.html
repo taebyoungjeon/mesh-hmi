@@ -1221,6 +1221,12 @@
         lat: ROOTSQUARE_COORDINATE.lat,
         lng: ROOTSQUARE_COORDINATE.lng,
         patterns: ["928-27", "928 27", "진광로928-27", "진광로 928-27", "928–27", "뤁스퀘어", "루트스퀘어", "rootsquare"]
+      },
+      {
+        label: "청주 복대동 3381 도로명주소 좌표",
+        lat: 36.6421050575,
+        lng: 127.4284952698,
+        patterns: ["28425", "복대동3381", "복대동 3381", "대농로55", "대농로 55", "두산위브지웰시티"]
       }
     ];
     const TILE_SOURCES = {
@@ -1843,6 +1849,90 @@
       );
     }
 
+    function expandKoreanAddressAliases(value) {
+      return normalizeAddress(value)
+        .replace(/충북/g, "충청북도")
+        .replace(/충남/g, "충청남도")
+        .replace(/전북/g, "전라북도")
+        .replace(/전남/g, "전라남도")
+        .replace(/경북/g, "경상북도")
+        .replace(/경남/g, "경상남도")
+        .replace(/([가-힣]+(?:동|리|읍|면))(\d)/g, "$1 $2")
+        .replace(/([가-힣]+(?:로|길))(\d)/g, "$1 $2")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function compactAddress(value) {
+      return expandKoreanAddressAliases(value)
+        .replace(/\([^)]*\)/g, " ")
+        .replace(/[,.]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function extractAddressTokens(value) {
+      const normalized = compactAddress(value);
+      const tokens = {
+        road: "",
+        roadNumber: "",
+        dong: "",
+        jibun: "",
+        cityParts: ""
+      };
+      const roadMatch = normalized.match(/([가-힣0-9]+(?:로|길))\s*(\d+(?:-\d+)?)/);
+      if (roadMatch) {
+        tokens.road = roadMatch[1];
+        tokens.roadNumber = roadMatch[2];
+      }
+      const jibunMatch = normalized.match(/([가-힣]+(?:동|리|읍|면))\s*(\d+(?:-\d+)?)/);
+      if (jibunMatch) {
+        tokens.dong = jibunMatch[1];
+        tokens.jibun = jibunMatch[2];
+      }
+      tokens.cityParts = normalized
+        .replace(/\s+\d+(?:-\d+)?\b/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return tokens;
+    }
+
+    function buildAddressQueryVariants(query, postalCode) {
+      const normalized = compactAddress(query);
+      const tokens = extractAddressTokens(normalized);
+      const variants = [
+        normalized,
+        `${normalized} 대한민국`,
+        postalCode ? `${normalized} ${postalCode}` : "",
+        postalCode ? `${postalCode} ${normalized}` : "",
+        tokens.road && tokens.roadNumber ? `${tokens.road} ${tokens.roadNumber} ${tokens.cityParts} 대한민국` : "",
+        tokens.road && tokens.roadNumber && postalCode ? `${tokens.road} ${tokens.roadNumber} ${postalCode} 대한민국` : "",
+        tokens.dong && tokens.jibun ? `${tokens.dong} ${tokens.jibun} ${tokens.cityParts} 대한민국` : "",
+        tokens.dong && tokens.jibun && postalCode ? `${tokens.dong} ${tokens.jibun} ${postalCode} 대한민국` : "",
+        tokens.dong ? `${tokens.dong} ${tokens.cityParts} 대한민국` : "",
+        tokens.road ? `${tokens.road} ${tokens.cityParts} 대한민국` : "",
+        postalCode ? `${postalCode} 대한민국` : ""
+      ];
+      return Array.from(new Set(variants.filter(Boolean)));
+    }
+
+    function scoreGeocodeResult(result, variant, query, postalCode) {
+      const displayName = normalizeAddress(result.display_name);
+      const tokens = extractAddressTokens(query);
+      let score = 0;
+      if (postalCode && displayName.includes(postalCode)) score += 80;
+      if (tokens.dong && displayName.includes(tokens.dong)) score += 30;
+      if (tokens.jibun && displayName.includes(tokens.jibun)) score += 30;
+      if (tokens.road && displayName.includes(tokens.road)) score += 25;
+      if (tokens.roadNumber && displayName.includes(tokens.roadNumber)) score += 25;
+      if (postalCode && variant.includes(postalCode)) score += 5;
+      if (result.class === "place") score += 5;
+      if (result.class === "highway") score -= 8;
+      if (result.type === "house" || result.type === "apartments" || result.type === "building") score += 20;
+      score += Number(result.importance || 0);
+      return score;
+    }
+
     function moveMapToResolvedAddress(lat, lng, zoom, statusText) {
       state.map.centerLat = lat;
       state.map.centerLng = lng;
@@ -1859,8 +1949,8 @@
     async function geocodeAddressToMap() {
       const query = el.address.value.trim();
       const postalCode = el.postalCode.value.trim();
-      if (!query) {
-        el.mapSearchStatus.textContent = "주소를 먼저 입력해주세요.";
+      if (!query && !postalCode) {
+        el.mapSearchStatus.textContent = "주소 또는 우편번호를 먼저 입력해주세요.";
         return;
       }
       initFarmLeafletMap();
@@ -1868,7 +1958,7 @@
       try {
         const source = TILE_SOURCES.satellite;
         const targetZoom = Math.min(source.maxZoom, source.defaultZoom);
-        const knownPoint = knownAddressPoint(query);
+        const knownPoint = knownAddressPoint(`${query} ${postalCode}`);
         if (knownPoint) {
           moveMapToResolvedAddress(
             knownPoint.lat,
@@ -1878,37 +1968,34 @@
           );
           return;
         }
-        const queryVariants = Array.from(new Set([
-          query,
-          postalCode ? `${query} ${postalCode}` : "",
-          postalCode ? `${query}, ${postalCode}, 대한민국` : "",
-          query.replace(/\s+\d+(-\d+)?\s*$/, "").trim(),
-          postalCode ? `${query.replace(/\s+\d+(-\d+)?\s*$/, "").trim()} ${postalCode}` : "",
-          query.replace(/\s+\d+(-\d+)?\s*$/, "").replace(/\s+\S+로$/, "").trim(),
-          `${query} 대한민국`
-        ].filter(Boolean)));
+        const queryVariants = buildAddressQueryVariants(query, postalCode);
         let picked = null;
         for (const variant of queryVariants) {
-          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=kr&q=${encodeURIComponent(variant)}`;
+          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=kr&q=${encodeURIComponent(variant)}`;
           const response = await fetch(url, { headers: { Accept: "application/json" } });
           if (!response.ok) continue;
           const results = await response.json();
           if (Array.isArray(results) && results.length) {
-            picked = { ...results[0], query: variant };
-            break;
+            const ranked = results
+              .map(result => ({ ...result, query: variant, score: scoreGeocodeResult(result, variant, query, postalCode) }))
+              .sort((a, b) => b.score - a.score);
+            const best = ranked[0];
+            if (!picked || best.score > picked.score) picked = best;
+            if (best.score >= 80) break;
           }
         }
         if (!picked) {
-          el.mapSearchStatus.textContent = "주소를 찾지 못했습니다. 읍면동/지번을 조금 더 자세히 입력해주세요.";
+          el.mapSearchStatus.textContent = "주소를 찾지 못했습니다. 도로명+건물번호 또는 지번+우편번호를 함께 입력해주세요.";
           return;
         }
         const lat = Number(picked.lat);
         const lng = Number(picked.lon);
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("invalid coordinate");
-        const statusText = picked.query === query
+        const exactEnough = picked.score >= 80;
+        const statusText = exactEnough && picked.query === compactAddress(query)
           ? "위성뷰로 이동했습니다. 초록 마커와 노란 핸들로 온실 외곽을 맞춰주세요."
           : `근접 주소(${picked.query})로 이동했습니다. 위성뷰에서 위치를 보정해주세요.`;
-        moveMapToResolvedAddress(lat, lng, targetZoom, statusText);
+        moveMapToResolvedAddress(lat, lng, exactEnough ? targetZoom : Math.min(targetZoom, 16), statusText);
       } catch (error) {
         el.mapSearchStatus.textContent = "주소 이동 실패. 네트워크 또는 주소 표기를 확인해주세요.";
       }
