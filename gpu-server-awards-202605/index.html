@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026년 5월 GPU 서버 구매 공고 낙찰업체 조사</title>
+  <style>
+    :root {
+      --ink: #182235;
+      --muted: #627086;
+      --line: #d8dee8;
+      --soft: #f5f7fb;
+      --blue: #1d5fd0;
+      --green: #137333;
+      --amber: #9a6700;
+      --red: #b3261e;
+      --teal: #0b7a75;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+    header {
+      padding: 34px 42px 24px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f7fbff 0%, #ffffff 100%);
+    }
+    main {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 26px 42px 54px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.22;
+    }
+    h2 {
+      margin: 34px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+      font-size: 21px;
+    }
+    p { margin: 7px 0; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 14px 15px;
+      min-height: 86px;
+    }
+    .metric strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1.1;
+    }
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .note {
+      border-left: 4px solid var(--blue);
+      background: #f3f7ff;
+      padding: 13px 15px;
+      margin: 18px 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px 17px;
+    }
+    .panel h3 {
+      margin: 0 0 9px;
+      font-size: 17px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #fff;
+      color: #34435b;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .chip b { margin-right: 5px; color: var(--ink); }
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 170px 170px;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0 14px;
+    }
+    input, select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px 10px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: var(--soft);
+      text-align: left;
+      white-space: nowrap;
+    }
+    td.num, td.money, td.center { white-space: nowrap; }
+    td.money { text-align: right; }
+    .title { min-width: 280px; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ok { color: var(--green); background: #edf7ef; }
+    .fail { color: var(--red); background: #fff1f0; }
+    .none { color: var(--amber); background: #fff8e6; }
+    .source {
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 980px) {
+      header, main { padding-left: 18px; padding-right: 18px; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>2026년 5월 GPU 서버 구매 공고 낙찰업체 조사</h1>
+    <p class="meta">조회일: 2026-07-03 · 기준: 2026-05-01~2026-05-30 공고 · GPU/AI/딥러닝/그래픽/서버 관련 물품 공고 53건 중 50건</p>
+    <div class="summary" id="summary"></div>
+  </header>
+
+  <main>
+    <section class="note">
+      <p><strong>해석 기준</strong>: 나라장터 개찰결과분류조회 화면의 1순위 업체를 “낙찰/1순위 업체”로 정리했다. 별도 낙찰 API는 현재 인증 범위에서 접근이 제한되어 최종 계약 체결 여부까지는 개별 공고 상세로 재확인이 필요하다.</p>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h3>반복 확인 업체</h3>
+        <div class="chips">
+          <span class="chip"><b>(주)아이티마야</b>3건</span>
+          <span class="chip"><b>아토즈씨앤텍</b>2건</span>
+          <span class="chip"><b>웨이브파이브</b>1건</span>
+          <span class="chip"><b>웰메이드컴퓨터</b>1건</span>
+          <span class="chip"><b>비스무트</b>1건</span>
+          <span class="chip"><b>디에스앤지</b>1건</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>파트너/벤치마킹 우선 후보</h3>
+        <p>서버 구축 입찰을 확장하려면 GPU 서버 조달 실적이 확인된 업체를 먼저 보면 된다. 우선순위는 아이티마야, 아토즈씨앤텍, 웰메이드컴퓨터, 비스무트, 인프라큐브, 양컴, 디에스앤지, 엔코디다.</p>
+      </div>
+    </section>
+
+    <h2>50건 조사 결과</h2>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="공고번호, 공고명, 기관, 업체 검색">
+      <select id="statusFilter" aria-label="상태 필터">
+        <option value="">전체 상태</option>
+        <option value="개찰완료">개찰완료</option>
+        <option value="유찰">유찰</option>
+        <option value="조회안됨">조회안됨</option>
+      </select>
+      <select id="winnerFilter" aria-label="업체 필터">
+        <option value="">전체 업체</option>
+      </select>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>공고번호</th>
+          <th>공고명</th>
+          <th>수요기관</th>
+          <th>결과</th>
+          <th>1순위/낙찰업체</th>
+          <th>투찰금액</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+
+    <p class="source">
+      출처: <a href="https://www.g2b.go.kr/" target="_blank" rel="noreferrer">나라장터</a> 개찰결과분류조회,
+      <a href="https://www.data.go.kr/data/15129394/openapi.do" target="_blank" rel="noreferrer">조달청 나라장터 입찰공고정보서비스</a>.
+      48번 공고는 개찰결과 화면에 1순위 업체는 표시되나 입찰금액 칸이 비어 있어 금액 미표시로 기재했다.
+    </p>
+  </main>
+
+  <script>
+    const rows = [
+      {no:1, bid:"R26BK01501478-000", title:"서울과학기술대학교 산학협력단 연구장비(스마트에너지타운 데이터 처리 및 인공지능 분석용 컴퓨터서버) 구매", agency:"서울과학기술대학교 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:2, bid:"R26BK01501547-000", title:"연건내자_딥러닝 워크스테이션_PA202600707", agency:"서울대학교산학협력단", status:"개찰완료", winner:"웨이브파이브 주식회사", amount:"43,500,000"},
+      {no:3, bid:"R26BK01501810-000", title:"실험실습기자재 「고성능GPU서버」제조구매_전자전기컴퓨터공학부", agency:"서울특별시 서울시립대학교", status:"유찰", winner:"", amount:""},
+      {no:4, bid:"R26BK01503616-000", title:"고성능 GPU 서버 구매_258156", agency:"한국과학기술원", status:"개찰완료", winner:"유에이테크", amount:"78,690,000"},
+      {no:5, bid:"R26BK01501029-000", title:"생성모델 훈련용 GPU서버", agency:"한국재료연구원", status:"개찰완료", winner:"주식회사 웰메이드컴퓨터", amount:"247,650,000"},
+      {no:6, bid:"R26BK01503857-000", title:"2026년 의료데이터중심병원 Hub&Spoke용 GPU 확장도입", agency:"삼성서울병원", status:"개찰완료", winner:"주식회사 비스무트", amount:"306,790,000"},
+      {no:7, bid:"R26BK01504384-000", title:"울산과학기술원 GPU 워크스테이션 구매", agency:"울산과학기술원", status:"유찰", winner:"", amount:""},
+      {no:8, bid:"R26BK01499658-001", title:"고성능 GPU 서버 구매(변경)", agency:"주식회사 모비젠", status:"유찰", winner:"", amount:""},
+      {no:9, bid:"R26BK01505438-000", title:"GPU 서버 구매", agency:"중앙대학교 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:10, bid:"R26BK01508232-000", title:"통합안전관리플랫폼 대용량 스토리지 및 AI 서버 구축", agency:"부산교통공사", status:"유찰", winner:"", amount:""},
+      {no:11, bid:"R26BK01509100-000", title:"화학제품관리 차세대플랫폼 AI 서버 부속품 구매", agency:"한국환경산업기술원", status:"개찰완료", winner:"주식회사 와이에스제이", amount:"130,433,728"},
+      {no:12, bid:"R26BK01510969-000", title:"글로컬대학30사업 반도체 공동연구소 장비(저성능 AI반도체 설계용 GPU서버) 구입", agency:"충북대학교", status:"개찰완료", winner:"크리시스", amount:"87,131,220"},
+      {no:13, bid:"R26BK01511287-000", title:"컴퓨터서버 부품 구매_258133", agency:"한국과학기술원", status:"유찰", winner:"", amount:""},
+      {no:14, bid:"R26BK01513315-000", title:"쿠버네티스 기반 AI 서비스 제공용 서버 구매", agency:"기초과학연구원", status:"개찰완료", winner:"(주)아이와이시스템", amount:"519,970,000"},
+      {no:15, bid:"R26BK01514573-000", title:"그래프 기계학습 연구용 고성능 GPU 서버 구매", agency:"대구경북과학기술원", status:"개찰완료", winner:"(주)아이티마야", amount:"70,540,800"},
+      {no:16, bid:"R26BK01515382-000", title:"[순천향대학교 산학협력단] 인공지능개발 및 훈련용 서버 구매", agency:"순천향대학교 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:17, bid:"R26BK01516099-000", title:"[세종산단20260002-1호] AI 모델 학습 및 연구용 GPU 서버 구축", agency:"세종대학교 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:18, bid:"R26BK01516393-000", title:"그래픽처리 장치 서버 구매", agency:"한국화학연구원", status:"유찰", winner:"", amount:""},
+      {no:19, bid:"R26BK01519089-000", title:"서울과학기술대학교 산학협력단 연구장비(스마트에너지타운 데이터 처리 및 인공지능 분석용 컴퓨터서버) 구매", agency:"서울과학기술대학교 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:20, bid:"R26BK01520398-000", title:"실험실습기자재 「고성능GPU서버」제조구매_전자전기컴퓨터공학부", agency:"서울특별시 서울시립대학교", status:"유찰", winner:"", amount:""},
+      {no:21, bid:"R26BK01522509-000", title:"(재공고) 컴퓨터서버 부품 구매_258133", agency:"한국과학기술원", status:"유찰", winner:"", amount:""},
+      {no:22, bid:"R26BK01523292-000", title:"AI GPU 서버 임대 (7개월)_PA202600535", agency:"서울대학교산학협력단", status:"유찰", winner:"", amount:""},
+      {no:23, bid:"R26BK01524145-000", title:"고성능 GPU 서버 구매(재공고)", agency:"주식회사 모비젠", status:"개찰완료", winner:"(주)인프라큐브", amount:"211,200,000"},
+      {no:24, bid:"R26BK01524492-000", title:"GPU 서버 구매", agency:"중앙대학교 산학협력단", status:"개찰완료", winner:"주식회사 양컴", amount:"57,882,000"},
+      {no:25, bid:"R26BK01524724-000", title:"울산과학기술원 GPU 워크스테이션 구매", agency:"울산과학기술원", status:"개찰완료", winner:"주식회사 엑스디노드", amount:"29,599,900"},
+      {no:26, bid:"R26BK01523898-000", title:"2026년 실험실습기자재(컴퓨터공학_딥러닝서버) 구매", agency:"국립창원대학교", status:"개찰완료", winner:"우리정보시스템", amount:"30,311,340"},
+      {no:27, bid:"R26BK01526291-000", title:"GPU 기반 고성능 연산 서버", agency:"한국생명공학연구원", status:"개찰완료", winner:"주식회사 샌디아", amount:"93,885,000"},
+      {no:28, bid:"R26BK01528079-000", title:"2026학년도 실험실습기자재 구매(고가첨단_미래모빌_AI 딥러닝 서버)", agency:"전남대학교", status:"개찰완료", winner:"(주)아이티마야", amount:"457,479,000"},
+      {no:29, bid:"R26BK01532611-000", title:"연산용 GPU 서버 구매", agency:"대구경북과학기술원", status:"유찰", winner:"", amount:""},
+      {no:30, bid:"R26BK01534315-000", title:"고성능 GPU 서버 구매_258466", agency:"한국과학기술원", status:"개찰완료", winner:"아토즈씨앤텍(ATOZ Sci & Tech)", amount:"73,040,000"},
+      {no:31, bid:"R26BK01511850-000", title:"그래픽처리장치 서버 구입", agency:"한국지질자원연구원", status:"개찰완료", winner:"주식회사 엔코디", amount:"304,440,000"},
+      {no:32, bid:"R26BK01534585-000", title:"고성능 GPU 시스템 미니 박스", agency:"광주과학기술원", status:"개찰완료", winner:"루아프라임", amount:"101,381,854"},
+      {no:33, bid:"R26BK01537042-000", title:"석유화학 버티컬 AI모델·서비스 구축용 GPU시스템", agency:"재단법인 울산정보산업진흥원", status:"유찰", winner:"", amount:""},
+      {no:34, bid:"R26BK01539184-000", title:"GPU서버", agency:"울산과학기술원", status:"유찰", winner:"", amount:""},
+      {no:35, bid:"R26BK01539065-000", title:"슈퍼마이크로 GPU 서버", agency:"연세대학교의료원 산학협력단", status:"유찰", winner:"", amount:""},
+      {no:36, bid:"R26BK01540373-000", title:"고성능 GPU 서버", agency:"국가보안기술연구소", status:"개찰완료", winner:"창조토건주식회사", amount:"165,226,896"},
+      {no:37, bid:"R26BK01540833-000", title:"[순천향대학교 산학협력단] 인공지능개발 및 훈련용 서버 구매", agency:"순천향대학교 산학협력단", status:"개찰완료", winner:"주식회사 아이티존", amount:"28,650,000"},
+      {no:38, bid:"R26BK01541367-000", title:"고성능 GPU 서버 구매_258434", agency:"한국과학기술원", status:"유찰", winner:"", amount:""},
+      {no:39, bid:"R26BK01541385-000", title:"고성능 GPU 서버 구매_258599", agency:"한국과학기술원", status:"개찰완료", winner:"아토즈씨앤텍(ATOZ Sci & Tech)", amount:"64,020,000"},
+      {no:40, bid:"R26BK01541414-000", title:"HPC 클러스터 확장용 GPU 노드 서버 구매", agency:"한국화학연구원", status:"유찰", winner:"", amount:""},
+      {no:41, bid:"R26BK01541694-000", title:"연건내자_고성능 인공지능 딥러닝 연산 및 데이터 분석 서버(증설)_PA202600878", agency:"서울대학교산학협력단", status:"유찰", winner:"", amount:""},
+      {no:42, bid:"R26BK01544133-000", title:"산재예방 AI GPU 인프라 구축을 위한 서버 구매", agency:"한국산업안전보건공단", status:"개찰완료", winner:"주식회사 바로에이아이", amount:"504,900,000"},
+      {no:43, bid:"R26BK01545855-000", title:"인공지능 기반 기상예측모델 구동을 위한 GPU 서버 임차", agency:"광주과학기술원", status:"개찰완료", winner:"주식회사 씨티원 충남", amount:"43,744,532"},
+      {no:44, bid:"R26BK01545158-000", title:"AI 학습용 서버 구매", agency:"서울에너지공사", status:"개찰완료", winner:"주식회사 에스앤브이테크", amount:"87,340,165"},
+      {no:45, bid:"R26BK01548702-000", title:"실험실습기자재 「고성능GPU서버」제조구매_전자전기컴퓨터공학부", agency:"서울특별시 서울시립대학교", status:"개찰완료", winner:"(주)아이티마야", amount:"79,499,200"},
+      {no:46, bid:"R26BK01548825-000", title:"연산용 GPU 서버 구매(재공고)", agency:"대구경북과학기술원", status:"유찰", winner:"", amount:""},
+      {no:47, bid:"R26BK01548946-000", title:"시퀀싱 GPU 워크스테이션 기자재 구매", agency:"동아대학교", status:"조회안됨", winner:"", amount:""},
+      {no:48, bid:"R26BK01549336-000", title:"통합안전관리플랫폼 대용량 스토리지 및 AI 서버 구축", agency:"부산교통공사", status:"개찰완료", winner:"주식회사 블루넥스", amount:"금액 미표시"},
+      {no:49, bid:"R26BK01549674-000", title:"GPU 구입", agency:"한국지질자원연구원", status:"개찰완료", winner:"홍재시스템", amount:"36,000,000"},
+      {no:50, bid:"R26BK01550024-000", title:"슈퍼마이크로 GPU 서버", agency:"연세대학교의료원 산학협력단", status:"개찰완료", winner:"주식회사 디에스앤지", amount:"83,193,000"}
+    ];
+
+    const summary = [
+      ["50", "최종 정리 건수"],
+      ["27", "개찰완료"],
+      ["22", "유찰"],
+      ["1", "결과조회 없음"],
+      ["53", "원 후보 건수"]
+    ];
+
+    const summaryEl = document.getElementById("summary");
+    summaryEl.innerHTML = summary.map(([value, label]) => `<div class="metric"><strong>${value}</strong><span>${label}</span></div>`).join("");
+
+    const winnerFilter = document.getElementById("winnerFilter");
+    [...new Set(rows.map(r => r.winner).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ko")).forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      winnerFilter.appendChild(opt);
+    });
+
+    function statusClass(status) {
+      if (status === "개찰완료") return "ok";
+      if (status === "유찰") return "fail";
+      return "none";
+    }
+
+    function render() {
+      const q = document.getElementById("search").value.trim().toLowerCase();
+      const status = document.getElementById("statusFilter").value;
+      const winner = winnerFilter.value;
+      const filtered = rows.filter(row => {
+        const haystack = [row.bid, row.title, row.agency, row.status, row.winner, row.amount].join(" ").toLowerCase();
+        return (!q || haystack.includes(q)) && (!status || row.status === status) && (!winner || row.winner === winner);
+      });
+      document.getElementById("rows").innerHTML = filtered.map(row => `
+        <tr>
+          <td class="num">${row.no}</td>
+          <td class="num">${row.bid}</td>
+          <td class="title">${row.title}</td>
+          <td>${row.agency}</td>
+          <td class="center"><span class="status ${statusClass(row.status)}">${row.status}</span></td>
+          <td>${row.winner || "-"}</td>
+          <td class="money">${row.amount || "-"}</td>
+        </tr>
+      `).join("");
+    }
+
+    document.getElementById("search").addEventListener("input", render);
+    document.getElementById("statusFilter").addEventListener("change", render);
+    winnerFilter.addEventListener("change", render);
+    render();
+  </script>
+</body>
+</html>
