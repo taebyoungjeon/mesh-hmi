@@ -236,12 +236,12 @@
       <span class="kicker"><i></i>MESH Facility Context Roadmap</span>
       <h1>AI 분석을 위한 시설 컨텍스트 개선 사항</h1>
       <p class="lead">
-        MESH는 센서 데이터와 작물 상태를 분석하는 데서 출발했지만, 같은 환경값도 온실의 구조와 설비 조건에 따라 다르게 해석되어야 합니다.
-        이 문서는 현재 반영된 시설 정보와 앞으로 AI 분석 컨텍스트로 보강해야 할 항목을 정리합니다.
+        이 문서는 현재 MESH AI 오케스트레이션 흐름에서 시설 정보가 어떻게 쓰이고 있는지 정리하고,
+        앞으로 `facility_spec`을 어떤 방식으로 분석 파이프라인에 연결할지 정리합니다.
       </p>
       <div class="meta">
         <span>공개용 정리 문서</span>
-        <span>초안 v0.1</span>
+        <span>초안 v0.2</span>
         <span>업데이트: 2026-07-03</span>
       </div>
     </header>
@@ -347,31 +347,86 @@
     </section>
 
     <section>
-      <h2>왜 필요한가</h2>
+      <h2>현재 AI 오케스트레이션 방식</h2>
+      <p>
+        현재 문서화된 MESH AI 흐름은 앱에서 작물 이미지와 시설 식별자를 전달하고, AI 서버가 백그라운드에서 여러 분석 도구를 순차 실행한 뒤 결과를 폴링으로 반환하는 구조입니다.
+        리포트 생성과 규칙 변경 승인은 별도 단계로 분리할 수 있습니다.
+      </p>
       <div class="grid">
         <div class="card">
-          <h3>같은 환경값도 구조에 따라 의미가 달라집니다</h3>
-          <p>
-            같은 습도 상승이라도 측고가 낮은 단동 비닐하우스, 측창 개폐가 제한된 연동하우스, 커튼이 닫힌 유리온실에서는 원인과 대응이 달라질 수 있습니다.
-          </p>
+          <h3>1. 분석 요청</h3>
+          <ul>
+            <li>앱에서 작물 이미지와 `facility_id`를 전송</li>
+            <li>필요 시 `env_id`를 함께 전달</li>
+            <li>서버는 즉시 `task_id`를 반환하고 백그라운드 분석 시작</li>
+          </ul>
         </div>
         <div class="card">
-          <h3>제어 추천의 안전성이 높아집니다</h3>
-          <p>
-            AI가 팬, 커튼, 천창, 난방, 포그를 추천하려면 해당 설비가 실제로 존재하는지, 어느 구역을 제어하는지, 어떤 제약이 있는지를 알아야 합니다.
-          </p>
+          <h3>2. 도구 분석</h3>
+          <ul>
+            <li>센서 히스토리 조회</li>
+            <li>작물 이미지 분석</li>
+            <li>발병·환경 위험도 평가</li>
+            <li>작동기 목록과 현재 상태 조회</li>
+            <li>환경 예측과 제어 추천 생성</li>
+          </ul>
         </div>
         <div class="card">
-          <h3>디지털 트윈 표현이 현장과 가까워집니다</h3>
-          <p>
-            시설 컨텍스트가 정리되면 고객 화면에서 순환팬 라인, 커튼 구역, 천창·측창 그룹, 난방 구역을 겹치지 않게 표현할 수 있습니다.
-          </p>
+          <h3>3. 결과 폴링</h3>
+          <ul>
+            <li>앱은 `task_id` 기준으로 분석 상태를 반복 조회</li>
+            <li>도구별 결과가 완료되는 순서대로 누적</li>
+            <li>최종 권고, 충돌 분석, 위험 요인을 UI에 표시</li>
+          </ul>
         </div>
         <div class="card">
-          <h3>농장별 AI 개인화의 기반이 됩니다</h3>
-          <p>
-            시설 스펙은 센서 히스토리와 함께 농장별 baseline을 만드는 데 사용될 수 있습니다. 이는 향후 작물·시설별 제어 전략 추천의 기반입니다.
-          </p>
+          <h3>4. 선택 단계</h3>
+          <ul>
+            <li>도구 결과 기반 AI 종합 리포트 생성</li>
+            <li>제어 규칙 변경 제안</li>
+            <li>사용자 승인 후 운영 서버에 규칙 반영</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>현재 구조에서 보이는 개선 포인트</h2>
+      <p>
+        현재 흐름은 `facility_id`를 중심으로 데이터를 묶는 구조입니다. 다음 단계에서는 시설 스펙을 단순 조회 정보가 아니라 각 분석 도구의 공통 컨텍스트로 주입하는 레이어가 필요합니다.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>시설 컨텍스트 조회 레이어</h3>
+          <ul>
+            <li>`facility_id` 기준으로 `facility_spec`을 먼저 조회</li>
+            <li>센서 히스토리, 작동기 목록, 시설 스펙을 하나의 분석 컨텍스트로 구성</li>
+            <li>컨텍스트 생성 시 누락 필드와 신뢰도를 함께 반환</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>도구별 입력 확장</h3>
+          <ul>
+            <li>위험도 평가에 피복, 측고, 커튼, 환기 조건 반영</li>
+            <li>환경 예측에 온실 체적, 환기 구조, 팬 그룹 반영</li>
+            <li>제어 추천에 실제 설비 존재 여부와 제어 구역 반영</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>장비 그룹 매핑</h3>
+          <ul>
+            <li>개별 장비를 순환팬 라인, 커튼 구역, 천창/측창 그룹으로 묶기</li>
+            <li>그룹별 상태, 수량, 제어 가능 여부를 별도 관리</li>
+            <li>고객 화면은 그룹 중심, 관리자 화면은 개별 장비 중심으로 표시</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>분석 추적성</h3>
+          <ul>
+            <li>AI 권고가 어떤 시설 스펙을 참조했는지 기록</li>
+            <li>누락된 시설 정보가 있으면 보수적 권고로 전환</li>
+            <li>권고 결과에 사용된 데이터 시점과 컨텍스트 버전 표시</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -426,6 +481,28 @@
     </section>
 
     <section>
+      <h2>AI 파이프라인 연결 예시</h2>
+      <p>
+        구현 시에는 분석 요청 직후 공통 컨텍스트를 만들고, 이후 도구들이 같은 컨텍스트를 참조하도록 구성하는 방식이 적합합니다.
+      </p>
+      <pre class="schema">submit_analysis(image, facility_id, env_id)
+  -> create_task(task_id)
+  -> build_facility_context(facility_id)
+       - facility_spec
+       - sensor_history
+       - actuator_groups
+       - current_actuator_status
+       - missing_context_fields
+  -> run_crop_image_analysis(image, context)
+  -> run_event_risk_check(context)
+  -> run_environment_prediction(context)
+  -> run_control_recommendation(context)
+  -> run_final_recommendation(context, tool_results)
+  -> optional_report(tool_results, context)
+  -> optional_rule_proposal(context, approved_by_user)</pre>
+    </section>
+
+    <section>
       <h2>적용 로드맵</h2>
       <div class="roadmap">
         <div class="step">
@@ -437,12 +514,12 @@
           <span>순환팬, 커튼, 천창, 측창, 관수 설비를 그룹 단위로 묶습니다.</span>
         </div>
         <div class="step">
-          <b>3. AI 컨텍스트 연결</b>
-          <span>분석 파이프라인에서 facility_id 기준으로 시설 스펙을 함께 참조합니다.</span>
+          <b>3. 컨텍스트 빌더</b>
+          <span>분석 시작 시 시설 스펙, 센서 이력, 장비 그룹을 하나로 묶습니다.</span>
         </div>
         <div class="step">
-          <b>4. 고객 화면 반영</b>
-          <span>디지털 트윈에서 설비 그룹과 시설 조건을 직관적으로 보여줍니다.</span>
+          <b>4. AI 도구 확장</b>
+          <span>위험도, 예측, 제어 추천 도구가 같은 시설 컨텍스트를 참조하게 합니다.</span>
         </div>
       </div>
     </section>
