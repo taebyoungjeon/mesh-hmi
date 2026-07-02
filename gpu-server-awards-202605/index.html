@@ -117,6 +117,36 @@
       white-space: nowrap;
     }
     .chip b { margin-right: 5px; color: var(--ink); }
+    .contact-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 13px;
+      background: #fff;
+    }
+    .contact-card strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+    }
+    .contact-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .contact-card em {
+      display: inline-block;
+      margin-top: 6px;
+      color: var(--teal);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 700;
+    }
     .toolbar {
       display: grid;
       grid-template-columns: minmax(220px, 1fr) 170px 170px;
@@ -178,6 +208,7 @@
       header, main { padding-left: 18px; padding-right: 18px; }
       .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid { grid-template-columns: 1fr; }
+      .contact-list { grid-template-columns: 1fr; }
       .toolbar { grid-template-columns: 1fr; }
       table { font-size: 12px; }
     }
@@ -212,6 +243,39 @@
         <p>서버 구축 입찰을 확장하려면 GPU 서버 조달 실적이 확인된 업체를 먼저 보면 된다. 우선순위는 아이티마야, 아토즈씨앤텍, 웰메이드컴퓨터, 비스무트, 인프라큐브, 양컴, 디에스앤지, 엔코디다.</p>
       </div>
     </section>
+
+    <h2>대전 업체 제외 후 컨택 후보</h2>
+    <section class="note">
+      <p><strong>컨택 원칙</strong>: 대전 소재 업체는 같은 지역 제한 공고에서 직접 경쟁자가 될 가능성이 높으므로 제외했다. 아래는 공개 주소 기준 대전이 아닌 업체만 추린 목록이다. 단, 충남 계룡 소재 업체는 대전은 아니지만 인접권이라 우선순위는 낮게 두었다.</p>
+    </section>
+    <div class="contact-list">
+      <div class="contact-card"><strong>주식회사 디에스앤지</strong><span>서울 영등포구 · 슈퍼마이크로 총판, NVIDIA Solution Provider</span><em>최우선</em></div>
+      <div class="contact-card"><strong>(주)아이티마야</strong><span>서울 영등포구 · 5월 GPU/AI 서버 3건 1순위</span><em>최우선</em></div>
+      <div class="contact-card"><strong>주식회사 웰메이드컴퓨터</strong><span>서울 강서구/용산구 이력 · 컴퓨터서버 제조/납품</span><em>우선</em></div>
+      <div class="contact-card"><strong>주식회사 비스무트</strong><span>서울 영등포구 · GPU 확장/IT 인프라 납품</span><em>우선</em></div>
+      <div class="contact-card"><strong>웨이브파이브 주식회사</strong><span>경기 안양시 · GPU/NPU/스토리지/액체냉각 인프라 제안</span><em>우선</em></div>
+      <div class="contact-card"><strong>주식회사 양컴</strong><span>서울 용산구 · 컴퓨터/컴퓨터서버 제조 공장 등록 이력</span><em>우선</em></div>
+      <div class="contact-card"><strong>(주)인프라큐브</strong><span>서울 금천구 · GPU 서버 구축/SI</span><em>우선</em></div>
+      <div class="contact-card"><strong>주식회사 바로에이아이</strong><span>경기 하남시 · AI Machine/AI 환경 구축</span><em>우선</em></div>
+      <div class="contact-card"><strong>주식회사 샌디아</strong><span>경기 용인시 · GPU/서버 납품 이력</span><em>검토</em></div>
+      <div class="contact-card"><strong>주식회사 엑스디노드</strong><span>서울 성동구 · GPU 워크스테이션 납품 이력</span><em>검토</em></div>
+      <div class="contact-card"><strong>주식회사 블루넥스</strong><span>부산 중구 · IT 솔루션/시스템 구축</span><em>검토</em></div>
+      <div class="contact-card"><strong>주식회사 에스앤브이테크</strong><span>서울 도봉구 · IT/컴퓨터 주변장치 유통</span><em>검토</em></div>
+      <div class="contact-card"><strong>주식회사 씨티원 충남</strong><span>충남 계룡시 · 대전 인접권, 우선순위 낮음</span><em>보류</em></div>
+    </div>
+
+    <h2>컨택 제외: 대전 소재로 확인된 업체</h2>
+    <div class="chips">
+      <span class="chip"><b>유에이테크</b>대전 유성구</span>
+      <span class="chip"><b>크리시스</b>대전 서구</span>
+      <span class="chip"><b>주식회사 와이에스제이</b>대전 중구</span>
+      <span class="chip"><b>(주)아이와이시스템</b>대전 서구/대덕구</span>
+      <span class="chip"><b>아토즈씨앤텍</b>대전 유성구</span>
+      <span class="chip"><b>주식회사 엔코디</b>대전 유성구</span>
+      <span class="chip"><b>창조토건주식회사</b>대전 유성구</span>
+      <span class="chip"><b>주식회사 아이티존</b>대전 대덕구</span>
+      <span class="chip"><b>홍재시스템</b>대전 서구</span>
+    </div>
 
     <h2>50건 조사 결과</h2>
     <div class="toolbar">
