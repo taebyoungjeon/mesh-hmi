@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPU 서버 입찰 확장 스터디 - 구매처 및 실행전략</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6b7a;
+      --line: #d9e0ea;
+      --soft: #f6f8fb;
+      --blue: #185abc;
+      --green: #137333;
+      --amber: #9a6700;
+      --red: #b3261e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.6;
+    }
+    header {
+      padding: 36px 42px 26px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+    }
+    main { padding: 28px 42px 56px; max-width: 1220px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: 0; }
+    h2 { margin: 36px 0 14px; font-size: 22px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+    h3 { margin: 22px 0 8px; font-size: 18px; }
+    p { margin: 8px 0; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .meta { color: var(--muted); font-size: 14px; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .metric strong { display: block; font-size: 22px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: #f4f8ff;
+      padding: 14px 16px;
+      margin: 18px 0;
+    }
+    .warning { border-left-color: var(--amber); background: #fff8e6; }
+    .danger { border-left-color: var(--red); background: #fff3f1; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 22px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 11px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--soft);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin: 2px 4px 2px 0;
+      font-size: 12px;
+      color: #314056;
+      background: #fff;
+    }
+    .ok { color: var(--green); font-weight: 700; }
+    .risk { color: var(--amber); font-weight: 700; }
+    .bad { color: var(--red); font-weight: 700; }
+    .notice {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin: 18px 0 26px;
+      background: #fff;
+    }
+    .notice h3 { margin-top: 0; }
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    ul { margin: 8px 0 8px 22px; padding: 0; }
+    li { margin: 4px 0; }
+    code {
+      background: #eef2f7;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      padding-top: 16px;
+      margin-top: 34px;
+    }
+    @media (max-width: 820px) {
+      header, main { padding-left: 18px; padding-right: 18px; }
+      .summary, .grid2 { grid-template-columns: 1fr; }
+      table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GPU 서버 입찰 확장 스터디</h1>
+    <p class="meta">작성일: 2026-07-03 · 목적: GPU 단품 납품에서 GPU 서버/컴퓨터서버 구축 입찰로 확장하기 위한 내부 공유자료</p>
+    <div class="summary">
+      <div class="metric"><strong>5건</strong><span>예시 공고 분석</span></div>
+      <div class="metric"><strong>3단계</strong><span>소액형 / 중간형 / 고액 구축형</span></div>
+      <div class="metric"><strong>4개 축</strong><span>자격 · 규격 · 견적 · 납품</span></div>
+      <div class="metric"><strong>1차 목표</strong><span>참여 가능성 판정 체계화</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>결론</h2>
+      <div class="callout">
+        서버 입찰은 바로 확장할 수 있다. 다만 초반에는 “직접 서버 제조/구축사”가 되기보다
+        <strong>공고 판정, 견적 취합, 제조사/총판 확약서 확보, 납품 PM</strong> 역할부터 가져가는 것이 안전하다.
+      </div>
+      <p>
+        서버 공고는 GPU 단품보다 자격과 리스크가 늘어난다. 특히 <code>컴퓨터서버(4321150102)</code>,
+        <code>소프트웨어사업자(컴퓨터관련서비스사업, 1468)</code>, 직접생산확인증명서, 제조사 공급/기술지원확약서,
+        설치 및 유지보수 조건을 먼저 봐야 한다.
+      </p>
+      <p>
+        추천 운영 방식은 “입찰 가능성 30분 판정 → 파트너 3곳 견적 요청 → 서류 가능성 확인 → 투찰” 순서다.
+        사양 공부보다 먼저 공고 해석 루틴을 만들면 실수가 줄어든다.
+      </p>
+    </section>
+
+    <section>
+      <h2>공통 체크리스트</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>확인 항목</th>
+            <th>판정 기준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>입찰 자격</td>
+            <td>컴퓨터서버 <code>4321150102</code>, SW사업자 <code>1468</code>, 중소기업확인서, 직접생산확인증명서</td>
+            <td>하나라도 마감 전 등록 불가하면 직접 투찰이 어렵다. 파트너 주관 또는 포기 판단.</td>
+          </tr>
+          <tr>
+            <td>낙찰 방식</td>
+            <td>규격가격동시, 적격심사, 최저가, 협상계약 여부</td>
+            <td>규격가격동시는 규격서/제안서 품질이 중요하다. 최저가형은 공급가 확보가 핵심.</td>
+          </tr>
+          <tr>
+            <td>기술 규격</td>
+            <td>CPU, GPU, RAM, NVMe/RAID, NIC, OS, CUDA, Rack, 전원, 설치 조건</td>
+            <td>동등 이상 제품 허용 여부와 특정 제조사 제한 가능성을 본다.</td>
+          </tr>
+          <tr>
+            <td>공급망</td>
+            <td>Dell/HPE/Lenovo/Supermicro/국내 서버 전문업체 견적 가능 여부</td>
+            <td>입찰 마감 2영업일 전까지 정식 견적, 납기, 확약서 발급 가능해야 한다.</td>
+          </tr>
+          <tr>
+            <td>납품 리스크</td>
+            <td>현장 설치, Burn-in test, 드라이버 설치, 보증기간, 장애 대응 SLA</td>
+            <td>서버 납품은 물건 배송이 아니라 설치 검수까지 포함되는 경우가 많다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>구매처 후보 맵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>구매처/파트너 유형</th>
+            <th>적합한 공고</th>
+            <th>장점</th>
+            <th>주의점</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dell Technologies / Dell 파트너</td>
+            <td>PowerEdge 기반 GPU 서버, 기관 납품, 고액/중간형</td>
+            <td>PowerEdge AI 서버 라인과 공식 보증 체계. Dell은 R760xa 등이 L40S/H100 계열 GPU 구성을 지원하는 자료가 있다.</td>
+            <td>온라인 가격은 참고용이다. 공공입찰은 영업/파트너 견적, 납기, 확약서 발급 여부를 별도 확인해야 한다.</td>
+          </tr>
+          <tr>
+            <td>HPE / 서버몬 / 리안시스템 등 HPE 취급사</td>
+            <td>HPE ProLiant 기반 서버, 소액~중간형, 정품 옵션 수급</td>
+            <td>서버몬은 HPE GPU 서버, 랙형/타워형 서버, 기술지원 문의 채널을 공개하고 있다. 리안시스템은 서버/워크스테이션 전문몰이며 HP 골드파트너, Dell 판매, 나라장터 경험을 표기한다.</td>
+            <td>GPU 호환은 서버 섀시, riser, GPU kit, 전원, 냉각 옵션까지 묶어 확인해야 한다.</td>
+          </tr>
+          <tr>
+            <td>Lenovo ThinkSystem 파트너</td>
+            <td>ThinkSystem 기반 GPU 서버, 연구기관 납품</td>
+            <td>Lenovo Press에 ThinkSystem GPU 옵션/지원 표가 공개되어 있어 규격 검토에 유리하다.</td>
+            <td>국내 파트너 견적/납기/보증 조건을 따로 확보해야 한다.</td>
+          </tr>
+          <tr>
+            <td>Supermicro 공식 총판/전문업체</td>
+            <td>가격 경쟁력 필요한 GPU 서버, 커스텀 BOM, 고성능 서버</td>
+            <td>Supermicro는 GPU 서버 포트폴리오와 L40S 최적화 시스템 자료가 풍부하다. 국내에는 디에스앤지시스템, 효성인포메이션시스템, 슈퍼솔루션 같은 공급 루트를 검토할 수 있다.</td>
+            <td>공공입찰에서는 제조사/총판 확약서, 정품 보증, A/S 책임 주체를 명확히 해야 한다.</td>
+          </tr>
+          <tr>
+            <td>국내 서버/워크스테이션 전문몰</td>
+            <td>2천만~5천만원대 단일 GPU 서버, 워크스테이션형 서버</td>
+            <td>견적 회신이 빠르고 커스텀 구성이 가능하다. 초기 학습과 가격 감 잡기에 적합하다.</td>
+            <td>공공기관이 요구하는 서류와 정식 제조사 보증을 충족하는지 별도 검증 필요.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>예시 공고 5건</h2>
+
+      <article class="notice">
+        <h3>1. R26BK01587722-000 · IITP AI 활용을 위한 기반 인프라(GPU서버) 구축</h3>
+        <p>
+          <span class="tag">고액 구축형</span>
+          <span class="tag">GPU 서버 인프라</span>
+          <span class="tag">배정예산 약 7.47억원</span>
+        </p>
+        <div class="grid2">
+          <div>
+            <h4>공고 요약</h4>
+            <ul>
+              <li>수요기관: 한국연구재단 정보통신기획평가원</li>
+              <li>입찰 개시: 2026-07-13 10:00</li>
+              <li>마감: 2026-07-15 10:00</li>
+              <li>성격: 단순 1대 서버보다 AI 기반 인프라 구축 성격으로 봐야 한다.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>구매처/파트너 전략</h4>
+            <ul>
+              <li><strong>1순위:</strong> Dell/HPE/Lenovo 공식 파트너 또는 Supermicro 공식 총판과 공동 견적.</li>
+              <li><strong>2순위:</strong> AI/HPC 구축 경험이 있는 SI 파트너. 설치, 네트워크, OS, CUDA, 검수 대응까지 포함해야 한다.</li>
+              <li><strong>주의:</strong> 배정예산 규모상 직접생산/확약서/기술지원/납기 리스크가 크다. 단독 첫 진입보다는 파트너 주관 또는 공동 수행 검토.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>견적 요청 핵심</th><td>GPU 모델/수량, CPU 세대, RAM, NVMe/RAID, 25G/100G NIC, Rack/전원, 설치 및 3년 유지보수, 제조사 기술지원확약서.</td></tr>
+          <tr><th>내부 학습 포인트</th><td>고액 인프라형은 “서버 물품 납품”보다 “구축 프로젝트”에 가깝다. 제안서/구성도/검수계획 작성 훈련 대상으로 적합.</td></tr>
+          <tr><th>권장 판단</th><td><span class="risk">바로 단독 투찰보다는 파트너 발굴용 샘플 공고</span></td></tr>
+        </table>
+        <p class="meta">공고 링크: <a href="https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01587722&amp;bidPbancOrd=000">나라장터 바로가기</a> · 보조 출처: <a href="https://www.bidpro.co.kr/n0_ipchal/konggo/item/konggo_view.asp?num=5441884">BidPro</a></p>
+      </article>
+
+      <article class="notice">
+        <h3>2. R26BK01591331-000 · GPU 서버 구매</h3>
+        <p>
+          <span class="tag">중간~고액형</span>
+          <span class="tag">서울대학교 공과대학</span>
+          <span class="tag">추정가격 1.52억원</span>
+          <span class="tag">규격가격동시</span>
+        </p>
+        <div class="grid2">
+          <div>
+            <h4>공고 요약</h4>
+            <ul>
+              <li>공고기관: 조달청 서울지방조달청</li>
+              <li>수요기관: 서울대학교 공과대학</li>
+              <li>계약방법: 제한경쟁</li>
+              <li>낙찰방식: 규격가격동시입찰, 제안적격자 중 예정가격 이하 최저가</li>
+              <li>마감: 2026-07-02 10:00</li>
+            </ul>
+          </div>
+          <div>
+            <h4>구매처/파트너 전략</h4>
+            <ul>
+              <li><strong>Dell:</strong> PowerEdge R760xa/R7625 계열 검토. Dell 자료상 R760xa는 L40S/H100급 GPU 구성이 가능한 AI 서버 라인이다.</li>
+              <li><strong>HPE:</strong> ProLiant GPU 지원 구성. 서버몬/리안시스템 같은 국내 HPE 취급사에 BOM 견적 요청.</li>
+              <li><strong>Supermicro:</strong> 가격 경쟁이 필요하면 디에스앤지시스템/효성인포메이션시스템/슈퍼솔루션 계열 견적 비교.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>견적 요청 핵심</th><td>규격가격동시라서 가격만으로는 부족하다. 규격 대응표, 제조사 카탈로그, 공급확약서, 기술지원확약서를 같이 요청.</td></tr>
+          <tr><th>자격 리스크</th><td>첨부파일명상 컴퓨터서버 직접생산/서버 관련 자격 요구 가능성이 있다. 직접생산확인증명서가 필요하면 우리 단독 투찰은 사전 확인 필요.</td></tr>
+          <tr><th>권장 판단</th><td><span class="ok">스터디 1순위</span> · 서버 입찰의 표준 패턴을 배우기 좋다.</td></tr>
+        </table>
+        <p class="meta">공고 링크: <a href="https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01591331&amp;bidPbancOrd=000">나라장터 바로가기</a> · 보조 출처: <a href="https://www.grend.kr/bid/notice/R26BK01591331">GREND</a>, <a href="https://www.bidpro.co.kr/n0_ipchal/konggo/item/konggo_list.asp?pageno=6&amp;startpage=21">BidPro 목록</a></p>
+      </article>
+
+      <article class="notice">
+        <h3>3. R26BK01600068-000 · 서울대학교 약학대학 분자 구조 모델링용 고성능 GPU 서버 구매</h3>
+        <p>
+          <span class="tag">중간~고액형</span>
+          <span class="tag">고성능 GPU 서버</span>
+          <span class="tag">기초금액 1.644억원</span>
+          <span class="tag">제한경쟁</span>
+        </p>
+        <div class="grid2">
+          <div>
+            <h4>공고 요약</h4>
+            <ul>
+              <li>공고기관: 조달청 서울지방조달청</li>
+              <li>수요기관: 서울대학교 약학대학</li>
+              <li>입찰 개시: 2026-07-03 10:00</li>
+              <li>마감: 2026-07-07 10:00</li>
+              <li>분자 구조 모델링 목적이므로 GPU 메모리, FP32/FP64 성능, CUDA 호환성이 중요할 가능성이 높다.</li>
+            </ul>
+          </div>
+          <div>
+            <h4>구매처/파트너 전략</h4>
+            <ul>
+              <li><strong>연구용 GPU 서버:</strong> Dell/HPE/Lenovo/Supermicro 모두 비교 가능.</li>
+              <li><strong>검토 포인트:</strong> L40S, RTX PRO 6000, H100/H200 등 요구 GPU가 무엇인지 규격서 확인 필요.</li>
+              <li><strong>납품 포인트:</strong> CUDA, NVIDIA Driver, Linux/Ubuntu, 원격접속, 안정성 테스트 결과 제출 가능 여부.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>견적 요청 핵심</th><td>GPU 모델을 임의 대체하지 말고 동등 이상 판정 기준을 먼저 확인. 전원/소음/발열과 랙 설치 여부를 별도 확인.</td></tr>
+          <tr><th>구매처 추천</th><td>Dell/HPE 공식 파트너 1곳, Supermicro 공식 총판 1곳, 국내 서버 전문몰 1곳에서 같은 BOM으로 비교 견적.</td></tr>
+          <tr><th>권장 판단</th><td><span class="ok">실전 후보</span> · 예산이 충분해 정식 서버 벤더 견적 구조를 배우기 좋다.</td></tr>
+        </table>
+        <p class="meta">공고 링크: <a href="https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01600068&amp;bidPbancOrd=000">나라장터 바로가기</a> · 보조 출처: <a href="https://www.bidpro.co.kr/n0_ipchal/konggo/item/konggo_view.asp?num=5444123">BidPro</a></p>
+      </article>
+
+      <article class="notice">
+        <h3>4. R26BK01602533-000 · HUFS G-RISE PoC 수행을 위한 GPU 컴퓨팅 서버 구매</h3>
+        <p>
+          <span class="tag">소액형</span>
+          <span class="tag">GPU 컴퓨팅 서버 1식</span>
+          <span class="tag">배정예산 2,700만원</span>
+        </p>
+        <div class="grid2">
+          <div>
+            <h4>공고 요약</h4>
+            <ul>
+              <li>공고기관/수요기관: 한국외국어대학교 산학협력단</li>
+              <li>품목: 컴퓨터서버, GPU 컴퓨팅 서버 1식</li>
+              <li>입찰 개시: 2026-06-25 17:00</li>
+              <li>마감: 2026-07-08 10:00</li>
+              <li>추정가격: 24,545,455원, 배정예산: 27,000,000원</li>
+            </ul>
+          </div>
+          <div>
+            <h4>구매처/파트너 전략</h4>
+            <ul>
+              <li><strong>소액형 접근:</strong> 리안시스템, 서버몬, HPE/Dell 취급사, Supermicro 조립 서버 업체에 빠른 견적 요청.</li>
+              <li><strong>권장 구성 범위:</strong> 단일 GPU 또는 소형 멀티 GPU 서버/워크스테이션형일 가능성이 높다.</li>
+              <li><strong>주의:</strong> 공고가 “컴퓨터서버”로 잡히면 직접생산확인/품명 등록 여부가 여전히 중요하다.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>견적 요청 핵심</th><td>GPU, CPU, RAM, NVMe 용량, OS 포함 여부, 무상보증기간, 설치장소 배송/설치비 포함 여부.</td></tr>
+          <tr><th>내부 학습 포인트</th><td>처음 서버 입찰을 연습하기에 가장 적합한 규모. 견적 비교와 규격 대응표 작성 훈련용.</td></tr>
+          <tr><th>권장 판단</th><td><span class="ok">초기 진입형으로 적합</span></td></tr>
+        </table>
+        <p class="meta">공고 링크: <a href="https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01602533&amp;bidPbancOrd=000">나라장터 바로가기</a> · 보조 출처: <a href="https://www.sankun.com/bid-info/byAWj2lJYoGOA5qVq_4GOuMJsZm_794MNXgFFEVDxVw">산군</a>, <a href="https://www.jungi.net/detail_bid/index/bid10176111">전기넷</a></p>
+      </article>
+
+      <article class="notice">
+        <h3>5. R26BK01607532-000 · GPU 서버 등 구매</h3>
+        <p>
+          <span class="tag">소액~중간형</span>
+          <span class="tag">충북대학교산학협력단</span>
+          <span class="tag">기초금액 3,509만원</span>
+          <span class="tag">규격가격동시</span>
+        </p>
+        <div class="grid2">
+          <div>
+            <h4>공고 요약</h4>
+            <ul>
+              <li>공고기관/수요기관: 충북대학교산학협력단</li>
+              <li>계약방법: 제한경쟁</li>
+              <li>낙찰방법: 규격가격동시입찰, 제안적격자 중 예정가격 이하 최저가</li>
+              <li>마감: 2026-07-10 10:00</li>
+              <li>기초금액/배정예산: 35,090,000원</li>
+            </ul>
+          </div>
+          <div>
+            <h4>구매처/파트너 전략</h4>
+            <ul>
+              <li><strong>1차 구매처:</strong> 국내 서버 전문몰 2곳 + HPE/Dell 취급사 1곳.</li>
+              <li><strong>2차 구매처:</strong> Supermicro 공식 총판/파트너. 가격 경쟁 시 유리할 수 있다.</li>
+              <li><strong>제안 대응:</strong> 규격가격동시이므로 단순 최저가 견적서가 아니라 규격충족표와 납품/설치계획이 필요하다.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>견적 요청 핵심</th><td>납품기한, GPU 재고, 동일/동등 모델 허용 여부, 보증기간, 서버 조립/검수 리포트 제공 가능 여부.</td></tr>
+          <tr><th>내부 학습 포인트</th><td>소액이지만 규격가격동시라서 서버 입찰 실무를 압축적으로 배우기 좋다.</td></tr>
+          <tr><th>권장 판단</th><td><span class="ok">실전 연습형으로 적합</span></td></tr>
+        </table>
+        <p class="meta">공고 링크: <a href="https://www.g2b.go.kr/link/PNPE027_01/single/?bidPbancNo=R26BK01607532&amp;bidPbancOrd=000">나라장터 바로가기</a> · 보조 출처: <a href="https://www.sankun.com/bid-info/SwUwqaRqjCzTs_AUQjaEfYamPP_wcuPIoS9BL6MUxNg">산군</a>, <a href="https://www.bidpro.co.kr/n0_ipchal/konggo/item/konggo_list.asp?pageno=28&amp;startpage=20">BidPro 목록</a></p>
+      </article>
+    </section>
+
+    <section>
+      <h2>내부 스터디 운영안</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>주차</th>
+            <th>목표</th>
+            <th>실행 과제</th>
+            <th>산출물</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1주차</td>
+            <td>서버 공고 읽기</td>
+            <td>서버 공고 10건을 읽고 자격, 예산, 낙찰방식, 규격, 제출서류를 표로 정리</td>
+            <td>입찰 가능성 판정표</td>
+          </tr>
+          <tr>
+            <td>2주차</td>
+            <td>BOM/견적 훈련</td>
+            <td>공고 3건을 골라 동일 규격으로 Dell/HPE/Supermicro/국내몰에 견적 요청</td>
+            <td>공급가 비교표, 납기표, 서류 가능 여부표</td>
+          </tr>
+          <tr>
+            <td>3주차</td>
+            <td>제안/규격 대응</td>
+            <td>규격가격동시 공고 1건을 대상으로 규격대응표, 납품계획, 유지보수계획 초안 작성</td>
+            <td>제출서류 템플릿</td>
+          </tr>
+          <tr>
+            <td>4주차</td>
+            <td>실전 후보 선정</td>
+            <td>소액형 1건을 실제 투찰 검토 대상으로 선정하고 파트너/자격/마진 최종 점검</td>
+            <td>투찰 의사결정 메모</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>견적 요청 메일 템플릿</h2>
+      <div class="callout">
+        <p><strong>제목:</strong> [견적요청] 나라장터 GPU 서버 공고 R26BK01607532-000 대응 가능 여부 및 견적 요청</p>
+        <p>
+          안녕하세요. 아래 나라장터 GPU 서버 구매 공고에 대해 공급 가능 여부와 견적을 요청드립니다.
+          첨부 규격 기준으로 동등 이상 구성 가능 모델, 납기, 무상보증기간, 제조사 공급확약서/기술지원확약서 발급 가능 여부를 함께 회신 부탁드립니다.
+        </p>
+        <ul>
+          <li>공고번호: R26BK01607532-000</li>
+          <li>공고명: GPU 서버 등 구매</li>
+          <li>예산: 35,090,000원</li>
+          <li>필요 회신: 견적서, BOM, 카탈로그, 규격대응표 초안, 납기, 보증조건, 확약서 가능 여부</li>
+          <li>회신 희망: 오늘 17시까지</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>서버 후보메일 검색어 추가 제안</h2>
+      <p>후보 입찰 자동메일에는 아래 키워드를 추가하는 것이 좋다. 단, 잡음이 늘 수 있으므로 “서버 후보” 섹션을 별도로 분리하는 방식이 안전하다.</p>
+      <p>
+        <span class="tag">GPU 서버</span>
+        <span class="tag">고성능 서버</span>
+        <span class="tag">AI 서버</span>
+        <span class="tag">연산 서버</span>
+        <span class="tag">딥러닝 서버</span>
+        <span class="tag">컴퓨터서버</span>
+        <span class="tag">스토리지 서버</span>
+        <span class="tag">워크스테이션</span>
+        <span class="tag">HPC</span>
+      </p>
+    </section>
+
+    <section>
+      <h2>참고 자료</h2>
+      <ul>
+        <li><a href="https://www.smpp.go.kr/prd/prdinfo/smlpzbtwncmptprd/SelectSmlpzBtwnCmptprdListVw.do">공공구매종합정보망 - 중소기업자간 경쟁제품, 컴퓨터서버 4321150102</a></li>
+        <li><a href="https://www.kisa.or.kr/403/form?postSeq=10292">KISA 입찰공고 예시 - 컴퓨터서버 직접생산확인증명서 및 중소기업확인서 요구 사례</a></li>
+        <li><a href="https://www.dell.com/en-us/shop/storage-servers-and-networking-for-business/sf/poweredge-ai-servers">Dell PowerEdge AI Servers</a></li>
+        <li><a href="https://infohub.delltechnologies.com/l/design-guide-generative-ai-in-the-enterprise-inferencing/dell-poweredge-servers-and-nvidia-gpus-3/">Dell PowerEdge 서버와 NVIDIA GPU 구성 자료</a></li>
+        <li><a href="https://www.hpe.com/kr/ko/compute/ai-servers.html">HPE AI 서버</a></li>
+        <li><a href="https://www.hpe.com/us/en/collaterals/collateral.c04123180.html">HPE NVIDIA Accelerators QuickSpecs</a></li>
+        <li><a href="https://lenovopress.lenovo.com/lp0767-gpu-options-for-thinksystem-servers">Lenovo ThinkSystem GPU Options</a></li>
+        <li><a href="https://www.supermicro.com/en/products/gpu">Supermicro GPU Servers</a></li>
+        <li><a href="https://www.supermicro.com/en/accelerators/nvidia/l40s">Supermicro NVIDIA L40S Optimized Systems</a></li>
+        <li><a href="https://servermon.kr/">서버몬 - HPE 서버/스토리지, GPU 서버, 기술지원 문의</a></li>
+        <li><a href="https://www.ryansys.co.kr/">리안시스템 - 서버/워크스테이션 전문몰</a></li>
+        <li><a href="https://www.dsngsystem.co.kr/supermicro/01_01/11/1/">디에스앤지시스템 - Supermicro 한국 공식 총판 GPU System</a></li>
+        <li><a href="https://www.his21.co.kr/his/product/bigdata_n_iot/AI_Paltform/Supermicro_GPU_Server.do">효성인포메이션시스템 - Supermicro GPU Server</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        주의: 본 문서는 공개 공고/공급사 자료를 기반으로 한 사전 스터디 자료이다.
+        실제 투찰 전에는 나라장터 원문 공고서, 구매규격서, 제안요청서, 참가자격 등록 상태, 직접생산확인증명서 필요 여부,
+        제조사 확약서 발급 가능 여부를 반드시 재확인해야 한다.
+      </p>
+    </footer>
+  </main>
+</body>
+</html>
