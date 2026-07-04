@@ -258,7 +258,7 @@
       <div class="view-kicker">
         <span>Completed references + active pipeline</span>
         <span>Use for global footprint communication</span>
-        <span>Example data pending replacement</span>
+        <span>Working draft records</span>
       </div>
       <div class="layout">
         <div class="panel">
@@ -279,14 +279,14 @@
         <aside class="side">
           <div class="panel">
             <div class="metric-grid">
-              <div class="metric"><b>12</b><span>Total example records</span></div>
+              <div class="metric"><b>15</b><span>Total records</span></div>
               <div class="metric"><b>5</b><span>Completed examples</span></div>
-              <div class="metric"><b>7</b><span>Active pipeline</span></div>
+              <div class="metric"><b>10</b><span>Active pipeline</span></div>
               <div class="metric"><b>10+</b><span>Countries / regions</span></div>
             </div>
           </div>
           <div class="panel">
-            <div class="panel-head"><h2>Global Footprint List</h2><span class="hint">replace with final data</span></div>
+            <div class="panel-head"><h2>Global Footprint List</h2><span class="hint">working draft</span></div>
             <div id="allList" class="project-list"></div>
           </div>
           <div class="panel">
@@ -300,7 +300,7 @@
       <div class="view-kicker">
         <span>Domestic opportunity board</span>
         <span>Korea map to detail workflow</span>
-        <span>Example data pending replacement</span>
+        <span>Validated records can be refined later</span>
       </div>
       <div class="domestic-grid">
         <div class="panel">
@@ -319,12 +319,12 @@
         </div>
         <div class="panel">
           <div class="metric-grid">
-            <div class="metric"><b>2</b><span>Domestic records</span></div>
-            <div class="metric"><b>KRW 1.0B+</b><span>Visible anchor scope</span></div>
-            <div class="metric"><b>2</b><span>Active candidates</span></div>
-            <div class="metric"><b>2</b><span>Experience / campus type</span></div>
+            <div class="metric"><b>3</b><span>Domestic records</span></div>
+            <div class="metric"><b>KRW 1.6B+</b><span>Visible anchor scope</span></div>
+            <div class="metric"><b>3</b><span>Active candidates</span></div>
+            <div class="metric"><b>1</b><span>Public-sector quote</span></div>
           </div>
-          <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">sample pipeline</span></div>
+          <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">working pipeline</span></div>
           <div id="domesticList" class="domestic-list"></div>
           <div id="domesticDetail" class="detail"><div class="empty">국내 지도 마커 또는 프로젝트를 선택하면 세부 정보가 표시됩니다.</div></div>
         </div>
@@ -455,12 +455,21 @@
         next:'스마트팜 코어 투자 범위, 운영권, 카페/부대시설 역할 분담, 투자금 사용 구조를 확정.',
         notes:['Smart farm core: around KRW 1.0B reference','500 pyeong scale used as business-unit standard','R&R and investment boundary discussion in progress'],
         sourceUrl:'https://taebyoungjeon.github.io/mesh-hmi/munhori-ykl-decision-20260702/'
+      },
+      {
+        id:'jecheon-agri-tech-center', name:'제천시 농업기술센터 재배시설 견적', region:'충북 제천 / 농업기술센터', lat:37.13, lng:128.19, status:'proposal', statusLabel:'Quotation submitted',
+        amount:'KRW 639.5M', period:'2026.05 · 견적 제출',
+        summary:'제천시 농업기술센터 대상 재배시설 납품·설치 견적 건입니다. 견적서는 재배동 A/B의 수직형·계단형·육묘·파종·무빙베드·에어로포닉스 재배기 구성을 포함합니다.',
+        scope:'재배동 A 수직형 재배기 20 SET, 재배동 B 계단형/수직형/육묘/파종/무빙베드/에어로포닉스 재배기, 운임 및 현장 설치 인건비, 일부 육묘실·파종실 재배기 제어용 MESH 자동제어모듈 적용 기준.',
+        next:'견적 유효기간, 납품/설치 일정, 건축업체 시공 제외 범위, MESH 제어 적용 범위와 후속 구매 절차를 확인.',
+        notes:['Quotation date: 2026-05-19','Final amount incl. VAT: KRW 639,485,000','Supply amount before VAT: KRW 581,350,000','Installation lead time note: approx. 90 days after order','Embedded piping for nutrient supply, drainage and conduit excluded from this quotation']
       }
     ];
 
     const allProjects = [
       ...completedProjects.map(p => ({ ...p, footprintType:'Completed reference' })),
-      ...globalProjects.map(p => ({ ...p, footprintType:'Active pipeline' }))
+      ...globalProjects.map(p => ({ ...p, footprintType:'Active global pipeline' })),
+      ...domesticProjects.map(p => ({ ...p, footprintType:'Active domestic pipeline', country:'South Korea', city:p.region }))
     ];
 
     const mapBounds = {
