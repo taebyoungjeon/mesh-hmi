@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>샐러딩 내부 주간 리포트</title>
+  <style>
+    :root {
+      --bg: #f5f6f2;
+      --paper: #ffffff;
+      --ink: #172019;
+      --muted: #667166;
+      --line: #d9dfd6;
+      --accent: #1f5c45;
+      --accent-soft: #edf5f0;
+      --blue: #0e7490;
+      --shadow: 0 16px 34px rgba(23, 32, 25, .08);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); }
+    .page { max-width: 1120px; margin: 0 auto; padding: 22px 16px 48px; }
+    .hero {
+      background: linear-gradient(145deg, #1e3e32 0%, #295845 100%);
+      color: #fff;
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+    .eyebrow { margin: 0 0 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .72; }
+    h1 { margin: 0; font-size: 32px; line-height: 1.18; letter-spacing: 0; }
+    .hero p { margin: 12px 0 0; max-width: 760px; color: rgba(255,255,255,.84); line-height: 1.62; }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 18px 2px 12px;
+      scrollbar-width: thin;
+    }
+    .tab {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(23, 32, 25, .05);
+    }
+    .tab[aria-current="page"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .archive, .viewer {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .archive { padding: 18px; }
+    .archive h2, .viewer h2 { margin: 0; font-size: 18px; }
+    .archive p { margin: 8px 0 16px; color: var(--muted); line-height: 1.55; font-size: 14px; }
+    .week-list { display: grid; gap: 10px; }
+    .week-card {
+      display: block;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcf9;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .week-card b { display: block; font-size: 15px; }
+    .week-card span { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .viewer { overflow: hidden; }
+    .viewer-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .viewer-head a {
+      flex: 0 0 auto;
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      height: 78vh;
+      min-height: 680px;
+      border: 0;
+      background: #fff;
+    }
+    .note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    @media (max-width: 820px) {
+      .page { padding: 14px 12px 34px; }
+      .hero { padding: 22px 18px; border-radius: 18px; }
+      h1 { font-size: 27px; }
+      .content { grid-template-columns: 1fr; }
+      .viewer-head { align-items: flex-start; flex-direction: column; }
+      iframe { height: 74vh; min-height: 560px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">Salading Weekly Report</p>
+      <h1>샐러딩 내부 주간 리포트</h1>
+      <p>매주 금요일까지의 생산·판매·리뷰·운영 이슈를 토요일 오전 9시에 누적합니다. 최신 리포트가 먼저 보이고, 과거 리포트는 주차별로 다시 확인할 수 있습니다.</p>
+    </section>
+
+    <nav class="tabs" aria-label="주차별 리포트">
+      <a class="tab" aria-current="page" href="../salading-weekly-20260703/">최신: 2026-07-03</a>
+    </nav>
+
+    <section class="content">
+      <aside class="archive">
+        <h2>리포트 목록</h2>
+        <p>새 리포트가 발행될 때마다 이 목록에 주차별 카드가 추가됩니다.</p>
+        <div class="week-list">
+          <a class="week-card" href="../salading-weekly-20260703/">
+            <b>2026-07-03 주간 리포트</b>
+            <span>6/29~7/3 결과 · 엔보그 행사 구간 포함</span>
+          </a>
+        </div>
+        <p class="note">고정 공유 링크: <br>https://taebyoungjeon.github.io/mesh-hmi/salading-weekly/</p>
+      </aside>
+
+      <section class="viewer">
+        <div class="viewer-head">
+          <h2>최신 리포트 미리보기</h2>
+          <a href="../salading-weekly-20260703/">새 창에서 열기</a>
+        </div>
+        <iframe title="샐러딩 최신 주간 리포트" src="../salading-weekly-20260703/"></iframe>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
