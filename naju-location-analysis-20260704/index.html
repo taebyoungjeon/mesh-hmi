@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>나주 농업 복합문화공간 입지 분석 보고서</title>
+  <meta name="description" content="나주 연수원 부지를 농업 복합문화공간으로 활용하기 위한 입지, 인근 거주지, 수요권, 장단점 분석 보고서" />
+  <style>
+    :root {
+      --ink:#18201c;
+      --muted:#5d6862;
+      --line:#d7ded7;
+      --paper:#f7f7f2;
+      --white:#ffffff;
+      --green:#123f2d;
+      --green-2:#1f6848;
+      --blue:#244f73;
+      --clay:#a85f3d;
+      --gold:#c28a26;
+      --soft:#eef3ed;
+      --danger:#8f3f32;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.58;
+      word-break:keep-all;
+      overflow-wrap:break-word;
+    }
+    a { color:inherit; text-decoration-thickness:1px; text-underline-offset:3px; }
+    .wrap { width:min(1180px, calc(100% - 40px)); margin:0 auto; }
+    header {
+      min-height:74vh;
+      display:flex;
+      align-items:flex-end;
+      color:white;
+      background:
+        linear-gradient(90deg, rgba(11,35,26,.92), rgba(11,35,26,.64) 46%, rgba(11,35,26,.24)),
+        url("assets/naju_aerial.jpg") center/cover no-repeat;
+      padding:82px 0 54px;
+    }
+    .eyebrow {
+      display:inline-flex;
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.12);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+    h1 {
+      margin:18px 0 0;
+      max-width:870px;
+      font-size:clamp(39px, 6.4vw, 76px);
+      line-height:1.04;
+      letter-spacing:0;
+    }
+    .lead {
+      margin:22px 0 0;
+      max-width:810px;
+      color:rgba(255,255,255,.87);
+      font-size:clamp(17px, 2.1vw, 22px);
+      font-weight:650;
+    }
+    .hero-note {
+      margin-top:26px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      max-width:980px;
+    }
+    .hero-note div {
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.12);
+      padding:14px;
+      min-height:86px;
+    }
+    .hero-note b {
+      display:block;
+      font-size:23px;
+      line-height:1.1;
+      color:#ffe1a3;
+      margin-bottom:8px;
+    }
+    .hero-note span {
+      color:rgba(255,255,255,.82);
+      font-size:13px;
+      font-weight:750;
+    }
+    nav {
+      position:sticky;
+      top:0;
+      z-index:10;
+      background:rgba(247,247,242,.94);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    nav .wrap {
+      display:flex;
+      gap:6px;
+      overflow:auto;
+      padding:10px 0;
+    }
+    nav a {
+      white-space:nowrap;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:900;
+      color:#39463e;
+      border:1px solid var(--line);
+      background:white;
+      padding:7px 10px;
+    }
+    section { padding:76px 0; }
+    .band-white { background:white; }
+    .band-green { background:var(--green); color:white; }
+    .section-head {
+      display:grid;
+      grid-template-columns:260px 1fr;
+      gap:34px;
+      align-items:start;
+      margin-bottom:28px;
+    }
+    .kicker {
+      color:var(--clay);
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .band-green .kicker { color:#ffd28a; }
+    h2 {
+      margin:0;
+      font-size:clamp(29px, 4vw, 48px);
+      line-height:1.15;
+      letter-spacing:0;
+    }
+    .intro {
+      margin:12px 0 0;
+      max-width:840px;
+      color:var(--muted);
+      font-size:18px;
+    }
+    .band-green .intro { color:rgba(255,255,255,.78); }
+    .grid { display:grid; gap:14px; }
+    .cols-2 { grid-template-columns:1fr 1fr; }
+    .cols-3 { grid-template-columns:repeat(3,1fr); }
+    .cols-4 { grid-template-columns:repeat(4,1fr); }
+    .panel {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:22px;
+      min-height:100%;
+    }
+    .band-green .panel {
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.20);
+    }
+    .panel h3 {
+      margin:0 0 10px;
+      font-size:22px;
+      line-height:1.28;
+    }
+    .panel p { margin:0; color:var(--muted); }
+    .band-green .panel p { color:rgba(255,255,255,.76); }
+    .num {
+      display:block;
+      color:var(--green-2);
+      font-size:31px;
+      line-height:1.05;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+    .band-green .num { color:#ffe1a3; }
+    .tag {
+      display:inline-flex;
+      margin:0 6px 8px 0;
+      padding:6px 9px;
+      background:#eaf1ec;
+      color:var(--green);
+      font-size:12px;
+      font-weight:900;
+    }
+    .image {
+      border:1px solid var(--line);
+      background:white;
+      overflow:hidden;
+      border-radius:8px;
+    }
+    .image img { display:block; width:100%; height:auto; }
+    .caption {
+      padding:11px 14px;
+      border-top:1px solid var(--line);
+      color:#68736b;
+      background:#fbfbf8;
+      font-size:12px;
+      font-weight:750;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+      border:1px solid var(--line);
+      font-size:14px;
+    }
+    th {
+      background:#20362b;
+      color:white;
+      text-align:left;
+      padding:12px;
+      vertical-align:top;
+      font-size:13px;
+    }
+    td {
+      padding:13px 12px;
+      border-top:1px solid var(--line);
+      vertical-align:top;
+      color:#39443e;
+    }
+    tr:nth-child(even) td { background:#f8faf7; }
+    .matrix td:first-child {
+      font-weight:900;
+      color:var(--green);
+      width:20%;
+    }
+    .score {
+      display:inline-block;
+      min-width:42px;
+      padding:3px 7px;
+      text-align:center;
+      background:#edf3ef;
+      color:var(--green);
+      font-weight:950;
+      font-size:12px;
+    }
+    .callout {
+      border-left:6px solid var(--gold);
+      background:#fff8e8;
+      padding:18px 20px;
+      font-size:19px;
+      font-weight:850;
+      color:#263128;
+    }
+    .danger {
+      border-left-color:var(--danger);
+      background:#fff0ee;
+    }
+    .list {
+      margin:0;
+      padding-left:19px;
+      color:var(--muted);
+    }
+    .list li { margin:7px 0; }
+    .program {
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:center;
+    }
+    .program img {
+      width:100%;
+      height:auto;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .source-list {
+      display:grid;
+      gap:9px;
+      margin-top:18px;
+      color:#526058;
+      font-size:13px;
+    }
+    .source-list a { color:var(--blue); }
+    footer {
+      padding:34px 0 48px;
+      color:#69746c;
+      background:#eef0eb;
+      border-top:1px solid var(--line);
+      font-size:13px;
+    }
+    @media (max-width: 900px) {
+      .hero-note, .cols-2, .cols-3, .cols-4, .program, .section-head { grid-template-columns:1fr; }
+      header { min-height:auto; padding-top:74px; }
+      section { padding:54px 0; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width:min(100% - 26px, 1180px); }
+      .hero-note div { min-height:auto; }
+      table { font-size:13px; }
+      th, td { padding:10px 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">External Share · Location Review · 2026.07.04</div>
+      <h1>나주 농업 복합문화공간 입지 분석 보고서</h1>
+      <p class="lead">양평 IM의 분석 방식처럼 교통, 인근 거주지, 개발·산업 수요, 운영 리스크를 분해하되, 나주 부지는 병원·종교시설이 아니라 농업 체험·교육·F&B·연수·체류가 결합된 사계절 캠퍼스로 해석합니다.</p>
+      <div class="hero-note">
+        <div><b>89,049㎡</b><span>공유 자료 기준 대지면적</span></div>
+        <div><b>30,981㎡</b><span>기존 연수원 연면적</span></div>
+        <div><b>10분</b><span>빛가람동 접근권</span></div>
+        <div><b>30분권</b><span>광주 주요 생활권 흡수</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="wrap">
+      <a href="#summary">요약</a>
+      <a href="#site">대상지</a>
+      <a href="#catchment">거주지 분석</a>
+      <a href="#traffic">교통·산업권</a>
+      <a href="#swot">입지 장단점</a>
+      <a href="#strategy">전략</a>
+      <a href="#risks">리스크</a>
+      <a href="#sources">근거</a>
+    </div>
+  </nav>
+
+  <section id="summary" class="band-white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">01 · Executive Summary</div>
+        <div>
+          <h2>나주는 “목적형 관광지”보다 “근거리 반복 방문형 농업문화 캠퍼스”로 보는 편이 맞습니다.</h2>
+          <p class="intro">양평 IM은 서울 접근성과 자연환경을 기반으로 암요양병원·연수원·종교시설 같은 자산가치 전환 논리를 만들었습니다. 나주 부지는 광역 관광 한 방보다, 나주 도심·빛가람 혁신도시·광주 생활권을 묶어 주말 가족 체험과 평일 교육·연수 수요를 동시에 받는 모델이 더 설득력 있습니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-4">
+        <div class="panel">
+          <span class="num">판정 A</span>
+          <h3>부지 규모와 기존 건물</h3>
+          <p>기존 연수원 자산이 있어 온실, 교육동, F&B, 캠프 기능을 단계적으로 얹기 좋습니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">판정 B+</span>
+          <h3>인근 생활권</h3>
+          <p>나주 도심과 빛가람동은 가깝지만, 일상 유동이 자연스럽게 지나가는 상권형 입지는 아닙니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">판정 A-</span>
+          <h3>광역 접근성</h3>
+          <p>광주공항·상무지구·효천지구·산단권이 20~35분대에 잡혀 단체·기업 수요 설계가 가능합니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">판정 B</span>
+          <h3>사업 실행성</h3>
+          <p>관광농원, F&B, 숙박, 물놀이, 외국인 근로자 숙소가 섞이면 인허가와 브랜드 리스크가 커집니다.</p>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="callout">핵심 제안: 1단계는 “500평급 스마트팜 체험온실 + 야외 재배체험 + 팜카페/교육”으로 시작하고, 숙박형 캠프와 대규모 관광농원 전환은 수요와 인허가가 확인된 뒤 확장하는 구조가 적합합니다.</div>
+    </div>
+  </section>
+
+  <section id="site">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">02 · Site Facts</div>
+        <div>
+          <h2>연수원형 캠퍼스 자산을 농업문화공간으로 재해석할 수 있는 물리적 기반이 있습니다.</h2>
+          <p class="intro">대상지는 전남 나주시 삼영동 633, 내영산1길 40 일원으로 검토했습니다. 공유 자료상 기존 용도는 교육연구시설이며 자연녹지지역, 대규모 운동장·교육동·기숙사·후생동·주택동이 함께 있는 구조입니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div>
+          <table>
+            <tr><th>항목</th><th>검토 내용</th></tr>
+            <tr><td>사업 방향</td><td>농업 체험, 교육, F&B, 연수, 체류가 결합된 복합문화공간</td></tr>
+            <tr><td>대상지</td><td>전남 나주시 삼영동 633 / 내영산1길 40</td></tr>
+            <tr><td>기존 성격</td><td>교육연구시설, 연수원, 기숙·후생 기능 보유</td></tr>
+            <tr><td>규모</td><td>대지 89,049㎡, 연면적 30,981.56㎡, 건축물 8개동</td></tr>
+            <tr><td>주요 활용 후보</td><td>운동장 온실, 교육동 체험·강의, 후생동 F&B, 기숙사동 체류 기능</td></tr>
+            <tr><td>1차 판단</td><td>전면 신축보다 기존 건물 존치와 단계적 리모델링이 현실적</td></tr>
+          </table>
+        </div>
+        <div class="image">
+          <img src="assets/naju_detail_map.jpg" alt="나주 프로젝트 세부 위치도" />
+          <div class="caption">대상지 세부 위치도. 실제 경계, 지목, 도로 접속, 배수 조건은 토지이용계획확인원과 현장 실측으로 재확인 필요.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catchment" class="band-white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">03 · Residential Catchment</div>
+        <div>
+          <h2>인근 거주지는 “나주 기본권, 빛가람 가족권, 광주 확장권”으로 나눠야 합니다.</h2>
+          <p class="intro">농업 복합문화공간은 지나가는 유동인구보다 목적 방문을 만들어야 합니다. 따라서 생활권별로 방문 이유를 다르게 설계해야 하며, 주말 가족 체험과 평일 교육·연수 수요를 분리해 봐야 합니다.</p>
+        </div>
+      </div>
+      <table class="matrix">
+        <tr>
+          <th>생활권</th>
+          <th>접근성</th>
+          <th>수요 성격</th>
+          <th>적합 프로그램</th>
+          <th>판단</th>
+        </tr>
+        <tr>
+          <td>삼영동·영산포권</td>
+          <td>근거리 생활권</td>
+          <td>지역 주민, 학교·유치원, 가족 소규모 방문</td>
+          <td>어린이 체험, 방과후·주말 프로그램, 로컬푸드 마켓</td>
+          <td><span class="score">기초</span> 반복 방문의 바닥 수요</td>
+        </tr>
+        <tr>
+          <td>나주 도심권</td>
+          <td>나주시청 약 6분권</td>
+          <td>주말 가족, 단체행사, 공공기관 연계</td>
+          <td>팜카페, 계절 체험, 로컬 축제 연계, 기관 워크숍</td>
+          <td><span class="score">강점</span> 가장 설명하기 쉬운 기본 수요</td>
+        </tr>
+        <tr>
+          <td>빛가람 혁신도시</td>
+          <td>약 10분권</td>
+          <td>젊은 가족, 공공기관 종사자, 교육·체험 소비층</td>
+          <td>프리미엄 가족 체험, ESG·농업교육, 주말 브런치</td>
+          <td><span class="score">핵심</span> 객단가와 재방문 설계의 중심</td>
+        </tr>
+        <tr>
+          <td>광주 남부·효천지구</td>
+          <td>약 20분대</td>
+          <td>광주 가족 방문객, 근교 나들이 수요</td>
+          <td>반나절 체험, 온실 사진공간, 수확+F&B 패키지</td>
+          <td><span class="score">확장</span> 주말 피크를 만드는 권역</td>
+        </tr>
+        <tr>
+          <td>상무·공항·산단권</td>
+          <td>약 24~33분권</td>
+          <td>기업·기관 워크숍, 산단 근로자 복지, 단체 연수</td>
+          <td>평일 연수, 단체 식음, 기업 체험, 팀빌딩</td>
+          <td><span class="score">평일</span> 주말 편중을 줄이는 권역</td>
+        </tr>
+      </table>
+      <div style="height:18px"></div>
+      <div class="grid cols-3">
+        <div class="panel">
+          <h3>가족형 수요</h3>
+          <p>빛가람동과 광주 남부권은 아이 동반 체험, 사진, 브런치, 계절 이벤트를 묶으면 방문 전환이 가능합니다.</p>
+        </div>
+        <div class="panel">
+          <h3>학교·기관 수요</h3>
+          <p>나주·광주권 학교, 공공기관, 에너지밸리 기업은 평일 프로그램의 핵심입니다. 교육동이 있는 점이 유리합니다.</p>
+        </div>
+        <div class="panel">
+          <h3>지역 주민 수요</h3>
+          <p>근거리 주민만으로 대형 시설을 채우기는 어렵습니다. 지역권은 기본 방문과 입소문 역할로 보는 편이 안전합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="traffic">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">04 · Traffic & Industry Access</div>
+        <div>
+          <h2>광역 수요는 관광지보다 산업·공공기관·가족 생활권을 동시에 보는 방식이 맞습니다.</h2>
+          <p class="intro">기존 프로젝트 자료의 이동거리 지도에 따르면 나주시청 6분, 빛가람동 10분, 에너지밸리 19분, 평동산단 22분, 광주공항 24분, 상무지구 29분, 하남산단 33분으로 제시되어 있습니다. 이는 주말 가족뿐 아니라 평일 연수·기업 프로그램을 설명하는 근거입니다.</p>
+        </div>
+      </div>
+      <div class="image">
+        <img src="assets/naju_distance.jpg" alt="나주 사업지 기준 광역 이동거리 현황" />
+        <div class="caption">공유 프로젝트 자료의 사업지 기준 광역 이동거리 현황. 실제 이동시간은 시간대와 경로에 따라 변동됩니다.</div>
+      </div>
+      <div style="height:18px"></div>
+      <div class="grid cols-3">
+        <div class="panel">
+          <span class="num">0~10분</span>
+          <h3>지역 기본권</h3>
+          <p>나주 도심과 빛가람동을 즉시 흡수할 수 있어, 주말 체험과 평일 단체 예약의 출발점이 됩니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">20~30분</span>
+          <h3>광주 확장권</h3>
+          <p>효천·공항·상무권에서 반나절 목적 방문이 가능합니다. 단, 강한 콘텐츠와 예약 동선이 필요합니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">30분+</span>
+          <h3>산단·기업권</h3>
+          <p>평동·하남산단은 가족형보다 기업 복지, 교육, 워크숍, 단체 식음 프로그램으로 접근하는 편이 맞습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="swot" class="band-white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">05 · Site Pros & Cons</div>
+        <div>
+          <h2>입지는 좋지만, 자동으로 사람이 모이는 곳은 아닙니다. 프로그램 목적성이 성패를 가릅니다.</h2>
+          <p class="intro">부지는 규모와 기존 시설이 강점이고, 광주·빛가람 접근권도 좋습니다. 반면 대중적 상권 입지나 유명 관광지 바로 앞 입지는 아니므로, “왜 여기까지 와야 하는지”를 온실·체험·식음·교육으로 명확히 만들어야 합니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="panel">
+          <h3>강점</h3>
+          <ul class="list">
+            <li>기존 연수원 구조가 있어 교육·숙박·후생·운동장 기능을 단계적으로 활용 가능</li>
+            <li>나주 도심과 빛가람동이 가까워 가족·학교·기관 수요를 동시에 설명 가능</li>
+            <li>광주 남부권과 산단권이 20~30분대라 평일 단체 수요 확장 여지 존재</li>
+            <li>농업, 에너지밸리, 혁신도시, 영산강권 이미지를 묶어 지역형 스토리 구축 가능</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>약점</h3>
+          <ul class="list">
+            <li>길목 상권이 아니라 목적 방문형 운영이 필요</li>
+            <li>1990년대 연수원 건물의 리모델링, 설비, 소방, 피난, 냉난방 비용 확인 필요</li>
+            <li>외국인 근로자 생활지원 기능과 가족 체험 기능이 섞이면 브랜드 이미지가 흔들릴 수 있음</li>
+            <li>대규모 부지라 초기부터 전체를 열면 운영비와 관리 난도가 급격히 커짐</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>기회</h3>
+          <ul class="list">
+            <li>빛가람 혁신도시 가족층, 공공기관 교육, ESG·농업 체험 수요를 결합 가능</li>
+            <li>나주 로컬푸드, 배·농산물, 화장품·바이오 소재 체험과 F&B 연계 가능</li>
+            <li>온실형 콘텐츠는 폭염·우천·겨울 비수기 대응에 유리</li>
+            <li>학교 단체와 기업 워크숍을 만들면 주말 편중을 줄일 수 있음</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>위협</h3>
+          <ul class="list">
+            <li>관광농원, 숙박, F&B, 물놀이 시설은 각각 다른 인허가 리스크를 가짐</li>
+            <li>초기 투자비가 온실 외 토목·철거·전기·상하수·구조보강으로 확대될 수 있음</li>
+            <li>콘텐츠가 약하면 “큰 부지에 카페 하나”로 보일 위험</li>
+            <li>주차·동선·안전관리가 부족하면 가족 방문지로서 신뢰를 잃기 쉬움</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="strategy" class="band-green">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">06 · Recommended Strategy</div>
+        <div>
+          <h2>공간은 단계적으로 열고, 방문객에게 보이는 전면부는 농업문화 브랜드로 분리해야 합니다.</h2>
+          <p class="intro">나주 부지는 모든 기능을 한 번에 섞는 방식보다, 생활지원권과 방문객 체험권을 분리하고 스마트팜 체험온실을 앵커로 삼아 운영 검증 후 확장하는 방식이 적합합니다.</p>
+        </div>
+      </div>
+      <div class="program">
+        <div>
+          <span class="tag">1단계 · 앵커 조성</span>
+          <span class="tag">2단계 · F&B/교육</span>
+          <span class="tag">3단계 · 캠프/연수</span>
+          <h2 style="font-size:36px;margin-top:10px">500평급 스마트팜을 ‘볼거리’가 아니라 ‘예약 가능한 프로그램’으로 만들어야 합니다.</h2>
+          <p class="intro">온실은 사진을 찍는 구조물에 그치면 투자 회수가 어렵습니다. 딸기·토마토·엽채류 수확, 어린이 교육, 쿠킹 클래스, 로컬푸드 메뉴, 기업 ESG 워크숍까지 상품 단위로 나눠야 합니다.</p>
+        </div>
+        <img src="assets/naju_concept_render_evening_program_v1.png" alt="나주 스마트팜 체험온실 컨셉 렌더링" />
+      </div>
+      <div style="height:22px"></div>
+      <div class="grid cols-3">
+        <div class="panel">
+          <h3>방문객 체험권</h3>
+          <p>운동장, 스마트팜, 교육동 일부, 후생동 일부를 묶어 외부 고객에게 보이는 구역으로 구성합니다.</p>
+        </div>
+        <div class="panel">
+          <h3>생활지원권</h3>
+          <p>기숙사동과 근로자 생활지원 기능은 독립 출입, 독립 주차, 독립 운영관리로 분리합니다.</p>
+        </div>
+        <div class="panel">
+          <h3>공용 운영권</h3>
+          <p>주방, 전기·상수·오수, 소방, 창고, 운영사무실은 공용이 가능하되 책임 주체를 명확히 둡니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">07 · Program Mix</div>
+        <div>
+          <h2>사계절 운영은 “작물, F&B, 교육, 체류”의 조합으로 설계해야 합니다.</h2>
+          <p class="intro">여름 물놀이와 일회성 체험만으로는 연중 운영이 어렵습니다. 온실을 중심으로 계절별 방문 이유를 만들고, 평일 단체 수요와 주말 가족 수요를 분리 운영해야 합니다.</p>
+        </div>
+      </div>
+      <table>
+        <tr>
+          <th>시즌</th>
+          <th>주요 콘텐츠</th>
+          <th>대상 수요</th>
+          <th>매출 포인트</th>
+        </tr>
+        <tr>
+          <td>봄</td>
+          <td>딸기·허브 수확, 모종 심기, 가족 피크닉</td>
+          <td>가족, 유치원·초등 단체</td>
+          <td>체험권, 디저트, 사진공간</td>
+        </tr>
+        <tr>
+          <td>여름</td>
+          <td>물놀이, 냉방 온실 투어, 야간 프로그램</td>
+          <td>나주·광주 가족, 방학 수요</td>
+          <td>입장권, 음료, 시즌 패키지</td>
+        </tr>
+        <tr>
+          <td>가을</td>
+          <td>수확제, 로컬푸드 마켓, 기업 워크숍</td>
+          <td>기관·기업, 가족 재방문</td>
+          <td>단체 예약, 마켓 수수료, F&B</td>
+        </tr>
+        <tr>
+          <td>겨울</td>
+          <td>온실 체험, 쿠킹 클래스, 실내 농업교육</td>
+          <td>학교 단체, 공공기관, 가족</td>
+          <td>교육비, 클래스비, 브런치</td>
+        </tr>
+      </table>
+      <div style="height:18px"></div>
+      <div class="image">
+        <img src="assets/naju_pt_scene_02_greenhouse_cafe_seating.png" alt="스마트팜 카페 좌석 컨셉 이미지" />
+        <div class="caption">스마트팜과 F&B가 결합된 내부 체류공간 예시. 단순 생산 온실보다 체험, 교육, 카페 좌석, 판매 동선이 함께 설계되어야 합니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="risks" class="band-white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">08 · Risk & Due Diligence</div>
+        <div>
+          <h2>다음 단계는 컨셉보다 확인자료입니다. 인허가와 설비 상태가 사업비를 결정합니다.</h2>
+          <p class="intro">나주 프로젝트는 방향성보다 실행 조건 확인이 중요합니다. 특히 자연녹지지역, 기존 교육연구시설, 관광농원 검토, F&B·숙박 용도, 온실 설치, 오수·전기 용량을 먼저 확인해야 합니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="panel">
+          <h3>우선 확인해야 할 자료</h3>
+          <ul class="list">
+            <li>토지이용계획확인원, 지적도, 토지대장</li>
+            <li>건축물대장 최신본과 위반건축물 여부</li>
+            <li>건물별 CAD/PDF 도면, 구조·소방·전기·기계 도면</li>
+            <li>상수, 오수, 전기, 가스, 통신 용량 자료</li>
+            <li>기존 사용승인, 용도변경, 인허가 이력</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>의사결정 게이트</h3>
+          <ul class="list">
+            <li>1차: 방문객 구역과 생활지원 구역의 물리적 분리 가능성</li>
+            <li>2차: 온실 500평급 설치 부지, 배수, 전기, 진입 동선</li>
+            <li>3차: F&B와 교육 프로그램의 합법적 운영 방식</li>
+            <li>4차: 관광농원 지정 또는 기존 시설 활용 중 어느 쪽이 빠른지</li>
+            <li>5차: 1단계 CAPEX와 12개월 파일럿 손익</li>
+          </ul>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="callout danger">주의: “큰 부지 + 온실 + 카페”만으로는 사업성이 설명되지 않습니다. 인근 거주지 수요를 실제 예약 상품으로 전환할 운영안, 단체 영업안, 동선 분리안, 인허가 확인표가 같이 있어야 합니다.</div>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">09 · Basis</div>
+        <div>
+          <h2>분석 기준과 참고자료</h2>
+          <p class="intro">본 보고서는 공유 폴더의 나주 프로젝트 자료, 양평 IM의 분석 구조, 기존 GitHub Pages 산출물의 컨셉 방향을 바탕으로 작성했습니다. 인구와 인허가 관련 숫자는 최종 의사결정 전 관할기관 자료로 재확인해야 합니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="panel">
+          <h3>사용한 내부·공유 자료</h3>
+          <ul class="list">
+            <li>나주 프로젝트 입주 제안 요약 PDF</li>
+            <li>나주 건축물대장 및 위치도·거리 현황 이미지</li>
+            <li>나주 사계절 농업 캠퍼스 내부 요약 HTML</li>
+            <li>양평 IM PDF의 입지·수요·개발호재·운영수익 분석 구조</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>외부 확인 권장 출처</h3>
+          <div class="source-list">
+            <a href="https://jumin.mois.go.kr/" target="_blank" rel="noreferrer">행정안전부 주민등록 인구통계: 나주시·빛가람동 최신 인구 확인</a>
+            <a href="https://www.naju.go.kr/" target="_blank" rel="noreferrer">나주시청: 도시계획, 관광, 인허가, 통계연보 확인</a>
+            <a href="https://www.epeople.go.kr/" target="_blank" rel="noreferrer">국민신문고/관할부서 질의: 관광농원·용도변경 사전 질의</a>
+            <a href="https://www.luris.go.kr/" target="_blank" rel="noreferrer">토지이음: 토지이용계획확인원, 용도지역·지구 확인</a>
+            <a href="https://kosis.kr/" target="_blank" rel="noreferrer">KOSIS 국가통계포털: 인구, 사업체, 관광·지역 통계 보강</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      나주 농업 복합문화공간 입지 분석 보고서 · 작성일 2026.07.04 · 외부 공유용 초안<br />
+      본 문서는 투자·인허가 확정 의견이 아니며, 현장 실측과 관할기관 검토 전의 전략 검토 자료입니다.
+    </div>
+  </footer>
+</body>
+</html>
