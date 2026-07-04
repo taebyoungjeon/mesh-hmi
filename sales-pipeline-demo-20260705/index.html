@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MANNA CEA Pipeline Calendar Demo</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQh7Mfxe8A5OZ+n5h7tfqH8Qb9lDXbM=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    :root {
+      --green:#084c3b;
+      --green2:#0c6b52;
+      --mint:#e7f3ee;
+      --line:#d9e2de;
+      --text:#142033;
+      --muted:#667085;
+      --bg:#f7f9f8;
+      --card:#ffffff;
+      --amber:#b7791f;
+      --blue:#2b5ca8;
+      --red:#b23b3b;
+      --shadow:0 14px 38px rgba(15, 33, 45, .11);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#f4f7f6 0,#fff 45%,#f7f9f8 100%);
+    }
+    header {
+      padding:24px 32px 14px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.88);
+      position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+    }
+    .topbar { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; }
+    h1 { margin:0; font-size:28px; letter-spacing:-.02em; }
+    .subtitle { margin-top:6px; color:var(--muted); font-size:14px; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; }
+    button {
+      border:1px solid var(--line); background:#fff; color:var(--text);
+      padding:9px 13px; border-radius:10px; cursor:pointer; font-weight:700;
+    }
+    button.active { background:var(--green); color:#fff; border-color:var(--green); }
+    button.ghost { background:transparent; }
+    main { padding:22px 32px 44px; max-width:1480px; margin:0 auto; }
+    .layout { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(360px,.8fr); gap:20px; align-items:start; }
+    .panel {
+      background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
+    }
+    .panel-head { padding:18px 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .panel-head h2 { margin:0; font-size:19px; }
+    .panel-head .hint { color:var(--muted); font-size:13px; }
+    #map { height:680px; width:100%; background:#e9efed; }
+    .side { display:flex; flex-direction:column; gap:16px; }
+    .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
+    .metric { background:#f8faf9; border:1px solid var(--line); border-radius:12px; padding:13px; }
+    .metric b { display:block; font-size:21px; margin-bottom:2px; }
+    .metric span { color:var(--muted); font-size:12px; }
+    .project-list { padding:10px; display:flex; flex-direction:column; gap:8px; }
+    .project-row { text-align:left; border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff; cursor:pointer; }
+    .project-row:hover { border-color:#9bc4b4; background:#f7fcfa; }
+    .row-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .row-title { font-weight:800; }
+    .row-meta { color:var(--muted); font-size:12px; margin-top:4px; }
+    .badge { display:inline-flex; align-items:center; border-radius:999px; padding:3px 8px; font-size:11px; font-weight:800; white-space:nowrap; }
+    .badge.qualify { background:#eef2ff; color:#3658a8; }
+    .badge.proposal { background:#fff7e6; color:#a05d00; }
+    .badge.meeting { background:#e8f7ef; color:#0b694d; }
+    .badge.sent { background:#f2f4f7; color:#475467; }
+    .detail { padding:18px 20px 20px; }
+    .detail h3 { margin:0 0 6px; font-size:24px; }
+    .detail .country { color:var(--green); font-weight:800; margin-bottom:14px; }
+    .kv { display:grid; grid-template-columns:132px 1fr; gap:9px 14px; font-size:14px; margin:16px 0; }
+    .kv div:nth-child(odd) { color:var(--muted); }
+    .section-title { font-weight:900; margin:18px 0 8px; color:var(--green); }
+    .bullets { margin:0; padding-left:20px; color:#344054; font-size:14px; }
+    .bullets li { margin:5px 0; }
+    .note { margin-top:16px; padding:12px; border-radius:12px; background:#f9fafb; border:1px solid var(--line); color:#5b6472; font-size:13px; }
+    .leaflet-popup-content { min-width:230px; }
+    .popup-title { font-weight:900; font-size:15px; color:var(--green); }
+    .popup-meta { color:#475467; margin:5px 0 9px; }
+    .popup-link { color:var(--green); font-weight:900; cursor:pointer; }
+    .domestic-view { display:none; }
+    .domestic-grid { display:grid; grid-template-columns:360px 1fr; gap:20px; }
+    .domestic-list { padding:14px; display:flex; flex-direction:column; gap:10px; }
+    .timeline { padding:18px 20px; }
+    .timeline-item { position:relative; padding-left:26px; padding-bottom:18px; border-left:2px solid #d6e4dc; }
+    .timeline-item:last-child { border-left-color:transparent; }
+    .dot { position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--green); border:2px solid #fff; box-shadow:0 0 0 2px #d6e4dc; }
+    .month { font-weight:900; color:var(--green); }
+    .empty { padding:28px; color:var(--muted); text-align:center; }
+    .map-label {
+      background:#fff; border:1px solid #b6cfc5; border-radius:10px; padding:7px 9px;
+      box-shadow:0 8px 20px rgba(0,0,0,.16); font-size:12px; min-width:132px;
+    }
+    .map-label strong { color:var(--green); display:block; font-size:13px; }
+    .map-label span { color:#475467; display:block; }
+    @media (max-width:1080px) {
+      .layout, .domestic-grid { grid-template-columns:1fr; }
+      #map { height:560px; }
+      header { position:static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>MANNA CEA Sales Pipeline Calendar</h1>
+        <div class="subtitle">Interactive demo · Global pipeline map + domestic pipeline drill-down · example data from MESH application cases</div>
+      </div>
+      <div class="tabs">
+        <button id="tabGlobal" class="active" onclick="showView('global')">Global Pipeline</button>
+        <button id="tabDomestic" onclick="showView('domestic')">Domestic Pipeline</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="globalView">
+      <div class="layout">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Global Pipeline Map</h2>
+              <div class="hint">지도 마커 또는 우측 프로젝트를 클릭하면 세부 정보로 이동합니다.</div>
+            </div>
+            <button class="ghost" onclick="resetMap()">Reset Map</button>
+          </div>
+          <div id="map"></div>
+        </div>
+
+        <aside class="side">
+          <div class="panel">
+            <div class="metric-grid">
+              <div class="metric"><b id="globalCount">4</b><span>Global projects</span></div>
+              <div class="metric"><b>USD 20.7k</b><span>Budgetary product subtotal</span></div>
+              <div class="metric"><b>4</b><span>Countries</span></div>
+              <div class="metric"><b>Q3-Q4</b><span>Indicative window</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Project List</h2><span class="hint">Casebook sample</span></div>
+            <div id="globalList" class="project-list"></div>
+          </div>
+          <div class="panel">
+            <div id="globalDetail" class="detail"><div class="empty">프로젝트를 선택하면 상세 정보가 표시됩니다.</div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="domesticView" class="domestic-view">
+      <div class="domestic-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Domestic Pipeline</h2>
+              <div class="hint">국내 파이프라인 리스트 예시</div>
+            </div>
+          </div>
+          <div id="domesticList" class="domestic-list"></div>
+        </div>
+        <div class="panel">
+          <div id="domesticDetail" class="detail"><div class="empty">국내 파이프라인을 선택하면 세부 정보가 표시됩니다.</div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const globalProjects = [
+      {
+        id:'ulmo', name:'ULMO', country:'France', city:'France', lat:46.23, lng:2.21,
+        status:'proposal', statusLabel:'Proposal pattern', amount:'USD 5,580', period:'2026 H2 · design review',
+        summary:'3,500 sqm Venlo glass strawberry greenhouse. New-build / tenant operation pattern with section-level control and weather context.',
+        scope:'AI Hub, Control Box M, 18 active FR/SW channels, six Air Nano points, WN90LP through MESH Link.',
+        next:'Validate real operating sections from manifold, valves, screens, vents and tenant model.',
+        notes:['New-build greenhouse infrastructure provider model','Section-level operation instead of span-level assumption','Budgetary product reference only']
+      },
+      {
+        id:'blueberry', name:'Blueberry Valley', country:'Georgia', city:'Western Georgia', lat:42.26, lng:42.67,
+        status:'meeting', statusLabel:'Meeting scheduled', amount:'USD 8,370', period:'2026 Q3 · pilot discussion',
+        summary:'0.2-0.3 ha pilot to 1 ha substrate blueberry reference system in western Georgia.',
+        scope:'Phase 1 validates climate, root-zone and weather monitoring with assumed control channels; Phase 2 expands toward four climate blocks.',
+        next:'Prepare dashboard demo, blueberry-specific workflow, Precision Drain Monitoring decision, and detailed cost split.',
+        notes:['July 8 meeting, 11:00 Georgia time / 16:00 KST','Customer requested MESH App/Web dashboard demo','Precision Drain Monitoring under active review']
+      },
+      {
+        id:'adva', name:'ADVA', country:'Egypt', city:'Egypt', lat:26.82, lng:30.80,
+        status:'qualify', statusLabel:'Qualification', amount:'USD 5,190', period:'TBD · crop validation',
+        summary:'4,500 sqm greenhouse in Egypt. Lean base and selectable options before final crop, irrigation and actuator validation.',
+        scope:'Package A: AI Hub, Control Box M, 18 active FR/SW channels, four Air Nano points. Package D: WN90LP weather context through MESH Link.',
+        next:'Confirm crop, cultivation method, irrigation strategy and actuator schedule before final quotation.',
+        notes:['Useful pattern when site details remain open','Keep root-zone and fertigation PLC as selectable options','Budgetary base, not installed total']
+      },
+      {
+        id:'vivai', name:'Vivai Capitanio', country:'Italy', city:'Italy', lat:41.87, lng:12.57,
+        status:'sent', statusLabel:'Proposal sent', amount:'USD 1,530', period:'2026 Q3 · follow-up',
+        summary:'1,280 sqm rooting greenhouse retrofit. Monitoring-first proposal for an existing controller environment.',
+        scope:'Phase 1 starts with independent Air Nano climate monitoring. Phase 2 reviews read-only controller data through MESH Link after interface validation.',
+        next:'Follow up on proposal review and suggest short Zoom walkthrough if clarification is needed.',
+        notes:['Existing Polyclim v31, XNEB2 and SPAZIO VERDE controllers','Air Nano x2 starter, optional expansion up to x4','MESH Link is Phase 2 after manuals, ports, protocol and registers are validated']
+      }
+    ];
+
+    const domesticProjects = [
+      {
+        id:'dom-a', name:'국내 스마트팜 고도화 A', region:'충북 / 시설원예', status:'qualify', statusLabel:'Needs validation', amount:'TBD', period:'2026 Q3',
+        summary:'기존 온실의 구역별 환경 데이터와 제어 상태를 MESH App/Web으로 통합하는 예시 파이프라인입니다.',
+        scope:'AI Hub, Air Nano, 기존 제어반 인터페이스 검토, 알림/로그/이력 화면 구성.',
+        next:'현장 제어반, 센서 위치, 통신 방식 확인 필요.',
+        notes:['예시 데이터','실제 고객명/금액 입력 필요','국내 프로젝트는 리스트 기반 drill-down 구조로 관리']
+      },
+      {
+        id:'dom-b', name:'교육/체험형 스마트팜 B', region:'수도권 / 쇼케이스', status:'proposal', statusLabel:'Draft proposal', amount:'TBD', period:'2026 Q3-Q4',
+        summary:'방문객 체험과 재배 운영 데이터를 함께 보여주는 Rootsquare형 MESH 적용 예시입니다.',
+        scope:'대시보드, 운영 기록, 방문객용 모니터링 화면, 교육 콘텐츠 연동 가능성 검토.',
+        next:'운영 주체와 화면 공개 범위, 개인정보/운영 데이터 구분 필요.',
+        notes:['예시 데이터','홍보/교육 가치 중심','상업 재배와 체험 운영을 분리해 설계']
+      },
+      {
+        id:'dom-c', name:'작물 실증 파일럿 C', region:'전남 / 연구 실증', status:'meeting', statusLabel:'Internal review', amount:'TBD', period:'2026 Q4',
+        summary:'특정 작물의 환경-생육 데이터 수집과 AI-ready dataset 구축을 목표로 하는 예시 파이프라인입니다.',
+        scope:'기후 데이터, 근권 데이터, 작물 메모, 생육 이미지/기록, API/export 검토.',
+        next:'실증 작물과 측정 항목을 확정해야 합니다.',
+        notes:['예시 데이터','연구기관/지자체 연계 가능','데이터셋 품질 기준 필요']
+      }
+    ];
+
+    let map;
+    const markers = new Map();
+
+    function badgeClass(status){ return 'badge ' + status; }
+
+    function renderProjectRow(p, type){
+      return `<div class="project-row" onclick="selectProject('${type}','${p.id}')">
+        <div class="row-top"><div class="row-title">${p.name}</div><span class="${badgeClass(p.status)}">${p.statusLabel}</span></div>
+        <div class="row-meta">${type === 'global' ? p.country : p.region} · ${p.amount} · ${p.period}</div>
+      </div>`;
+    }
+
+    function renderDetail(p){
+      return `<h3>${p.name}</h3>
+        <div class="country">${p.country || p.region} · ${p.period}</div>
+        <span class="${badgeClass(p.status)}">${p.statusLabel}</span>
+        <div class="kv">
+          <div>Budget</div><div>${p.amount}</div>
+          <div>Summary</div><div>${p.summary}</div>
+          <div>Starting Scope</div><div>${p.scope}</div>
+          <div>Next Action</div><div>${p.next}</div>
+        </div>
+        <div class="section-title">Notes</div>
+        <ul class="bullets">${p.notes.map(n=>`<li>${n}</li>`).join('')}</ul>
+        <div class="note">Demo note: displayed amounts are budgetary product subtotal references from casebook/proposal examples. Final site configuration, pricing, delivery, wiring and commissioning scope require validation.</div>`;
+    }
+
+    function init(){
+      document.getElementById('globalList').innerHTML = globalProjects.map(p=>renderProjectRow(p,'global')).join('');
+      document.getElementById('domesticList').innerHTML = domesticProjects.map(p=>renderProjectRow(p,'domestic')).join('');
+      initMap();
+      renderTimeline();
+    }
+
+    function initMap(){
+      map = L.map('map', { scrollWheelZoom:true, worldCopyJump:true }).setView([28, 20], 2.15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 8,
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      globalProjects.forEach(p => {
+        const icon = L.divIcon({
+          className:'',
+          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.amount}</span><span>${p.period}</span></div>`,
+          iconSize:[150,56], iconAnchor:[75,28]
+        });
+        const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+        marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.country}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('global','${p.id}')">Open project detail</div>`);
+        marker.on('click', () => selectProject('global', p.id, false));
+        markers.set(p.id, marker);
+      });
+    }
+
+    function renderTimeline(){
+      const items = [
+        ['Jul 2026','Blueberry Valley dashboard meeting and Precision Drain Monitoring discussion'],
+        ['Q3 2026','Vivai proposal follow-up and monitoring pilot decision'],
+        ['Q3-Q4 2026','ULMO / ADVA technical qualification and scope validation'],
+        ['Q4 2026','Selected pilot conversion and updated quotation package']
+      ];
+      const timeline = document.createElement('div');
+      timeline.className = 'panel';
+      timeline.innerHTML = `<div class="panel-head"><h2>Pipeline Calendar</h2><span class="hint">sample milestones</span></div><div class="timeline">${items.map(([m,t])=>`<div class="timeline-item"><span class="dot"></span><div class="month">${m}</div><div>${t}</div></div>`).join('')}</div>`;
+      document.querySelector('.side').appendChild(timeline);
+    }
+
+    function selectProject(type, id, zoom=true){
+      const list = type === 'global' ? globalProjects : domesticProjects;
+      const p = list.find(x => x.id === id);
+      if (!p) return;
+      const target = type === 'global' ? 'globalDetail' : 'domesticDetail';
+      document.getElementById(target).innerHTML = renderDetail(p);
+      if (type === 'global' && zoom && markers.has(id)) {
+        const marker = markers.get(id);
+        map.setView(marker.getLatLng(), 4, { animate:true });
+        marker.openPopup();
+      }
+    }
+
+    function showView(view){
+      document.getElementById('globalView').style.display = view === 'global' ? 'block' : 'none';
+      document.getElementById('domesticView').style.display = view === 'domestic' ? 'block' : 'none';
+      document.getElementById('tabGlobal').classList.toggle('active', view === 'global');
+      document.getElementById('tabDomestic').classList.toggle('active', view === 'domestic');
+      if (view === 'global' && map) setTimeout(()=>map.invalidateSize(), 80);
+    }
+
+    function resetMap(){
+      map.setView([28, 20], 2.15);
+      map.closePopup();
+      document.getElementById('globalDetail').innerHTML = '<div class="empty">프로젝트를 선택하면 상세 정보가 표시됩니다.</div>';
+    }
+
+    init();
+  </script>
+</body>
+</html>
