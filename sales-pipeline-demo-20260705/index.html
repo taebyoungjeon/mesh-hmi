@@ -279,9 +279,9 @@
         <aside class="side">
           <div class="panel">
             <div class="metric-grid">
-              <div class="metric"><b>15</b><span>Total records</span></div>
+              <div class="metric"><b>16</b><span>Total records</span></div>
               <div class="metric"><b>5</b><span>Completed examples</span></div>
-              <div class="metric"><b>10</b><span>Active pipeline</span></div>
+              <div class="metric"><b>11</b><span>Active pipeline</span></div>
               <div class="metric"><b>10+</b><span>Countries / regions</span></div>
             </div>
           </div>
@@ -319,10 +319,10 @@
         </div>
         <div class="panel">
           <div class="metric-grid">
-            <div class="metric"><b>3</b><span>Domestic records</span></div>
-            <div class="metric"><b>KRW 1.6B+</b><span>Visible anchor scope</span></div>
-            <div class="metric"><b>3</b><span>Active candidates</span></div>
-            <div class="metric"><b>1</b><span>Public-sector quote</span></div>
+            <div class="metric"><b>4</b><span>Domestic records</span></div>
+            <div class="metric"><b>KRW 3.0B+</b><span>Visible anchor scope</span></div>
+            <div class="metric"><b>4</b><span>Active candidates</span></div>
+            <div class="metric"><b>2</b><span>Public-sector quotes</span></div>
           </div>
           <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">working pipeline</span></div>
           <div id="domesticList" class="domestic-list"></div>
@@ -463,6 +463,14 @@
         scope:'재배동 A 수직형 재배기 20 SET, 재배동 B 계단형/수직형/육묘/파종/무빙베드/에어로포닉스 재배기, 운임 및 현장 설치 인건비, 일부 육묘실·파종실 재배기 제어용 MESH 자동제어모듈 적용 기준.',
         next:'견적 유효기간, 납품/설치 일정, 건축업체 시공 제외 범위, MESH 제어 적용 범위와 후속 구매 절차를 확인.',
         notes:['Quotation date: 2026-05-19','Final amount incl. VAT: KRW 639,485,000','Supply amount before VAT: KRW 581,350,000','Installation lead time note: approx. 90 days after order','Embedded piping for nutrient supply, drainage and conduit excluded from this quotation']
+      },
+      {
+        id:'jeju-smartfarm-education-center', name:'제주 농업기술원 스마트팜 교육센터 실습온실', region:'제주 / 농업기술원 교육센터', lat:33.49, lng:126.53, status:'meeting', statusLabel:'BOQ sent',
+        amount:'KRW 1.33B', period:'2026.07 · 방문 협의 제안',
+        summary:'제주 농업기술원 스마트팜 교육센터 실습온실 신축공사 내역서 송부 건입니다. 이메일상 일부 항목은 도면만으로 수량 산출이 어려워 향후 변동 가능성이 있고, 다음주 수요일 제주 방문을 통한 세부 협의를 제안한 상태입니다.',
+        scope:'실습온실 신축공사 내역 기준으로 온실공사, 건축공사, 기계공사, 양액설비, 환경제어시스템, 온실 제어공사, 관급자재비가 포함됩니다. 내역상 환경제어시스템 공사 약 40.8M, 온실 제어공사 약 90.2M, 양액설비 공사 약 191.5M이 주요 스마트팜 관련 항목입니다.',
+        next:'제주 방문 일정 확정, 도면 기준 수량 변동 가능 항목 확인, 제어·양액·환경센서 범위와 시공/관급자재 경계를 세부 협의.',
+        notes:['Email sent: 2026-07-03 by Jongwook Jeon','Final amount incl. VAT: KRW 1,330,000,000','Supply amount before VAT: KRW 1,209,090,909','Project title in BOQ: Smart Farm Education Center Practice Greenhouse New Construction','Some quantities may change after detailed drawing/site validation']
       }
     ];
 
@@ -536,7 +544,7 @@
       target.innerHTML = projects.map(p => {
         const pos = markerPercent(p, type);
         const label = projectLocation(p, type);
-        const markerClass = type === 'all' ? (p.footprintType === 'Active pipeline' ? ' pipeline' : ' done') : '';
+        const markerClass = type === 'all' ? ((p.footprintType || '').startsWith('Active') ? ' pipeline' : ' done') : '';
         return `<button class="static-marker${markerClass}" data-type="${type}" data-id="${p.id}" style="left:${pos.x}%; top:${pos.y}%;" onclick="selectProject('${type}','${p.id}')" aria-label="Open ${p.name} project detail">
           <span class="pin-card"><strong>${p.name}</strong><span>${label}</span><span>${p.amount} · ${p.period}</span></span>
         </button>`;
@@ -546,6 +554,7 @@
     function renderTimeline(){
       const items = [
         ['Jul 2026','Blueberry Valley dashboard meeting and Precision Drain Monitoring discussion'],
+        ['Jul 2026','Jeju Smart Farm Education Center BOQ review and site meeting coordination'],
         ['Q3 2026','Vivai proposal follow-up and monitoring pilot decision'],
         ['Q3-Q4 2026','ULMO / ADVA technical qualification and scope validation'],
         ['Q4 2026','Selected pilot conversion and updated quotation package']
