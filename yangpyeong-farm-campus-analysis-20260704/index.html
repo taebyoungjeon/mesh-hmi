@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>양평 광탄리 농업 복합문화공간 입지 분석 보고서</title>
+  <meta name="description" content="경기도 양평군 용문면 광탄리 235-8 외 8필지 농업 복합문화공간 입지 분석 보고서" />
+  <style>
+    :root {
+      --ink:#17201c;
+      --muted:#5f6b64;
+      --line:#d9ded8;
+      --paper:#f6f4ec;
+      --white:#fffef8;
+      --green:#153f2f;
+      --green2:#226145;
+      --blue:#234c69;
+      --gold:#c58a26;
+      --clay:#9c5d40;
+      --soft:#edf3ed;
+      --warn:#8c3f33;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      line-height:1.58;
+      word-break:keep-all;
+      overflow-wrap:break-word;
+    }
+    .wrap { width:min(1160px, calc(100% - 40px)); margin:0 auto; }
+    header {
+      min-height:76vh;
+      display:flex;
+      align-items:flex-end;
+      color:white;
+      padding:82px 0 54px;
+      background:
+        linear-gradient(120deg, rgba(13,34,26,.94), rgba(15,64,45,.78) 48%, rgba(35,76,105,.60)),
+        radial-gradient(circle at 82% 16%, rgba(222,167,82,.34), transparent 28%),
+        linear-gradient(160deg, #1c5137 0%, #204866 54%, #10251d 100%);
+    }
+    .eyebrow {
+      display:inline-flex;
+      padding:7px 10px;
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.12);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+    h1 {
+      margin:18px 0 0;
+      max-width:940px;
+      font-size:clamp(38px, 6.2vw, 74px);
+      line-height:1.06;
+      letter-spacing:0;
+    }
+    .lead {
+      margin:22px 0 0;
+      max-width:840px;
+      color:rgba(255,255,255,.88);
+      font-size:clamp(17px, 2.1vw, 22px);
+      font-weight:650;
+    }
+    .hero-note {
+      margin-top:26px;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      max-width:1000px;
+    }
+    .hero-note div {
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.12);
+      padding:14px;
+      min-height:86px;
+    }
+    .hero-note b {
+      display:block;
+      font-size:23px;
+      line-height:1.1;
+      color:#ffe0a4;
+      margin-bottom:8px;
+    }
+    .hero-note span {
+      color:rgba(255,255,255,.84);
+      font-size:13px;
+      font-weight:800;
+    }
+    nav {
+      position:sticky;
+      top:0;
+      z-index:10;
+      background:rgba(246,244,236,.94);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    nav .wrap {
+      display:flex;
+      gap:6px;
+      overflow:auto;
+      padding:10px 0;
+    }
+    nav a {
+      white-space:nowrap;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:900;
+      color:#37433d;
+      border:1px solid var(--line);
+      background:white;
+      padding:7px 10px;
+    }
+    section { padding:74px 0; }
+    .white { background:white; }
+    .green { background:var(--green); color:white; }
+    .section-head {
+      display:grid;
+      grid-template-columns:250px 1fr;
+      gap:34px;
+      align-items:start;
+      margin-bottom:28px;
+    }
+    .kicker {
+      color:var(--clay);
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .green .kicker { color:#ffd28a; }
+    h2 {
+      margin:0;
+      font-size:clamp(29px, 4vw, 48px);
+      line-height:1.15;
+      letter-spacing:0;
+    }
+    .intro {
+      margin:12px 0 0;
+      max-width:880px;
+      color:var(--muted);
+      font-size:18px;
+    }
+    .green .intro { color:rgba(255,255,255,.78); }
+    .grid { display:grid; gap:14px; }
+    .cols-2 { grid-template-columns:1fr 1fr; }
+    .cols-3 { grid-template-columns:repeat(3,1fr); }
+    .cols-4 { grid-template-columns:repeat(4,1fr); }
+    .panel {
+      background:white;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:22px;
+      min-height:100%;
+    }
+    .green .panel {
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.20);
+    }
+    .panel h3 {
+      margin:0 0 10px;
+      font-size:22px;
+      line-height:1.28;
+    }
+    .panel p { margin:0; color:var(--muted); }
+    .green .panel p { color:rgba(255,255,255,.76); }
+    .num {
+      display:block;
+      color:var(--green2);
+      font-size:31px;
+      line-height:1.05;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+    .green .num { color:#ffe0a4; }
+    .callout {
+      border-left:6px solid var(--gold);
+      background:#fff8e8;
+      padding:18px 20px;
+      font-size:19px;
+      font-weight:850;
+      color:#263128;
+    }
+    .danger { border-left-color:var(--warn); background:#fff0ee; }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+      border:1px solid var(--line);
+      font-size:14px;
+    }
+    th {
+      background:#20362b;
+      color:white;
+      text-align:left;
+      padding:12px;
+      vertical-align:top;
+      font-size:13px;
+    }
+    td {
+      padding:13px 12px;
+      border-top:1px solid var(--line);
+      vertical-align:top;
+      color:#39443e;
+    }
+    tr:nth-child(even) td { background:#f8faf7; }
+    .matrix td:first-child {
+      font-weight:900;
+      color:var(--green);
+      width:20%;
+    }
+    .score {
+      display:inline-block;
+      min-width:42px;
+      padding:3px 7px;
+      text-align:center;
+      background:#edf3ef;
+      color:var(--green);
+      font-weight:950;
+      font-size:12px;
+    }
+    .list {
+      margin:0;
+      padding-left:19px;
+      color:var(--muted);
+    }
+    .list li { margin:7px 0; }
+    .green .list { color:rgba(255,255,255,.78); }
+    .mapbox {
+      border:1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(21,63,47,.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(21,63,47,.08) 1px, transparent 1px),
+        #fffef8;
+      background-size:38px 38px;
+      min-height:360px;
+      position:relative;
+      overflow:hidden;
+      border-radius:8px;
+    }
+    .node {
+      position:absolute;
+      min-width:118px;
+      padding:10px 12px;
+      background:white;
+      border:1px solid var(--line);
+      box-shadow:0 10px 28px rgba(23,32,28,.10);
+      font-size:13px;
+      font-weight:900;
+    }
+    .node small {
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .site {
+      left:43%;
+      top:42%;
+      background:var(--green);
+      color:white;
+      border-color:var(--green);
+      transform:scale(1.08);
+    }
+    .site small { color:rgba(255,255,255,.78); }
+    .n1 { left:58%; top:30%; }
+    .n2 { left:48%; top:16%; }
+    .n3 { left:22%; top:50%; }
+    .n4 { left:8%; top:24%; }
+    .n5 { right:7%; top:58%; }
+    .n6 { left:22%; bottom:9%; }
+    .ring {
+      position:absolute;
+      border:2px dashed rgba(197,138,38,.55);
+      border-radius:50%;
+      left:31%;
+      top:18%;
+      width:420px;
+      height:260px;
+      transform:rotate(-12deg);
+      pointer-events:none;
+    }
+    .tag {
+      display:inline-flex;
+      margin:0 6px 8px 0;
+      padding:6px 9px;
+      background:#eaf1ec;
+      color:var(--green);
+      font-size:12px;
+      font-weight:900;
+    }
+    footer {
+      padding:34px 0 48px;
+      color:#69746c;
+      background:#eef0eb;
+      border-top:1px solid var(--line);
+      font-size:13px;
+    }
+    @media (max-width: 900px) {
+      .hero-note, .cols-2, .cols-3, .cols-4, .section-head { grid-template-columns:1fr; }
+      header { min-height:auto; padding-top:74px; }
+      section { padding:54px 0; }
+      .mapbox { min-height:560px; }
+      .ring { display:none; }
+      .node { position:static; margin:10px; transform:none; display:block; }
+      .site { transform:none; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width:min(100% - 26px, 1160px); }
+      .hero-note div { min-height:auto; }
+      table { font-size:13px; }
+      th, td { padding:10px 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">External Share · Location Review · 2026.07.04</div>
+      <h1>양평 광탄리 농업 복합문화공간 입지 분석 보고서</h1>
+      <p class="lead">사업부지는 경기도 양평군 용문면 광탄리 235-8 외 8필지입니다. 수요권은 용문·양평 생활권, 경기 동부 확장권, 서울 동남·동북권의 주말 목적 방문 수요를 중심으로 봐야 합니다.</p>
+      <div class="hero-note">
+        <div><b>38,526㎡</b><span>IM 기준 대지면적</span></div>
+        <div><b>2,473.9평</b><span>기존 건물 연면적</span></div>
+        <div><b>용문역 5분권</b><span>IM 기준 접근성</span></div>
+        <div><b>목적방문형</b><span>농업·체험·F&B·체류</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="wrap">
+      <a href="#summary">요약</a>
+      <a href="#site">대상지</a>
+      <a href="#catchment">거주지 분석</a>
+      <a href="#traffic">교통·관광권</a>
+      <a href="#swot">입지 장단점</a>
+      <a href="#strategy">전략</a>
+      <a href="#risks">리스크</a>
+    </div>
+  </nav>
+
+  <section id="summary" class="white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">01 · Executive Summary</div>
+        <div>
+          <h2>양평 광탄리는 “도심형 상권”이 아니라 수도권 근교 목적방문형 체험지로 봐야 합니다.</h2>
+          <p class="intro">농업 복합문화공간의 큰 구조는 유지하되, 양평은 지역 상시 수요보다 수도권 근교 목적 방문 수요가 더 중요합니다. 용문산·광탄리유원지·캠핑·펜션·서울 근교 나들이 흐름을 흡수하는 주말형·체류형 콘텐츠가 핵심입니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-4">
+        <div class="panel">
+          <span class="num">A-</span>
+          <h3>자연·체험성</h3>
+          <p>흑천·유원지·수목·기존 연수원 자산이 있어 농업문화·힐링·캠프형 콘텐츠와 잘 맞습니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">B</span>
+          <h3>상시 생활수요</h3>
+          <p>용문·양평읍 근거리 수요만으로는 대형 시설을 채우기 어렵습니다. 광역 목적 방문이 필요합니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">A-</span>
+          <h3>수도권 접근성</h3>
+          <p>서울·하남·남양주·구리·경기도 광주시권에서 주말 반나절 또는 1박 방문 상품으로 설명 가능합니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">B-</span>
+          <h3>인허가·운영</h3>
+          <p>하천구역, 임야, 기존 교육연구시설, 숙박·F&B·체험시설 용도는 반드시 별도 확인이 필요합니다.</p>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="callout">핵심 제안: 이 부지는 “양평 로컬 농산물 체험 + 온실형 사계절 콘텐츠 + 팜카페/F&B + 가족 캠프·기업 워크숍”으로 가는 것이 맞습니다. 지역 농산물과 수도권 근교 나들이 수요를 함께 묶어야 합니다.</div>
+    </div>
+  </section>
+
+  <section id="site">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">02 · Site Facts</div>
+        <div>
+          <h2>기존 연수원 자산은 농업 복합문화공간의 초기 뼈대로 활용할 수 있습니다.</h2>
+          <p class="intro">IM 기준으로 사업지는 토지 및 건물 5개동으로 구성되어 있고, 기존 용도는 교육 및 연구시설입니다. 전면 신축보다 기존 강의·숙박·식당·운동장 기능을 단계적으로 전환하는 방식이 현실적입니다.</p>
+        </div>
+      </div>
+      <table>
+        <tr><th>항목</th><th>검토 내용</th></tr>
+        <tr><td>사업지</td><td>경기도 양평군 용문면 광탄리 235-8 외 8필지</td></tr>
+        <tr><td>토지 규모</td><td>IM 기준 38,526㎡, 약 11,654평. 산7 임야 약 6,345.85평 포함</td></tr>
+        <tr><td>건물 규모</td><td>5개동, 연면적 약 2,473.9평. 강의동, 숙박동, 관리동 등</td></tr>
+        <tr><td>기존 용도</td><td>교육 및 연구시설, 연수원 성격</td></tr>
+        <tr><td>제안 방향</td><td>농업 체험, 사계절 온실, 팜카페, 로컬푸드, 가족 캠프, 기업 연수</td></tr>
+        <tr><td>핵심 확인</td><td>하천구역, 임야 활용 가능성, 기존 건물 상태, F&B·숙박·관광농원 인허가</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="catchment" class="white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">03 · Residential Catchment</div>
+        <div>
+          <h2>인근 거주지는 “양평 기본권, 경기 동부 확장권, 서울 목적방문권”으로 나눠야 합니다.</h2>
+          <p class="intro">농업 복합문화공간은 지나가는 유동인구가 아니라 예약·목적방문이 중요합니다. 양평 광탄리는 근거리 반복 방문보다 수도권 주말형 체험·캠프·숙박 수요를 크게 봐야 합니다. 여기서 광주권은 인접한 경기도 광주시를 뜻하며, 광주광역시와는 입지·수요권상 관련이 없습니다.</p>
+        </div>
+      </div>
+      <table class="matrix">
+        <tr>
+          <th>권역</th>
+          <th>해석</th>
+          <th>수요 성격</th>
+          <th>적합 프로그램</th>
+          <th>판단</th>
+        </tr>
+        <tr>
+          <td>용문·양평읍</td>
+          <td>근거리 생활권</td>
+          <td>지역 주민, 학교·유치원, 소규모 가족 방문</td>
+          <td>주말 체험, 지역 마켓, 어린이 교육, 로컬 커뮤니티 프로그램</td>
+          <td><span class="score">기초</span> 초기 인지도와 평일 단체 수요</td>
+        </tr>
+        <tr>
+          <td>남양주·하남·구리</td>
+          <td>경기 동부 확장권</td>
+          <td>서울 근교 나들이, 가족 체험, 반나절 방문</td>
+          <td>수확체험, 팜카페, 흑천 물놀이 연계, 당일 패키지</td>
+          <td><span class="score">핵심</span> 주말 방문객의 주력 권역</td>
+        </tr>
+        <tr>
+          <td>경기 광주시·이천·여주</td>
+          <td>동남부 생활·관광권</td>
+          <td>차량 기반 가족 방문, 캠핑·펜션 연계 수요</td>
+          <td>가족 캠프, 농산물 체험, 브런치·디저트, 계절 행사</td>
+          <td><span class="score">확장</span> 1박·캠프 상품과 궁합</td>
+        </tr>
+        <tr>
+          <td>서울 동남·동북권</td>
+          <td>목적 방문권</td>
+          <td>주말 드라이브, 아이 체험, 힐링·사진 공간</td>
+          <td>예약형 체험, 온실 투어, 농장 브런치, 기업 워크숍</td>
+          <td><span class="score">광역</span> 콘텐츠가 강해야 전환</td>
+        </tr>
+        <tr>
+          <td>양평 관광객</td>
+          <td>기존 관광 유입권</td>
+          <td>용문산, 계곡·유원지, 캠핑·펜션 이용객</td>
+          <td>체험+F&B 단기 체류, 비오는 날 온실 콘텐츠, 기념품 판매</td>
+          <td><span class="score">흡수</span> 계절 편차 보완 필요</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="traffic">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">04 · Traffic & Tourism Access</div>
+        <div>
+          <h2>교통 호재보다 중요한 것은 “도착 후 소비할 이유”입니다.</h2>
+          <p class="intro">IM은 용문역 5분, 서울-양평 고속도로, 제2외곽순환고속도로 등 접근성 개선 논리를 제시합니다. 다만 서울-양평 접근 시간은 실제 개통·노선·주말 정체에 따라 달라지므로, 사업성은 교통 호재보다 체험 예약률과 체류시간으로 검증해야 합니다.</p>
+        </div>
+      </div>
+      <div class="mapbox" aria-label="양평 광탄리 사업지 수요권 개념도">
+        <div class="ring"></div>
+        <div class="node site">SITE<small>광탄리 235-8 외</small></div>
+        <div class="node n1">용문역<small>IM 기준 5분권</small></div>
+        <div class="node n2">용문산·관광지<small>관광 연계권</small></div>
+        <div class="node n3">양평읍<small>지역 기본권</small></div>
+        <div class="node n4">서울 동남·동북권<small>주말 목적방문</small></div>
+        <div class="node n5">여주·이천·경기도 광주시<small>동남부 확장권</small></div>
+        <div class="node n6">남양주·하남·구리<small>경기 동부 확장권</small></div>
+      </div>
+      <div style="height:18px"></div>
+      <div class="grid cols-3">
+        <div class="panel">
+          <span class="num">근거리</span>
+          <h3>용문·양평</h3>
+          <p>평일 단체, 학교·유치원, 지역 행사, 로컬 마켓의 기반 수요입니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">주말권</span>
+          <h3>경기 동부</h3>
+          <p>하남·남양주·구리·경기도 광주시권은 당일 체험과 F&B 소비가 가능한 권역입니다.</p>
+        </div>
+        <div class="panel">
+          <span class="num">광역권</span>
+          <h3>서울권</h3>
+          <p>서울권은 강한 목적성이 있어야 움직입니다. 온실·수확·브런치·캠프를 패키지화해야 합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="swot" class="white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">05 · Site Pros & Cons</div>
+        <div>
+          <h2>자연환경과 기존 시설은 강점이고, 상시 유동과 인허가는 약점입니다.</h2>
+          <p class="intro">양평 광탄리는 농업문화·힐링·캠프형 콘텐츠를 만들기에 좋은 배경을 갖고 있습니다. 반면 상권형 입지는 아니기 때문에, 프로그램 목적성과 예약 시스템이 없으면 방문객을 안정적으로 만들기 어렵습니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="panel">
+          <h3>강점</h3>
+          <ul class="list">
+            <li>흑천·유원지·수목 환경으로 농업·힐링·체험 이미지가 자연스럽게 형성</li>
+            <li>연수원·숙박동·식당·강의동 등 기존 캠퍼스 자산 보유</li>
+            <li>서울 근교 양평이라는 목적 방문지 브랜드 활용 가능</li>
+            <li>용문산, 캠핑, 펜션, 계곡·물놀이 수요와 결합 가능</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>약점</h3>
+          <ul class="list">
+            <li>일상 유동이 많은 상권이 아니라 예약형·목적형 운영 필요</li>
+            <li>서울 접근성은 주말 정체와 고속도로 진행 상황에 민감</li>
+            <li>토지 중 임야와 하천구역 관련 제약 가능성</li>
+            <li>건물 노후도, 냉난방, 소방, 피난, 식품위생 설비 확인 필요</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>기회</h3>
+          <ul class="list">
+            <li>양평 친환경 농산물, 산나물, 딸기·토마토·허브 체험과 F&B 연계</li>
+            <li>우천·폭염·겨울에도 운영 가능한 온실형 사계절 콘텐츠</li>
+            <li>가족 캠프, 기업 워크숍, 학교 단체 등 평일·체류형 매출 확장</li>
+            <li>반려동물, 캠핑, 로컬푸드 마켓 등 양평 관광 흐름과 결합 가능</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>위협</h3>
+          <ul class="list">
+            <li>관광농원, F&B, 숙박, 물놀이, 반려동물 시설은 각각 인허가 조건이 다름</li>
+            <li>기존 연수원 이미지를 체험형 농업문화공간으로 전환하는 브랜드 작업 필요</li>
+            <li>여름·가을 피크와 겨울 비수기 매출 편차</li>
+            <li>초기 투자비가 온실 외 토목·배수·전기·오수·리모델링으로 확대될 수 있음</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="strategy" class="green">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">06 · Recommended Strategy</div>
+        <div>
+          <h2>양평형 모델은 “농업 체험장”보다 “수도권 근교 사계절 팜 캠퍼스”가 맞습니다.</h2>
+          <p class="intro">양평은 주말 목적방문과 1박 체류를 전제로 설계해야 합니다. 온실은 사계절 앵커, 기존 숙박동은 캠프·워크숍, 식당동은 F&B로 단계적 전환하는 구조가 적합합니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-3">
+        <div class="panel">
+          <span class="tag">1단계</span>
+          <h3>스마트팜 체험온실</h3>
+          <p>딸기·토마토·허브·엽채류 중심의 수확, 교육, 사진, F&B 연계 콘텐츠를 먼저 만듭니다.</p>
+        </div>
+        <div class="panel">
+          <span class="tag">2단계</span>
+          <h3>팜카페·로컬푸드</h3>
+          <p>양평 농산물, 브런치, 디저트, 피크닉 박스, 계절 마켓으로 체류시간을 늘립니다.</p>
+        </div>
+        <div class="panel">
+          <span class="tag">3단계</span>
+          <h3>캠프·연수·숙박</h3>
+          <p>기존 숙박동을 활용해 가족 캠프, 방학 캠프, 기업 워크숍, 1박 농업문화 프로그램으로 확장합니다.</p>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="callout">브랜드 문장: “서울 근교에서 배우고, 수확하고, 먹고, 머무는 양평 사계절 팜 캠퍼스”</div>
+    </div>
+  </section>
+
+  <section id="risks" class="white">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker">07 · Risk & Due Diligence</div>
+        <div>
+          <h2>다음 단계는 현장 실측과 인허가 확인입니다.</h2>
+          <p class="intro">IM의 가능성 문구만으로는 사업 판단이 어렵습니다. 특히 토지이용계획, 하천구역, 산지·임야, 숙박·F&B 용도, 관광농원 가능성, 기존 건물 리모델링 비용을 분리해 확인해야 합니다.</p>
+        </div>
+      </div>
+      <div class="grid cols-2">
+        <div class="panel">
+          <h3>우선 확인자료</h3>
+          <ul class="list">
+            <li>토지이용계획확인원, 지적도, 토지대장</li>
+            <li>건축물대장 최신본, 위반건축물 여부</li>
+            <li>하천구역·재해·개발행위 제한 여부</li>
+            <li>기계·전기·소방·오수·상수 용량 자료</li>
+            <li>기존 숙박동·식당동·강의동의 구조와 피난 상태</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>의사결정 게이트</h3>
+          <ul class="list">
+            <li>온실 설치 가능 부지와 배수·전기 인입 확인</li>
+            <li>기존 식당동의 F&B 전환 가능성 확인</li>
+            <li>숙박동의 가족 캠프·기업 워크숍 활용 가능성 확인</li>
+            <li>관광농원 또는 기존 교육연구시설 기반 운영 중 빠른 방식 선택</li>
+            <li>1단계 CAPEX와 12개월 파일럿 손익 산정</li>
+          </ul>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="callout danger">주의: 서울 접근성과 자연환경만으로 사업성이 나오지는 않습니다. 이 부지는 “체험 예약률, F&B 객단가, 캠프·연수 가동률, 겨울 프로그램”이 사업성의 핵심입니다.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      양평 광탄리 농업 복합문화공간 입지 분석 보고서 · 작성일 2026.07.04 · 외부 공유용 초안<br />
+      본 문서는 투자·인허가 확정 의견이 아니며, 현장 실측과 관할기관 검토 전의 전략 검토 자료입니다.
+    </div>
+  </footer>
+</body>
+</html>
