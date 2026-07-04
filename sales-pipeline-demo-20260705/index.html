@@ -141,6 +141,12 @@
     .bullets { margin:0; padding-left:20px; color:#344054; font-size:14px; }
     .bullets li { margin:5px 0; }
     .note { margin-top:16px; padding:13px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); color:#5b6472; font-size:13px; }
+    .detail-link {
+      display:inline-flex; align-items:center; justify-content:center; margin-top:14px;
+      min-height:38px; padding:0 14px; border-radius:999px; background:var(--green);
+      color:#fff; font-size:13px; font-weight:900; text-decoration:none;
+      box-shadow:0 10px 22px rgba(7,61,49,.18);
+    }
     .domestic-view, .all-view { display:none; }
     .domestic-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(360px,.78fr); gap:20px; align-items:start; }
     .domestic-list { padding:14px; display:flex; flex-direction:column; gap:10px; }
@@ -231,10 +237,10 @@
         <aside class="side">
           <div class="panel">
             <div class="metric-grid">
-              <div class="metric"><b id="globalCount">4</b><span>Global projects</span></div>
-              <div class="metric"><b>USD 20.7k</b><span>Budgetary product subtotal</span></div>
-              <div class="metric"><b>4</b><span>Countries</span></div>
-              <div class="metric"><b>Q3-Q4</b><span>Indicative window</span></div>
+              <div class="metric"><b id="globalCount">6</b><span>Global projects</span></div>
+              <div class="metric"><b>KRW 1.0B+</b><span>Visible anchor scope</span></div>
+              <div class="metric"><b>6</b><span>Countries</span></div>
+              <div class="metric"><b>2026-2028</b><span>Indicative window</span></div>
             </div>
           </div>
           <div class="panel">
@@ -273,10 +279,10 @@
         <aside class="side">
           <div class="panel">
             <div class="metric-grid">
-              <div class="metric"><b>9</b><span>Total example records</span></div>
+              <div class="metric"><b>11</b><span>Total example records</span></div>
               <div class="metric"><b>5</b><span>Completed examples</span></div>
-              <div class="metric"><b>4</b><span>Active pipeline</span></div>
-              <div class="metric"><b>8+</b><span>Countries / regions</span></div>
+              <div class="metric"><b>6</b><span>Active pipeline</span></div>
+              <div class="metric"><b>9+</b><span>Countries / regions</span></div>
             </div>
           </div>
           <div class="panel">
@@ -313,10 +319,10 @@
         </div>
         <div class="panel">
           <div class="metric-grid">
-            <div class="metric"><b>5</b><span>Domestic examples</span></div>
-            <div class="metric"><b>TBD</b><span>Target value</span></div>
-            <div class="metric"><b>3</b><span>Q3 candidates</span></div>
-            <div class="metric"><b>2</b><span>Demo / research type</span></div>
+            <div class="metric"><b>7</b><span>Domestic records</span></div>
+            <div class="metric"><b>KRW 1.0B+</b><span>Visible anchor scope</span></div>
+            <div class="metric"><b>5</b><span>Q3/H2 candidates</span></div>
+            <div class="metric"><b>3</b><span>Demo / experience type</span></div>
           </div>
           <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">sample pipeline</span></div>
           <div id="domesticList" class="domestic-list"></div>
@@ -328,6 +334,24 @@
 
   <script>
     const globalProjects = [
+      {
+        id:'samsung-riyadh', name:'Riyadh Strawberry Smart Farm', country:'Saudi Arabia', city:'Riyadh', lat:24.71, lng:46.68,
+        status:'proposal', statusLabel:'Strategic pipeline', amount:'KRW 1.0B est.', period:'2027-2028 · Stage 1',
+        summary:'3,300 sqm IoT-based glass greenhouse testbed in Riyadh with Dohwa Engineering and Samsung C&T context. Total Stage 1 CAPEX is around KRW 4.15B, with MANNA CEA potential scope estimated around KRW 1.0B.',
+        scope:'MESH API integration with Samsung Bynd IoT, farm data standardization, strawberry recipe support, remote monitoring, KPI dashboard and operating data layer.',
+        next:'Clarify MANNA CEA scope inside Automation & IoT, MEP/HVAC data interface, strawberry operation support and commercial role with partners.',
+        notes:['With Dohwa Engineering / Samsung C&T context','Stage 1 testbed: 3,300 sqm Riyadh strawberry greenhouse','Total CAPEX reference: 10M SAR / KRW 4.15B','MANNA CEA potential scope: around KRW 1.0B estimate'],
+        sourceUrl:'https://taebyoungjeon.github.io/mesh-hmi/samsung-riyadh-strawberry-20260701/'
+      },
+      {
+        id:'thai-strawberry', name:'Thailand Indoor Vertical Strawberry Farm', country:'Thailand', city:'Thailand', lat:15.87, lng:100.99,
+        status:'proposal', statusLabel:'Proposal draft', amount:'TBD', period:'2026 H2 · proposal review',
+        summary:'Indoor vertical strawberry farm proposal for a controlled-environment, high-density strawberry production model. The linked proposal can be used as the project-level brief until final site and commercial data are confirmed.',
+        scope:'Indoor vertical strawberry cultivation package, controlled climate and lighting concept, production planning, MESH monitoring/control layer and operator-facing dashboard.',
+        next:'Confirm final site, production target, facility scale, local partner role, logistics/cold-chain assumptions and MESH hardware/software scope.',
+        notes:['Based on linked Indoor Vertical Strawberry Farm Proposal','Use as draft pipeline item until final customer/site data is confirmed','Good example for premium strawberry production and indoor farm package discussion'],
+        sourceUrl:'https://taebyoungjeon.github.io/naju-season-farm-campus-20260628/indoor-vertical-strawberry-proposal/index.html?v=02bf6e3'
+      },
       {
         id:'ulmo', name:'ULMO', country:'France', city:'France', lat:46.23, lng:2.21,
         status:'proposal', statusLabel:'Proposal pattern', amount:'USD 5,580', period:'2026 H2 · design review',
@@ -407,6 +431,24 @@
 
     const domesticProjects = [
       {
+        id:'naju-campus', name:'나주 사계절 농업 캠퍼스', region:'전남 나주 / 연수원 부지 활용', lat:35.02, lng:126.71, status:'proposal', statusLabel:'Internal concept',
+        amount:'TBD', period:'2026 H2 · 활용 방향 검토',
+        summary:'나주 연수원 부지를 사계절 농업 캠퍼스 형태로 활용하는 내부 검토 프로젝트입니다. 교육, 체험, 농업 콘텐츠, 스마트팜 운영 모델을 결합하는 방향입니다.',
+        scope:'부지 활용 방향, 교육/체험 프로그램, 스마트팜 시설 구성, 운영 주체, 투자 범위와 단계별 실행안 검토.',
+        next:'사업 목적, 운영 주체, 초기 투자 범위, 외부 공개 가능 자료 범위를 정리해 후속 제안서로 전환.',
+        notes:['Linked internal summary available','Training campus / education / experience-oriented project','Actual customer, budget and stage can be replaced later'],
+        sourceUrl:'https://taebyoungjeon.github.io/naju-season-farm-campus-20260628/internal-summary.html?v=edc56e7'
+      },
+      {
+        id:'munhori-ykl', name:'문호리 스마트팜 관광농원', region:'경기 양평 문호리 / 스마트팜·체험', lat:37.59, lng:127.35, status:'meeting', statusLabel:'Decision agenda',
+        amount:'KRW 1.0B core', period:'2026 Q3 · R&R discussion',
+        summary:'문호리 프로젝트는 관광농원 성격의 스마트팜, 카페, 조경, 체험, 판매 기능을 나누어 역할과 투자 범위를 정리하는 프로젝트입니다.',
+        scope:'500평 내외 스마트팜 코어, 약 10억 투자 기준, 체험·재배·판매 구조, 리아네이처 협업, 카페/조경/숙박/토목 R&R 구분.',
+        next:'스마트팜 코어 투자 범위, 운영권, 카페/부대시설 역할 분담, 투자금 사용 구조를 확정.',
+        notes:['Smart farm core: around KRW 1.0B reference','500 pyeong scale used as business-unit standard','R&R and investment boundary discussion in progress'],
+        sourceUrl:'https://taebyoungjeon.github.io/mesh-hmi/munhori-ykl-decision-20260702/'
+      },
+      {
         id:'dom-a', name:'국내 스마트팜 고도화 A', region:'충북 / 시설원예', lat:36.86, lng:127.43, status:'qualify', statusLabel:'Needs validation', amount:'TBD', period:'2026 Q3',
         summary:'기존 온실의 구역별 환경 데이터와 제어 상태를 MESH App/Web으로 통합하는 예시 파이프라인입니다.',
         scope:'AI Hub, Air Nano, 기존 제어반 인터페이스 검토, 알림/로그/이력 화면 구성.',
@@ -480,7 +522,8 @@
         </div>
         <div class="section-title">Notes</div>
         <ul class="bullets">${p.notes.map(n=>`<li>${n}</li>`).join('')}</ul>
-        <div class="note">Demo note: displayed amounts are budgetary product subtotal references from casebook/proposal examples. Final site configuration, pricing, delivery, wiring and commissioning scope require validation.</div>`;
+        <div class="note">Demo note: displayed amounts are budgetary product subtotal references from casebook/proposal examples. Final site configuration, pricing, delivery, wiring and commissioning scope require validation.</div>
+        ${p.sourceUrl ? `<a class="detail-link" href="${p.sourceUrl}" target="_blank" rel="noopener">Open project brief</a>` : ''}`;
     }
 
     function init(){
