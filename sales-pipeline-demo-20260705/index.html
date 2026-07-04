@@ -8,59 +8,89 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
     :root {
-      --green:#084c3b;
-      --green2:#0c6b52;
-      --mint:#e7f3ee;
-      --line:#d9e2de;
-      --text:#142033;
+      --green:#073d31;
+      --green2:#0b6b52;
+      --green3:#13916f;
+      --mint:#e8f5ef;
+      --line:#dce6e2;
+      --line2:#c8d8d1;
+      --text:#101828;
       --muted:#667085;
-      --bg:#f7f9f8;
+      --bg:#f5f8f7;
       --card:#ffffff;
       --amber:#b7791f;
       --blue:#2b5ca8;
       --red:#b23b3b;
-      --shadow:0 14px 38px rgba(15, 33, 45, .11);
+      --shadow:0 20px 55px rgba(9, 39, 32, .13);
+      --soft-shadow:0 10px 26px rgba(9, 39, 32, .08);
     }
     * { box-sizing:border-box; }
     body {
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;
       color:var(--text);
-      background:linear-gradient(180deg,#f4f7f6 0,#fff 45%,#f7f9f8 100%);
+      background:
+        radial-gradient(circle at 18% -8%, rgba(19,145,111,.18), transparent 36%),
+        radial-gradient(circle at 78% 0%, rgba(43,92,168,.12), transparent 34%),
+        linear-gradient(180deg,#f7faf9 0,#f2f6f4 46%,#eef4f1 100%);
     }
     header {
-      padding:24px 32px 14px;
-      border-bottom:1px solid var(--line);
-      background:rgba(255,255,255,.88);
+      padding:26px 34px 18px;
+      border-bottom:1px solid rgba(255,255,255,.28);
+      background:
+        linear-gradient(135deg, rgba(7,61,49,.96), rgba(8,78,61,.9) 58%, rgba(15,96,78,.82)),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,.16), transparent 28%);
+      color:#fff;
       position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+      box-shadow:0 16px 38px rgba(9,39,32,.18);
     }
-    .topbar { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; }
-    h1 { margin:0; font-size:28px; letter-spacing:-.02em; }
-    .subtitle { margin-top:6px; color:var(--muted); font-size:14px; }
-    .tabs { display:flex; gap:8px; flex-wrap:wrap; }
+    .topbar { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; max-width:1480px; margin:0 auto; }
+    .brandline { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .brandmark {
+      letter-spacing:.34em; font-weight:900; font-size:13px; color:#dcefe8;
+      border:1px solid rgba(255,255,255,.28); border-radius:999px; padding:6px 10px 6px 13px;
+    }
+    .eyebrow { color:#9be0c7; font-size:12px; font-weight:900; text-transform:uppercase; letter-spacing:.16em; }
+    h1 { margin:0; font-size:34px; letter-spacing:-.03em; line-height:1.08; }
+    .subtitle { margin-top:8px; color:#d5e7e1; font-size:14px; max-width:760px; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
     button {
       border:1px solid var(--line); background:#fff; color:var(--text);
-      padding:9px 13px; border-radius:10px; cursor:pointer; font-weight:700;
+      padding:10px 14px; border-radius:999px; cursor:pointer; font-weight:800;
+      box-shadow:0 7px 18px rgba(9,39,32,.08);
     }
-    button.active { background:var(--green); color:#fff; border-color:var(--green); }
-    button.ghost { background:transparent; }
-    main { padding:22px 32px 44px; max-width:1480px; margin:0 auto; }
+    button.active { background:#dff7ed; color:var(--green); border-color:#c5eadc; }
+    button.ghost { background:rgba(255,255,255,.78); border-color:rgba(255,255,255,.82); }
+    main { padding:26px 32px 50px; max-width:1480px; margin:0 auto; }
     .layout { display:grid; grid-template-columns:minmax(0,1.45fr) minmax(360px,.8fr); gap:20px; align-items:start; }
     .panel {
-      background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); overflow:hidden;
+      background:rgba(255,255,255,.92); border:1px solid rgba(212,225,220,.9); border-radius:20px;
+      box-shadow:var(--shadow); overflow:hidden; backdrop-filter:blur(10px);
     }
-    .panel-head { padding:18px 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .panel-head {
+      padding:18px 20px; border-bottom:1px solid var(--line);
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      background:linear-gradient(180deg,#fff,#f9fbfa);
+    }
     .panel-head h2 { margin:0; font-size:19px; }
     .panel-head .hint { color:var(--muted); font-size:13px; }
-    #map { height:680px; width:100%; background:#e9efed; }
+    #map { height:700px; width:100%; background:#e9efed; }
     .side { display:flex; flex-direction:column; gap:16px; }
     .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
-    .metric { background:#f8faf9; border:1px solid var(--line); border-radius:12px; padding:13px; }
-    .metric b { display:block; font-size:21px; margin-bottom:2px; }
-    .metric span { color:var(--muted); font-size:12px; }
+    .metric {
+      background:linear-gradient(180deg,#ffffff,#f7fbf9);
+      border:1px solid var(--line); border-radius:16px; padding:14px;
+      box-shadow:var(--soft-shadow);
+    }
+    .metric b { display:block; font-size:24px; margin-bottom:2px; letter-spacing:-.02em; color:var(--green); }
+    .metric span { color:var(--muted); font-size:12px; font-weight:700; }
     .project-list { padding:10px; display:flex; flex-direction:column; gap:8px; }
-    .project-row { text-align:left; border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff; cursor:pointer; }
-    .project-row:hover { border-color:#9bc4b4; background:#f7fcfa; }
+    .project-row {
+      text-align:left; border:1px solid var(--line); border-radius:16px; padding:13px;
+      background:linear-gradient(180deg,#fff,#fbfdfc); cursor:pointer; transition:.16s ease;
+      box-shadow:0 6px 16px rgba(9,39,32,.04);
+    }
+    .project-row:hover { border-color:#8fc6b2; background:#f7fcfa; transform:translateY(-1px); box-shadow:0 12px 28px rgba(9,39,32,.11); }
     .row-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
     .row-title { font-weight:800; }
     .row-meta { color:var(--muted); font-size:12px; margin-top:4px; }
@@ -69,15 +99,15 @@
     .badge.proposal { background:#fff7e6; color:#a05d00; }
     .badge.meeting { background:#e8f7ef; color:#0b694d; }
     .badge.sent { background:#f2f4f7; color:#475467; }
-    .detail { padding:18px 20px 20px; }
-    .detail h3 { margin:0 0 6px; font-size:24px; }
+    .detail { padding:20px 22px 22px; }
+    .detail h3 { margin:0 0 6px; font-size:27px; letter-spacing:-.025em; }
     .detail .country { color:var(--green); font-weight:800; margin-bottom:14px; }
-    .kv { display:grid; grid-template-columns:132px 1fr; gap:9px 14px; font-size:14px; margin:16px 0; }
+    .kv { display:grid; grid-template-columns:132px 1fr; gap:9px 14px; font-size:14px; margin:18px 0; }
     .kv div:nth-child(odd) { color:var(--muted); }
     .section-title { font-weight:900; margin:18px 0 8px; color:var(--green); }
     .bullets { margin:0; padding-left:20px; color:#344054; font-size:14px; }
     .bullets li { margin:5px 0; }
-    .note { margin-top:16px; padding:12px; border-radius:12px; background:#f9fafb; border:1px solid var(--line); color:#5b6472; font-size:13px; }
+    .note { margin-top:16px; padding:13px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); color:#5b6472; font-size:13px; }
     .leaflet-popup-content { min-width:230px; }
     .popup-title { font-weight:900; font-size:15px; color:var(--green); }
     .popup-meta { color:#475467; margin:5px 0 9px; }
@@ -85,18 +115,31 @@
     .domestic-view { display:none; }
     .domestic-grid { display:grid; grid-template-columns:360px 1fr; gap:20px; }
     .domestic-list { padding:14px; display:flex; flex-direction:column; gap:10px; }
-    .timeline { padding:18px 20px; }
+    .timeline { padding:18px 20px; background:linear-gradient(180deg,#fff,#f8fbfa); }
     .timeline-item { position:relative; padding-left:26px; padding-bottom:18px; border-left:2px solid #d6e4dc; }
     .timeline-item:last-child { border-left-color:transparent; }
     .dot { position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--green); border:2px solid #fff; box-shadow:0 0 0 2px #d6e4dc; }
     .month { font-weight:900; color:var(--green); }
-    .empty { padding:28px; color:var(--muted); text-align:center; }
+    .empty { padding:32px; color:var(--muted); text-align:center; }
     .map-label {
-      background:#fff; border:1px solid #b6cfc5; border-radius:10px; padding:7px 9px;
-      box-shadow:0 8px 20px rgba(0,0,0,.16); font-size:12px; min-width:132px;
+      background:rgba(255,255,255,.96); border:1px solid #abcfc0; border-radius:14px; padding:8px 10px;
+      box-shadow:0 13px 28px rgba(7,61,49,.2); font-size:12px; min-width:142px;
     }
-    .map-label strong { color:var(--green); display:block; font-size:13px; }
+    .map-label strong { color:var(--green); display:block; font-size:14px; }
     .map-label span { color:#475467; display:block; }
+    .map-label:after {
+      content:""; display:block; width:9px; height:9px; border-radius:50%;
+      background:var(--green3); box-shadow:0 0 0 5px rgba(19,145,111,.16);
+      position:absolute; transform:translate(54px, 5px);
+    }
+    .view-kicker {
+      display:flex; gap:10px; align-items:center; color:var(--muted); font-size:13px; font-weight:800;
+      padding:0 0 14px;
+    }
+    .view-kicker span {
+      display:inline-flex; align-items:center; gap:6px; background:#fff; border:1px solid var(--line);
+      border-radius:999px; padding:7px 10px; box-shadow:var(--soft-shadow);
+    }
     @media (max-width:1080px) {
       .layout, .domestic-grid { grid-template-columns:1fr; }
       #map { height:560px; }
@@ -108,8 +151,9 @@
   <header>
     <div class="topbar">
       <div>
-        <h1>MANNA CEA Sales Pipeline Calendar</h1>
-        <div class="subtitle">Interactive demo · Global pipeline map + domestic pipeline drill-down · example data from MESH application cases</div>
+        <div class="brandline"><div class="brandmark">MANNA CEA</div><div class="eyebrow">Pipeline Command Center</div></div>
+        <h1>MESH Sales Pipeline Calendar</h1>
+        <div class="subtitle">Global opportunity map, domestic pipeline drill-down and project-level follow-up view for internal execution and investor communication.</div>
       </div>
       <div class="tabs">
         <button id="tabGlobal" class="active" onclick="showView('global')">Global Pipeline</button>
@@ -120,6 +164,11 @@
 
   <main>
     <section id="globalView">
+      <div class="view-kicker">
+        <span>Reference data: MESH application casebook</span>
+        <span>Mode: interactive prototype</span>
+        <span>Amounts: budgetary product subtotal</span>
+      </div>
       <div class="layout">
         <div class="panel">
           <div class="panel-head">
@@ -153,6 +202,11 @@
     </section>
 
     <section id="domesticView" class="domestic-view">
+      <div class="view-kicker">
+        <span>Domestic opportunity board</span>
+        <span>List to detail workflow</span>
+        <span>Example data pending replacement</span>
+      </div>
       <div class="domestic-grid">
         <div class="panel">
           <div class="panel-head">
@@ -266,15 +320,15 @@
 
     function initMap(){
       map = L.map('map', { scrollWheelZoom:true, worldCopyJump:true }).setView([28, 20], 2.15);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 8,
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(map);
 
       globalProjects.forEach(p => {
         const icon = L.divIcon({
           className:'',
-          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.amount}</span><span>${p.period}</span></div>`,
+          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.country}</span><span>${p.amount} · ${p.period}</span></div>`,
           iconSize:[150,56], iconAnchor:[75,28]
         });
         const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
