@@ -66,6 +66,7 @@
     .panel {
       background:rgba(255,255,255,.92); border:1px solid rgba(212,225,220,.9); border-radius:20px;
       box-shadow:var(--shadow); overflow:hidden; backdrop-filter:blur(10px);
+      min-width:0;
     }
     .panel-head {
       padding:18px 20px; border-bottom:1px solid var(--line);
@@ -74,7 +75,11 @@
     }
     .panel-head h2 { margin:0; font-size:19px; }
     .panel-head .hint { color:var(--muted); font-size:13px; }
-    #map, #domesticMap { height:700px; width:100%; background:#e9efed; }
+    #map, #domesticMap {
+      height:700px; width:100%; min-width:0; background:#e9efed;
+      position:relative; overflow:hidden;
+    }
+    .leaflet-container { width:100%; max-width:100%; font-family:inherit; }
     .side { display:flex; flex-direction:column; gap:16px; }
     .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
     .metric {
@@ -144,6 +149,36 @@
       .layout, .domestic-grid { grid-template-columns:1fr; }
       #map, #domesticMap { height:560px; }
       header { position:static; }
+    }
+    @media (max-width:640px) {
+      header { padding:22px 18px 18px; }
+      .topbar { flex-direction:column; gap:16px; }
+      h1 { font-size:31px; }
+      .subtitle { font-size:13px; }
+      .tabs { width:100%; justify-content:flex-start; }
+      button { padding:9px 12px; }
+      main { padding:18px 14px 40px; overflow:hidden; }
+      .panel { border-radius:18px; }
+      .panel-head { padding:15px 14px; align-items:flex-start; }
+      .panel-head h2 { font-size:18px; }
+      .panel-head .hint { font-size:12px; }
+      #map, #domesticMap { height:430px; }
+      .metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); padding:10px; }
+      .metric { padding:11px; }
+      .metric b { font-size:20px; }
+      .project-list, .domestic-list { padding:10px; }
+      .detail { padding:16px; }
+      .detail h3 { font-size:23px; }
+      .kv { grid-template-columns:96px 1fr; font-size:13px; gap:8px 10px; }
+      .view-kicker { overflow-x:auto; padding-bottom:12px; }
+      .view-kicker span { white-space:nowrap; }
+      .map-label {
+        min-width:0; width:18px; height:18px; padding:0; border-radius:999px;
+        background:var(--green3); border:3px solid #fff; box-shadow:0 0 0 5px rgba(19,145,111,.22), 0 10px 22px rgba(7,61,49,.28);
+      }
+      .map-label strong, .map-label span { display:none; }
+      .map-label:after { display:none; }
+      .leaflet-popup-content { min-width:210px; }
     }
   </style>
 </head>
@@ -312,6 +347,20 @@
     const markers = new Map();
     const domesticMarkers = new Map();
 
+    function isMobile(){
+      return window.matchMedia('(max-width: 640px)').matches;
+    }
+
+    function projectIcon(html, desktopSize, desktopAnchor){
+      const mobile = isMobile();
+      return L.divIcon({
+        className:'',
+        html,
+        iconSize: mobile ? [18, 18] : desktopSize,
+        iconAnchor: mobile ? [9, 9] : desktopAnchor
+      });
+    }
+
     function badgeClass(status){ return 'badge ' + status; }
 
     function renderProjectRow(p, type){
@@ -342,46 +391,54 @@
       initMap();
       initDomesticMap();
       renderTimeline();
+      setTimeout(refreshVisibleMaps, 250);
+      setTimeout(refreshVisibleMaps, 900);
     }
 
     function initMap(){
-      map = L.map('map', { scrollWheelZoom:true, worldCopyJump:true }).setView([28, 20], 2.15);
+      map = L.map('map', { scrollWheelZoom:true, worldCopyJump:true }).setView(isMobile() ? [24, 18] : [28, 20], isMobile() ? 2 : 2.15);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 8,
         attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(map);
 
       globalProjects.forEach(p => {
-        const icon = L.divIcon({
-          className:'',
-          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.country}</span><span>${p.amount} · ${p.period}</span></div>`,
-          iconSize:[150,56], iconAnchor:[75,28]
-        });
+        const icon = projectIcon(
+          `<div class="map-label"><strong>${p.name}</strong><span>${p.country}</span><span>${p.amount} · ${p.period}</span></div>`,
+          [150,56],
+          [75,28]
+        );
         const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
         marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.country}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('global','${p.id}')">Open project detail</div>`);
         marker.on('click', () => selectProject('global', p.id, false));
         markers.set(p.id, marker);
       });
+      if (isMobile()) {
+        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
+      }
     }
 
     function initDomesticMap(){
-      domesticMap = L.map('domesticMap', { scrollWheelZoom:true }).setView([36.2, 127.9], 7);
+      domesticMap = L.map('domesticMap', { scrollWheelZoom:true }).setView([36.2, 127.9], isMobile() ? 6 : 7);
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 11,
         attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
       }).addTo(domesticMap);
 
       domesticProjects.forEach(p => {
-        const icon = L.divIcon({
-          className:'',
-          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.region}</span><span>${p.amount} · ${p.period}</span></div>`,
-          iconSize:[170,58], iconAnchor:[85,29]
-        });
+        const icon = projectIcon(
+          `<div class="map-label"><strong>${p.name}</strong><span>${p.region}</span><span>${p.amount} · ${p.period}</span></div>`,
+          [170,58],
+          [85,29]
+        );
         const marker = L.marker([p.lat, p.lng], { icon }).addTo(domesticMap);
         marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.region}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('domestic','${p.id}')">Open project detail</div>`);
         marker.on('click', () => selectProject('domestic', p.id, false));
         domesticMarkers.set(p.id, marker);
       });
+      if (isMobile()) {
+        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
+      }
     }
 
     function renderTimeline(){
@@ -405,12 +462,12 @@
       document.getElementById(target).innerHTML = renderDetail(p);
       if (type === 'global' && zoom && markers.has(id)) {
         const marker = markers.get(id);
-        map.setView(marker.getLatLng(), 4, { animate:true });
+        map.setView(marker.getLatLng(), isMobile() ? 3 : 4, { animate:true });
         marker.openPopup();
       }
       if (type === 'domestic' && zoom && domesticMarkers.has(id)) {
         const marker = domesticMarkers.get(id);
-        domesticMap.setView(marker.getLatLng(), 9, { animate:true });
+        domesticMap.setView(marker.getLatLng(), isMobile() ? 7 : 9, { animate:true });
         marker.openPopup();
       }
     }
@@ -420,21 +477,62 @@
       document.getElementById('domesticView').style.display = view === 'domestic' ? 'block' : 'none';
       document.getElementById('tabGlobal').classList.toggle('active', view === 'global');
       document.getElementById('tabDomestic').classList.toggle('active', view === 'domestic');
-      if (view === 'global' && map) setTimeout(()=>map.invalidateSize(), 80);
-      if (view === 'domestic' && domesticMap) setTimeout(()=>domesticMap.invalidateSize(), 80);
+      setTimeout(() => {
+        refreshVisibleMaps();
+        fitMobileView(view);
+        refreshVisibleMaps();
+      }, 140);
+      setTimeout(() => {
+        fitMobileView(view);
+        refreshVisibleMaps();
+      }, 480);
     }
 
     function resetMap(){
-      map.setView([28, 20], 2.15);
+      if (isMobile()) {
+        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
+      } else {
+        map.setView([28, 20], 2.15);
+      }
       map.closePopup();
       document.getElementById('globalDetail').innerHTML = '<div class="empty">프로젝트를 선택하면 상세 정보가 표시됩니다.</div>';
     }
 
     function resetDomesticMap(){
-      domesticMap.setView([36.2, 127.9], 7);
+      if (isMobile()) {
+        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
+      } else {
+        domesticMap.setView([36.2, 127.9], 7);
+      }
       domesticMap.closePopup();
       document.getElementById('domesticDetail').innerHTML = '<div class="empty">국내 지도 마커 또는 프로젝트를 선택하면 세부 정보가 표시됩니다.</div>';
     }
+
+    function refreshVisibleMaps(){
+      if (map && document.getElementById('globalView').style.display !== 'none') {
+        map.invalidateSize(true);
+      }
+      if (domesticMap && document.getElementById('domesticView').style.display !== 'none') {
+        domesticMap.invalidateSize(true);
+      }
+    }
+
+    function fitMobileView(view){
+      if (!isMobile()) return;
+      if (view === 'global' && map) {
+        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
+      }
+      if (view === 'domestic' && domesticMap) {
+        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(refreshVisibleMaps, 250);
+      setTimeout(refreshVisibleMaps, 1000);
+    });
+    window.addEventListener('resize', () => setTimeout(refreshVisibleMaps, 180));
+    window.addEventListener('orientationchange', () => setTimeout(refreshVisibleMaps, 500));
 
     init();
   </script>
