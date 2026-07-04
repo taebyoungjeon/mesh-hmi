@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MANNA CEA Pipeline Calendar Demo</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQh7Mfxe8A5OZ+n5h7tfqH8Qb9lDXbM=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
     :root {
       --green:#073d31;
@@ -75,11 +73,38 @@
     }
     .panel-head h2 { margin:0; font-size:19px; }
     .panel-head .hint { color:var(--muted); font-size:13px; }
-    #map, #domesticMap {
-      height:700px; width:100%; min-width:0; background:#e9efed;
-      position:relative; overflow:hidden;
+    .static-map {
+      position:relative; width:100%; min-width:0; overflow:hidden;
+      background:#e9efed; border-bottom-left-radius:20px; border-bottom-right-radius:20px;
     }
-    .leaflet-container { width:100%; max-width:100%; font-family:inherit; }
+    .static-map img {
+      display:block; width:100%; height:auto; user-select:none; pointer-events:none;
+    }
+    .marker-layer { position:absolute; inset:0; }
+    .static-marker {
+      position:absolute; transform:translate(-50%,-50%); z-index:3;
+      border:0; padding:0; background:transparent; box-shadow:none; cursor:pointer;
+    }
+    .static-marker::before {
+      content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:15px; height:15px; border-radius:999px; background:var(--green3);
+      border:3px solid #fff; box-shadow:0 0 0 7px rgba(19,145,111,.18), 0 14px 30px rgba(7,61,49,.26);
+    }
+    .static-marker.active::before { background:#b7791f; box-shadow:0 0 0 8px rgba(183,121,31,.22), 0 14px 30px rgba(7,61,49,.32); }
+    .pin-card {
+      display:block; min-width:145px; transform:translate(16px,-58%);
+      background:rgba(255,255,255,.96); border:1px solid #abcfc0; border-radius:14px; padding:8px 10px;
+      box-shadow:0 13px 28px rgba(7,61,49,.2); text-align:left; font-size:12px;
+      opacity:0; pointer-events:none; transition:opacity .16s ease, transform .16s ease;
+    }
+    .static-marker:hover .pin-card, .static-marker.active .pin-card { opacity:1; transform:translate(18px,-58%); }
+    .pin-card strong { color:var(--green); display:block; font-size:14px; }
+    .pin-card span { color:#475467; display:block; }
+    .map-attribution {
+      position:absolute; right:8px; bottom:7px; z-index:2;
+      padding:3px 7px; border-radius:999px; background:rgba(255,255,255,.78);
+      color:#667085; font-size:10px; font-weight:700;
+    }
     .side { display:flex; flex-direction:column; gap:16px; }
     .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
     .metric {
@@ -113,10 +138,6 @@
     .bullets { margin:0; padding-left:20px; color:#344054; font-size:14px; }
     .bullets li { margin:5px 0; }
     .note { margin-top:16px; padding:13px; border-radius:14px; background:#f9fafb; border:1px solid var(--line); color:#5b6472; font-size:13px; }
-    .leaflet-popup-content { min-width:230px; }
-    .popup-title { font-weight:900; font-size:15px; color:var(--green); }
-    .popup-meta { color:#475467; margin:5px 0 9px; }
-    .popup-link { color:var(--green); font-weight:900; cursor:pointer; }
     .domestic-view { display:none; }
     .domestic-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(360px,.78fr); gap:20px; align-items:start; }
     .domestic-list { padding:14px; display:flex; flex-direction:column; gap:10px; }
@@ -126,17 +147,6 @@
     .dot { position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--green); border:2px solid #fff; box-shadow:0 0 0 2px #d6e4dc; }
     .month { font-weight:900; color:var(--green); }
     .empty { padding:32px; color:var(--muted); text-align:center; }
-    .map-label {
-      background:rgba(255,255,255,.96); border:1px solid #abcfc0; border-radius:14px; padding:8px 10px;
-      box-shadow:0 13px 28px rgba(7,61,49,.2); font-size:12px; min-width:142px;
-    }
-    .map-label strong { color:var(--green); display:block; font-size:14px; }
-    .map-label span { color:#475467; display:block; }
-    .map-label:after {
-      content:""; display:block; width:9px; height:9px; border-radius:50%;
-      background:var(--green3); box-shadow:0 0 0 5px rgba(19,145,111,.16);
-      position:absolute; transform:translate(54px, 5px);
-    }
     .view-kicker {
       display:flex; gap:10px; align-items:center; color:var(--muted); font-size:13px; font-weight:800;
       padding:0 0 14px;
@@ -147,7 +157,6 @@
     }
     @media (max-width:1080px) {
       .layout, .domestic-grid { grid-template-columns:1fr; }
-      #map, #domesticMap { height:560px; }
       header { position:static; }
     }
     @media (max-width:640px) {
@@ -162,7 +171,6 @@
       .panel-head { padding:15px 14px; align-items:flex-start; }
       .panel-head h2 { font-size:18px; }
       .panel-head .hint { font-size:12px; }
-      #map, #domesticMap { height:430px; }
       .metric-grid { grid-template-columns:repeat(2,minmax(0,1fr)); padding:10px; }
       .metric { padding:11px; }
       .metric b { font-size:20px; }
@@ -172,13 +180,9 @@
       .kv { grid-template-columns:96px 1fr; font-size:13px; gap:8px 10px; }
       .view-kicker { overflow-x:auto; padding-bottom:12px; }
       .view-kicker span { white-space:nowrap; }
-      .map-label {
-        min-width:0; width:18px; height:18px; padding:0; border-radius:999px;
-        background:var(--green3); border:3px solid #fff; box-shadow:0 0 0 5px rgba(19,145,111,.22), 0 10px 22px rgba(7,61,49,.28);
-      }
-      .map-label strong, .map-label span { display:none; }
-      .map-label:after { display:none; }
-      .leaflet-popup-content { min-width:210px; }
+      .pin-card { display:none; }
+      .static-marker::before { width:18px; height:18px; box-shadow:0 0 0 5px rgba(19,145,111,.22), 0 10px 22px rgba(7,61,49,.28); }
+      .map-attribution { font-size:9px; }
     }
   </style>
 </head>
@@ -213,7 +217,11 @@
             </div>
             <button class="ghost" onclick="resetMap()">Reset Map</button>
           </div>
-          <div id="map"></div>
+          <div id="map" class="static-map">
+            <img src="assets/global-map-base.png" alt="Static global pipeline map covering Europe, North Africa and the Middle East">
+            <div id="globalMarkers" class="marker-layer"></div>
+            <div class="map-attribution">© OpenStreetMap contributors · © CARTO</div>
+          </div>
         </div>
 
         <aside class="side">
@@ -251,7 +259,11 @@
             </div>
             <button class="ghost" onclick="resetDomesticMap()">Reset Map</button>
           </div>
-          <div id="domesticMap"></div>
+          <div id="domesticMap" class="static-map">
+            <img src="assets/korea-map-base.png" alt="Static Korea domestic pipeline map">
+            <div id="domesticMarkers" class="marker-layer"></div>
+            <div class="map-attribution">© OpenStreetMap contributors · © CARTO</div>
+          </div>
         </div>
         <div class="panel">
           <div class="metric-grid">
@@ -342,24 +354,10 @@
       }
     ];
 
-    let map;
-    let domesticMap;
-    const markers = new Map();
-    const domesticMarkers = new Map();
-
-    function isMobile(){
-      return window.matchMedia('(max-width: 640px)').matches;
-    }
-
-    function projectIcon(html, desktopSize, desktopAnchor){
-      const mobile = isMobile();
-      return L.divIcon({
-        className:'',
-        html,
-        iconSize: mobile ? [18, 18] : desktopSize,
-        iconAnchor: mobile ? [9, 9] : desktopAnchor
-      });
-    }
+    const mapBounds = {
+      global: { west:-170, south:-55, east:170, north:75 },
+      domestic: { west:120, south:30, east:136, north:42 }
+    };
 
     function badgeClass(status){ return 'badge ' + status; }
 
@@ -388,57 +386,33 @@
     function init(){
       document.getElementById('globalList').innerHTML = globalProjects.map(p=>renderProjectRow(p,'global')).join('');
       document.getElementById('domesticList').innerHTML = domesticProjects.map(p=>renderProjectRow(p,'domestic')).join('');
-      initMap();
-      initDomesticMap();
+      renderStaticMarkers('global', globalProjects);
+      renderStaticMarkers('domestic', domesticProjects);
       renderTimeline();
-      setTimeout(refreshVisibleMaps, 250);
-      setTimeout(refreshVisibleMaps, 900);
     }
 
-    function initMap(){
-      map = L.map('map', { scrollWheelZoom:true, worldCopyJump:true }).setView(isMobile() ? [24, 18] : [28, 20], isMobile() ? 2 : 2.15);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 8,
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-      }).addTo(map);
-
-      globalProjects.forEach(p => {
-        const icon = projectIcon(
-          `<div class="map-label"><strong>${p.name}</strong><span>${p.country}</span><span>${p.amount} · ${p.period}</span></div>`,
-          [150,56],
-          [75,28]
-        );
-        const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
-        marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.country}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('global','${p.id}')">Open project detail</div>`);
-        marker.on('click', () => selectProject('global', p.id, false));
-        markers.set(p.id, marker);
-      });
-      if (isMobile()) {
-        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
-      }
+    function mercatorY(lat){
+      const clipped = Math.max(Math.min(lat, 85.05112878), -85.05112878);
+      const rad = clipped * Math.PI / 180;
+      return Math.log(Math.tan(Math.PI / 4 + rad / 2));
     }
 
-    function initDomesticMap(){
-      domesticMap = L.map('domesticMap', { scrollWheelZoom:true }).setView([36.2, 127.9], isMobile() ? 6 : 7);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 11,
-        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-      }).addTo(domesticMap);
+    function markerPercent(p, type){
+      const b = mapBounds[type];
+      const x = ((p.lng - b.west) / (b.east - b.west)) * 100;
+      const y = ((mercatorY(b.north) - mercatorY(p.lat)) / (mercatorY(b.north) - mercatorY(b.south))) * 100;
+      return { x: Math.max(2, Math.min(98, x)), y: Math.max(2, Math.min(98, y)) };
+    }
 
-      domesticProjects.forEach(p => {
-        const icon = projectIcon(
-          `<div class="map-label"><strong>${p.name}</strong><span>${p.region}</span><span>${p.amount} · ${p.period}</span></div>`,
-          [170,58],
-          [85,29]
-        );
-        const marker = L.marker([p.lat, p.lng], { icon }).addTo(domesticMap);
-        marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.region}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('domestic','${p.id}')">Open project detail</div>`);
-        marker.on('click', () => selectProject('domestic', p.id, false));
-        domesticMarkers.set(p.id, marker);
-      });
-      if (isMobile()) {
-        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
-      }
+    function renderStaticMarkers(type, projects){
+      const target = document.getElementById(type === 'global' ? 'globalMarkers' : 'domesticMarkers');
+      target.innerHTML = projects.map(p => {
+        const pos = markerPercent(p, type);
+        const label = type === 'global' ? p.country : p.region;
+        return `<button class="static-marker" data-type="${type}" data-id="${p.id}" style="left:${pos.x}%; top:${pos.y}%;" onclick="selectProject('${type}','${p.id}')" aria-label="Open ${p.name} project detail">
+          <span class="pin-card"><strong>${p.name}</strong><span>${label}</span><span>${p.amount} · ${p.period}</span></span>
+        </button>`;
+      }).join('');
     }
 
     function renderTimeline(){
@@ -460,16 +434,7 @@
       if (!p) return;
       const target = type === 'global' ? 'globalDetail' : 'domesticDetail';
       document.getElementById(target).innerHTML = renderDetail(p);
-      if (type === 'global' && zoom && markers.has(id)) {
-        const marker = markers.get(id);
-        map.setView(marker.getLatLng(), isMobile() ? 3 : 4, { animate:true });
-        marker.openPopup();
-      }
-      if (type === 'domestic' && zoom && domesticMarkers.has(id)) {
-        const marker = domesticMarkers.get(id);
-        domesticMap.setView(marker.getLatLng(), isMobile() ? 7 : 9, { animate:true });
-        marker.openPopup();
-      }
+      document.querySelectorAll(`.static-marker[data-type="${type}"]`).forEach(el => el.classList.toggle('active', el.dataset.id === id));
     }
 
     function showView(view){
@@ -477,62 +442,17 @@
       document.getElementById('domesticView').style.display = view === 'domestic' ? 'block' : 'none';
       document.getElementById('tabGlobal').classList.toggle('active', view === 'global');
       document.getElementById('tabDomestic').classList.toggle('active', view === 'domestic');
-      setTimeout(() => {
-        refreshVisibleMaps();
-        fitMobileView(view);
-        refreshVisibleMaps();
-      }, 140);
-      setTimeout(() => {
-        fitMobileView(view);
-        refreshVisibleMaps();
-      }, 480);
     }
 
     function resetMap(){
-      if (isMobile()) {
-        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
-      } else {
-        map.setView([28, 20], 2.15);
-      }
-      map.closePopup();
       document.getElementById('globalDetail').innerHTML = '<div class="empty">프로젝트를 선택하면 상세 정보가 표시됩니다.</div>';
+      document.querySelectorAll('.static-marker[data-type="global"]').forEach(el => el.classList.remove('active'));
     }
 
     function resetDomesticMap(){
-      if (isMobile()) {
-        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
-      } else {
-        domesticMap.setView([36.2, 127.9], 7);
-      }
-      domesticMap.closePopup();
       document.getElementById('domesticDetail').innerHTML = '<div class="empty">국내 지도 마커 또는 프로젝트를 선택하면 세부 정보가 표시됩니다.</div>';
+      document.querySelectorAll('.static-marker[data-type="domestic"]').forEach(el => el.classList.remove('active'));
     }
-
-    function refreshVisibleMaps(){
-      if (map && document.getElementById('globalView').style.display !== 'none') {
-        map.invalidateSize(true);
-      }
-      if (domesticMap && document.getElementById('domesticView').style.display !== 'none') {
-        domesticMap.invalidateSize(true);
-      }
-    }
-
-    function fitMobileView(view){
-      if (!isMobile()) return;
-      if (view === 'global' && map) {
-        map.fitBounds(L.latLngBounds(globalProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:3 });
-      }
-      if (view === 'domestic' && domesticMap) {
-        domesticMap.fitBounds(L.latLngBounds(domesticProjects.map(p => [p.lat, p.lng])), { padding:[42, 42], maxZoom:7 });
-      }
-    }
-
-    window.addEventListener('load', () => {
-      setTimeout(refreshVisibleMaps, 250);
-      setTimeout(refreshVisibleMaps, 1000);
-    });
-    window.addEventListener('resize', () => setTimeout(refreshVisibleMaps, 180));
-    window.addEventListener('orientationchange', () => setTimeout(refreshVisibleMaps, 500));
 
     init();
   </script>
