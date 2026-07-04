@@ -74,7 +74,7 @@
     }
     .panel-head h2 { margin:0; font-size:19px; }
     .panel-head .hint { color:var(--muted); font-size:13px; }
-    #map { height:700px; width:100%; background:#e9efed; }
+    #map, #domesticMap { height:700px; width:100%; background:#e9efed; }
     .side { display:flex; flex-direction:column; gap:16px; }
     .metric-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
     .metric {
@@ -113,7 +113,7 @@
     .popup-meta { color:#475467; margin:5px 0 9px; }
     .popup-link { color:var(--green); font-weight:900; cursor:pointer; }
     .domestic-view { display:none; }
-    .domestic-grid { display:grid; grid-template-columns:360px 1fr; gap:20px; }
+    .domestic-grid { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(360px,.78fr); gap:20px; align-items:start; }
     .domestic-list { padding:14px; display:flex; flex-direction:column; gap:10px; }
     .timeline { padding:18px 20px; background:linear-gradient(180deg,#fff,#f8fbfa); }
     .timeline-item { position:relative; padding-left:26px; padding-bottom:18px; border-left:2px solid #d6e4dc; }
@@ -142,7 +142,7 @@
     }
     @media (max-width:1080px) {
       .layout, .domestic-grid { grid-template-columns:1fr; }
-      #map { height:560px; }
+      #map, #domesticMap { height:560px; }
       header { position:static; }
     }
   </style>
@@ -204,21 +204,30 @@
     <section id="domesticView" class="domestic-view">
       <div class="view-kicker">
         <span>Domestic opportunity board</span>
-        <span>List to detail workflow</span>
+        <span>Korea map to detail workflow</span>
         <span>Example data pending replacement</span>
       </div>
       <div class="domestic-grid">
         <div class="panel">
           <div class="panel-head">
             <div>
-              <h2>Domestic Pipeline</h2>
-              <div class="hint">국내 파이프라인 리스트 예시</div>
+              <h2>Domestic Pipeline Map</h2>
+              <div class="hint">대한민국 지도 마커 또는 우측 프로젝트를 클릭하면 세부 정보가 표시됩니다.</div>
             </div>
+            <button class="ghost" onclick="resetDomesticMap()">Reset Map</button>
           </div>
-          <div id="domesticList" class="domestic-list"></div>
+          <div id="domesticMap"></div>
         </div>
         <div class="panel">
-          <div id="domesticDetail" class="detail"><div class="empty">국내 파이프라인을 선택하면 세부 정보가 표시됩니다.</div></div>
+          <div class="metric-grid">
+            <div class="metric"><b>5</b><span>Domestic examples</span></div>
+            <div class="metric"><b>TBD</b><span>Target value</span></div>
+            <div class="metric"><b>3</b><span>Q3 candidates</span></div>
+            <div class="metric"><b>2</b><span>Demo / research type</span></div>
+          </div>
+          <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">sample pipeline</span></div>
+          <div id="domesticList" class="domestic-list"></div>
+          <div id="domesticDetail" class="detail"><div class="empty">국내 지도 마커 또는 프로젝트를 선택하면 세부 정보가 표시됩니다.</div></div>
         </div>
       </div>
     </section>
@@ -262,30 +271,46 @@
 
     const domesticProjects = [
       {
-        id:'dom-a', name:'국내 스마트팜 고도화 A', region:'충북 / 시설원예', status:'qualify', statusLabel:'Needs validation', amount:'TBD', period:'2026 Q3',
+        id:'dom-a', name:'국내 스마트팜 고도화 A', region:'충북 / 시설원예', lat:36.86, lng:127.43, status:'qualify', statusLabel:'Needs validation', amount:'TBD', period:'2026 Q3',
         summary:'기존 온실의 구역별 환경 데이터와 제어 상태를 MESH App/Web으로 통합하는 예시 파이프라인입니다.',
         scope:'AI Hub, Air Nano, 기존 제어반 인터페이스 검토, 알림/로그/이력 화면 구성.',
         next:'현장 제어반, 센서 위치, 통신 방식 확인 필요.',
-        notes:['예시 데이터','실제 고객명/금액 입력 필요','국내 프로젝트는 리스트 기반 drill-down 구조로 관리']
+        notes:['예시 데이터','실제 고객명/금액 입력 필요','국내 프로젝트는 지도 기반 drill-down 구조로 관리']
       },
       {
-        id:'dom-b', name:'교육/체험형 스마트팜 B', region:'수도권 / 쇼케이스', status:'proposal', statusLabel:'Draft proposal', amount:'TBD', period:'2026 Q3-Q4',
+        id:'dom-b', name:'교육/체험형 스마트팜 B', region:'수도권 / 쇼케이스', lat:37.55, lng:126.98, status:'proposal', statusLabel:'Draft proposal', amount:'TBD', period:'2026 Q3-Q4',
         summary:'방문객 체험과 재배 운영 데이터를 함께 보여주는 Rootsquare형 MESH 적용 예시입니다.',
         scope:'대시보드, 운영 기록, 방문객용 모니터링 화면, 교육 콘텐츠 연동 가능성 검토.',
         next:'운영 주체와 화면 공개 범위, 개인정보/운영 데이터 구분 필요.',
         notes:['예시 데이터','홍보/교육 가치 중심','상업 재배와 체험 운영을 분리해 설계']
       },
       {
-        id:'dom-c', name:'작물 실증 파일럿 C', region:'전남 / 연구 실증', status:'meeting', statusLabel:'Internal review', amount:'TBD', period:'2026 Q4',
+        id:'dom-c', name:'작물 실증 파일럿 C', region:'전남 / 연구 실증', lat:35.02, lng:126.71, status:'meeting', statusLabel:'Internal review', amount:'TBD', period:'2026 Q4',
         summary:'특정 작물의 환경-생육 데이터 수집과 AI-ready dataset 구축을 목표로 하는 예시 파이프라인입니다.',
         scope:'기후 데이터, 근권 데이터, 작물 메모, 생육 이미지/기록, API/export 검토.',
         next:'실증 작물과 측정 항목을 확정해야 합니다.',
         notes:['예시 데이터','연구기관/지자체 연계 가능','데이터셋 품질 기준 필요']
+      },
+      {
+        id:'dom-d', name:'제주 완전자동형 후보 D', region:'제주 / 자동화 온실', lat:33.49, lng:126.53, status:'sent', statusLabel:'Reference case', amount:'TBD', period:'2026 Q4',
+        summary:'제주 지역 온실의 완전자동형 운영 또는 관광/체험 결합 가능성을 검토하는 예시 파이프라인입니다.',
+        scope:'기후제어, 원격 모니터링, 알림, 운영 로그, 현장 유지관리 범위 검토.',
+        next:'기존 설비 수준, 현장 운영자 역량, 원격 제어 허용 범위 확인.',
+        notes:['예시 데이터','관광/체험 요소와 생산 운영 분리 필요','제주 물류/AS 조건 검토 필요']
+      },
+      {
+        id:'dom-e', name:'천안 연구 쇼케이스 후보 E', region:'충남 / 연구 쇼케이스', lat:36.82, lng:127.15, status:'proposal', statusLabel:'Concept draft', amount:'TBD', period:'2026 H2',
+        summary:'연구기관 또는 기업 쇼케이스 형태로 MESH 대시보드와 센서/제어 모듈을 전시·실증하는 예시 파이프라인입니다.',
+        scope:'소형 재배 모듈, MESH App/Web, 센서 데이터 시각화, 방문객용 화면 분리.',
+        next:'공개 화면과 내부 운영 화면의 데이터 범위 구분.',
+        notes:['예시 데이터','투자자/방문객 데모 가치','실증 장비와 홍보 콘텐츠를 함께 설계']
       }
     ];
 
     let map;
+    let domesticMap;
     const markers = new Map();
+    const domesticMarkers = new Map();
 
     function badgeClass(status){ return 'badge ' + status; }
 
@@ -315,6 +340,7 @@
       document.getElementById('globalList').innerHTML = globalProjects.map(p=>renderProjectRow(p,'global')).join('');
       document.getElementById('domesticList').innerHTML = domesticProjects.map(p=>renderProjectRow(p,'domestic')).join('');
       initMap();
+      initDomesticMap();
       renderTimeline();
     }
 
@@ -335,6 +361,26 @@
         marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.country}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('global','${p.id}')">Open project detail</div>`);
         marker.on('click', () => selectProject('global', p.id, false));
         markers.set(p.id, marker);
+      });
+    }
+
+    function initDomesticMap(){
+      domesticMap = L.map('domesticMap', { scrollWheelZoom:true }).setView([36.2, 127.9], 7);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 11,
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+      }).addTo(domesticMap);
+
+      domesticProjects.forEach(p => {
+        const icon = L.divIcon({
+          className:'',
+          html:`<div class="map-label"><strong>${p.name}</strong><span>${p.region}</span><span>${p.amount} · ${p.period}</span></div>`,
+          iconSize:[170,58], iconAnchor:[85,29]
+        });
+        const marker = L.marker([p.lat, p.lng], { icon }).addTo(domesticMap);
+        marker.bindPopup(`<div class="popup-title">${p.name}</div><div class="popup-meta">${p.region}<br>${p.amount} · ${p.period}</div><div class="popup-link" onclick="selectProject('domestic','${p.id}')">Open project detail</div>`);
+        marker.on('click', () => selectProject('domestic', p.id, false));
+        domesticMarkers.set(p.id, marker);
       });
     }
 
@@ -362,6 +408,11 @@
         map.setView(marker.getLatLng(), 4, { animate:true });
         marker.openPopup();
       }
+      if (type === 'domestic' && zoom && domesticMarkers.has(id)) {
+        const marker = domesticMarkers.get(id);
+        domesticMap.setView(marker.getLatLng(), 9, { animate:true });
+        marker.openPopup();
+      }
     }
 
     function showView(view){
@@ -370,12 +421,19 @@
       document.getElementById('tabGlobal').classList.toggle('active', view === 'global');
       document.getElementById('tabDomestic').classList.toggle('active', view === 'domestic');
       if (view === 'global' && map) setTimeout(()=>map.invalidateSize(), 80);
+      if (view === 'domestic' && domesticMap) setTimeout(()=>domesticMap.invalidateSize(), 80);
     }
 
     function resetMap(){
       map.setView([28, 20], 2.15);
       map.closePopup();
       document.getElementById('globalDetail').innerHTML = '<div class="empty">프로젝트를 선택하면 상세 정보가 표시됩니다.</div>';
+    }
+
+    function resetDomesticMap(){
+      domesticMap.setView([36.2, 127.9], 7);
+      domesticMap.closePopup();
+      document.getElementById('domesticDetail').innerHTML = '<div class="empty">국내 지도 마커 또는 프로젝트를 선택하면 세부 정보가 표시됩니다.</div>';
     }
 
     init();
