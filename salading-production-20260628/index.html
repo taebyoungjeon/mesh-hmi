@@ -652,6 +652,39 @@ function linReg(vals){
 // 주간 발주량 = 채널 합계 (총 생산량 행 대신 실제 발주 기준)
 function wkTotal(wk){return(wk.c['컬리']||0)+(wk.c['쿠팡']||0)+(wk.c['조식24']||0);}
 
+function wkValueTotal(wk,endIdx=6){
+  return (wk.v||[]).slice(0,endIdx+1).reduce((a,b)=>a+(parseInt(b)||0),0);
+}
+
+function wkEnteredEndIdx(wk){
+  for(let i=6;i>=0;i--)if((wk.v&&wk.v[i]||0)>0)return i;
+  return 0;
+}
+
+function isTodayInWeek(wk){
+  if(!wk)return false;
+  const fp=parseLabel(wk.d[0]);
+  const lp=parseLabel(wk.d[6]);
+  if(!fp||!lp)return false;
+  const wkStart=labelToDate(fp.mo,fp.dy);
+  const wkEnd=labelToDate(lp.mo,lp.dy);
+  wkEnd.setHours(23,59,59,999);
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  return today>=wkStart&&today<=wkEnd;
+}
+
+function wkCompare(idx){
+  const wk=WKS[idx];
+  const prev=idx>0?WKS[idx-1]:wk;
+  const current=isTodayInWeek(wk);
+  const endIdx=current?wkEnteredEndIdx(wk):6;
+  const cur=wkValueTotal(wk,endIdx);
+  const prevSame=wkValueTotal(prev,endIdx);
+  const chg=prevSame>0?Math.round((cur-prevSame)/prevSame*100):0;
+  return{current,endIdx,days:endIdx+1,cur,prev:prevSame,chg,label:current?`입력 ${endIdx+1}/7일 기준`:'전주 대비'};
+}
+
 // 채널별 평균 단가 (pc 없을 때 폴백용)
 // PN 목록 기준으로만 평균 계산 → 단종 제품 제외, 제품 수 기준 공정 평균
 function chAvgPrice(ch){
@@ -1021,13 +1054,14 @@ function render(){
   const mx=Math.max(...weeklyTots);
   const mxw=WKS[weeklyTots.indexOf(mx)];
   const tp=Object.entries(PRODS).sort((a,b)=>b[1]-a[1])[0];
-  // KPI 바: 이번 주(오늘 기준) vs 전주 비교
+  // KPI 바: 진행 중 주차는 입력된 날짜까지만 전주 같은 기간과 비교
   const curWkTot=weeklyTots[CW_IDX];
-  const prevWkTot=CW_IDX>0?weeklyTots[CW_IDX-1]:curWkTot;
-  const wkChg=prevWkTot>0?Math.round((curWkTot-prevWkTot)/prevWkTot*100):0;
+  const wkCmp=wkCompare(CW_IDX);
+  const wkChg=wkCmp.chg;
   const wkTrend=wkChg>0?`<span class="trend-up">▲ ${wkChg}%</span>`:wkChg<0?`<span class="trend-down">▼ ${Math.abs(wkChg)}%</span>`:`<span class="trend-flat">—</span>`;
+  const wkSub=wkCmp.current?`${WKS[CW_IDX].w} 주차 · 진행 중`:WKS[CW_IDX].w+' 주차';
   document.getElementById('kpi').innerHTML=[
-    ['이번 주 발주량',f(curWkTot)+'개',WKS[CW_IDX].w+' 주차',`전주 대비 ${wkTrend}`],
+    ['이번 주 발주량',f(curWkTot)+'개',wkSub,`${wkCmp.label} ${wkTrend}`],
     ['주 평균',f(avg)+'개','전체 기간 주평균',''],
     ['최고 주차',mxw.w,f(mx)+'개',''],
     ['베스트 메뉴',tp[0].replace(' 샐러드',''),f(tp[1])+'개','']
@@ -1419,10 +1453,12 @@ function generateReportPDF(){
   const lastWk=WKS[WKS.length-1];
   const prevWk=WKS.length>=2?WKS[WKS.length-2]:null;
   const lastSum=wkTotal(lastWk);
-  const prevSum=prevWk?wkTotal(prevWk):0;
-  const wow=prevSum>0?((lastSum-prevSum)/prevSum*100).toFixed(1):0;
+  const reportCmp=wkCompare(WKS.length-1);
+  const prevSum=reportCmp.current?reportCmp.prev:(prevWk?wkTotal(prevWk):0);
+  const wow=prevSum>0?((reportCmp.cur-prevSum)/prevSum*100).toFixed(1):0;
   const wowSign=wow>=0?'+':'';
   const wowColor=wow>=0?'#22C55E':'#EF4444';
+  const wowLabel=reportCmp.current?`전주 같은 ${reportCmp.days}일 대비`:'전주 대비';
 
   const r4tot=recent4.reduce((a,w)=>a+wkTotal(w),0);
   const p4tot=prev4.reduce((a,w)=>a+wkTotal(w),0);
@@ -1451,8 +1487,8 @@ function generateReportPDF(){
   if(lr.slope>50) insights.push({emoji:'🚀',title:'성장 중',color:'#22C55E',body:`최근 주간 추이가 상승세 (주당 +${Math.round(lr.slope)}개). 현재 전략 유지하면서 생산 능력 확충을 검토하세요.`});
   else if(lr.slope<-50) insights.push({emoji:'⚠️',title:'하락 추세',color:'#EF4444',body:`최근 발주량이 감소 추세 (주당 ${Math.round(lr.slope)}개). 채널별 프로모션 강화 또는 신메뉴 도입을 검토하세요.`});
   else insights.push({emoji:'📊',title:'안정적 유지',color:'#378ADD',body:`발주량이 안정적으로 유지되고 있습니다. 신규 채널 발굴 또는 기존 채널 단가 협상으로 수익성을 높일 수 있습니다.`});
-  if(wow>10) insights.push({emoji:'📈',title:'주간 급증',color:'#22C55E',body:`이번 주 발주량이 전주 대비 +${wow}% 증가했습니다. 증가 원인을 파악하여 반복 가능한 전략으로 만드세요.`});
-  else if(wow<-10) insights.push({emoji:'📉',title:'주간 감소',color:'#EF4444',body:`이번 주 발주량이 전주 대비 ${wow}% 감소했습니다. 채널 담당자와 소통하여 원인을 파악하고 대응하세요.`});
+  if(wow>10) insights.push({emoji:'📈',title:'주간 급증',color:'#22C55E',body:`이번 주 발주량이 ${wowLabel} +${wow}% 증가했습니다. 증가 원인을 파악하여 반복 가능한 전략으로 만드세요.`});
+  else if(wow<-10) insights.push({emoji:'📉',title:'주간 감소',color:'#EF4444',body:`이번 주 발주량이 ${wowLabel} ${wow}% 감소했습니다. 채널 담당자와 소통하여 원인을 파악하고 대응하세요.`});
   const jo24pct=chRecent['조식24']/chTot*100;
   if(jo24pct<10) insights.push({emoji:'💡',title:'조식24 기회',color:'#F59E0B',body:`조식24 채널 비중이 ${jo24pct.toFixed(1)}%로 낮습니다. 아침 전용 메뉴 개발 또는 조식24 전용 프로모션으로 채널 다변화를 검토하세요.`});
   const kuri=chRecent['컬리'],coup=chRecent['쿠팡'];
@@ -1567,7 +1603,7 @@ tr:nth-child(even)td{background:#f8f8f6}
   <div class="kpi-card">
     <div class="kpi-label">이번 주 발주량</div>
     <div class="kpi-val">${f(lastSum)}개</div>
-    <div class="kpi-sub" style="color:${wowColor}">전주 대비 ${wowSign}${wow}%</div>
+    <div class="kpi-sub" style="color:${wowColor}">${wowLabel} ${wowSign}${wow}%</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">전주 발주량</div>
@@ -1649,15 +1685,16 @@ function rHome(){
   const dispIdx=cwIdx;
   const dispWk=WKS[dispIdx];
   const dispTot=tots[dispIdx];
-  const dispPrevTot=dispIdx>0?tots[dispIdx-1]:dispTot;
+  const dispCmp=wkCompare(dispIdx);
   const allAvg=Math.round(tots.reduce((a,b)=>a+b,0)/tots.length);
-  const wowChg=dispPrevTot>0?Math.round((dispTot-dispPrevTot)/dispPrevTot*100):0;
+  const wowChg=dispCmp.chg;
+  const wowText=dispCmp.current?`전주 같은 ${dispCmp.days}일 대비`:'전주 대비';
   const vsAvgChg=allAvg>0?Math.round((dispTot-allAvg)/allAvg*100):0;
   const{slope}=linReg(tots);
 
   // ── 히어로 날짜 범위 & 레이블 ──
   const dispRange=dispWk.d[0]+' ~ '+dispWk.d[6];
-  const heroLabel=isCurrentWeek?`이번 주 발주량 (${dispRange})`:`최근 발주량 (${dispRange})`;
+  const heroLabel=isCurrentWeek?`이번 주 발주량 (${dispRange} · 입력 ${dispCmp.days}/7일)`:`최근 발주량 (${dispRange})`;
 
   // ── ① 히어로: 기준 주차 총량 ──
   document.getElementById('home-hero-label').textContent=heroLabel;
@@ -1729,9 +1766,9 @@ function rHome(){
   }
 
   const wowBadge=wowChg>0
-    ?`<span class="home-badge badge-up">▲ +${wowChg}% 전주 대비</span>`
+    ?`<span class="home-badge badge-up">▲ +${wowChg}% ${wowText}</span>`
     :wowChg<0
-    ?`<span class="home-badge badge-down">▼ ${Math.abs(wowChg)}% 전주 대비</span>`
+    ?`<span class="home-badge badge-down">▼ ${Math.abs(wowChg)}% ${wowText}</span>`
     :`<span class="home-badge badge-flat">— 전주와 동일</span>`;
   const avgBadge=vsAvgChg>=0
     ?`<span class="home-badge badge-up">▲ 주평균 +${vsAvgChg}%</span>`
@@ -1921,9 +1958,9 @@ function rHome(){
   // ── ④ 핵심 알림 ──
   const alerts=[];
   if(wowChg<=-15)
-    alerts.push({color:'#EF4444',bg:'#FEF2F2',icon:'📉',title:`전주 대비 ${Math.abs(wowChg)}% 급감`,body:`이번 주 발주량이 크게 줄었어요. 채널 담당자에게 원인 확인이 필요합니다.`});
+    alerts.push({color:'#EF4444',bg:'#FEF2F2',icon:'📉',title:`${wowText} ${Math.abs(wowChg)}% 감소`,body:`진행 중인 주차는 입력된 날짜까지만 비교했습니다. 쿠팡 요청 수량과 행사 종료 영향을 함께 확인하세요.`});
   else if(wowChg>=15)
-    alerts.push({color:'#22C55E',bg:'#F0FDF4',icon:'🚀',title:`전주 대비 +${wowChg}% 급증`,body:`발주량이 크게 늘었어요! 생산 인력과 원재료 확보 상태를 점검하세요.`});
+    alerts.push({color:'#22C55E',bg:'#F0FDF4',icon:'🚀',title:`${wowText} +${wowChg}% 증가`,body:`진행 중인 주차는 입력된 날짜까지만 비교했습니다. 요청량 증가가 행사 영향인지 확인하세요.`});
   if(slope>40)
     alerts.push({color:'#378ADD',bg:'#EFF6FF',icon:'📈',title:'상승 추세 지속 중',body:`주당 +${Math.round(slope)}개씩 증가 중이에요. 생산 능력 확충과 채널 공급 여력을 미리 확인하세요.`});
   else if(slope<-40)
