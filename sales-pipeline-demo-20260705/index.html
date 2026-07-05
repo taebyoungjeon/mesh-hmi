@@ -133,6 +133,7 @@
     .badge.sent { background:#f2f4f7; color:#475467; }
     .badge.done { background:#e7f6f1; color:#07533f; }
     .badge.won { background:#e7f6f1; color:#07533f; }
+    .badge.executing { background:#e7f6f1; color:#07533f; }
     .detail { padding:20px 22px 22px; }
     .detail h3 { margin:0 0 6px; font-size:27px; letter-spacing:-.025em; }
     .detail .country { color:var(--green); font-weight:800; margin-bottom:14px; }
@@ -280,9 +281,9 @@
         <aside class="side">
           <div class="panel">
             <div class="metric-grid">
-              <div class="metric"><b>19</b><span>Total records</span></div>
+              <div class="metric"><b>20</b><span>Total records</span></div>
               <div class="metric"><b>4</b><span>Completed examples</span></div>
-              <div class="metric"><b>15</b><span>Active pipeline</span></div>
+              <div class="metric"><b>16</b><span>Active pipeline</span></div>
               <div class="metric"><b>11+</b><span>Countries / regions</span></div>
             </div>
           </div>
@@ -320,10 +321,10 @@
         </div>
         <div class="panel">
           <div class="metric-grid">
-            <div class="metric"><b>6</b><span>Domestic records</span></div>
+            <div class="metric"><b>7</b><span>Domestic records</span></div>
             <div class="metric"><b>KRW 2.0B</b><span>2026 신규 목표 수주액</span></div>
-            <div class="metric"><b>6</b><span>Active candidates</span></div>
-            <div class="metric"><b>3</b><span>Public-sector quotes</span></div>
+            <div class="metric"><b>7</b><span>Active candidates</span></div>
+            <div class="metric"><b>4</b><span>Public-sector quotes</span></div>
           </div>
           <div class="panel-head"><h2>Domestic Project List</h2><span class="hint">working pipeline</span></div>
           <div id="domesticList" class="domestic-list"></div>
@@ -457,6 +458,14 @@
         sourceUrl:'https://taebyoungjeon.github.io/naju-season-farm-campus-20260628/internal-summary.html?v=edc56e7'
       },
       {
+        id:'yeongyang-forestry-smartfarm', name:'영양군 임업 스마트팜 기본계획 수립 용역', region:'경북 영양 / 어수리 농장 기본계획', lat:36.66, lng:129.11, status:'executing', statusLabel:'In execution',
+        amount:'KRW 47M', period:'2026.07.30 · 수행 완료 예정',
+        summary:'영양군 임업 스마트팜 컨설팅 및 어수리 농장 기본계획 수립 용역입니다. 현재 약 47,000,000원 규모의 과업을 수행 중이며, 2026년 7월 30일까지 수행하는 계획입니다.',
+        scope:'기본계획 수립, 구역계 변경 검토, 전문가 서면자문, 영양군 보고자료 정리, 토지주 협의 및 매입 여부에 따른 조정 가능성 반영을 포함합니다.',
+        next:'현재 기본계획 용역을 7월 30일까지 마무리하고, 2027년 상세설계 수립 용역 수주를 준비합니다. 이후 2027년 말 50억, 2028년 50억 규모의 건설 용역은 도화엔지니어링과 함께 수행하는 방향으로 파이프라인을 관리합니다.',
+        notes:['Current confirmed task: basic planning service, approximately KRW 47,000,000','Planned completion: 2026-07-30','Next target: detailed design service in 2027','Construction pipeline target: KRW 5.0B near late 2027 and KRW 5.0B in 2028','Execution partner plan for construction phases: Dohwa Engineering','Source memo: Yeongyang-gun forestry smart farm consulting / Eosuri farm folder']
+      },
+      {
         id:'munhori-ykl', name:'문호리 스마트팜 관광농원', region:'경기 양평 문호리 / 스마트팜·체험', lat:37.59, lng:127.35, status:'meeting', statusLabel:'Decision agenda',
         amount:'KRW 1.0B core', period:'2026 Q3 · R&R discussion',
         summary:'문호리 프로젝트는 관광농원 성격의 스마트팜, 카페, 조경, 체험, 판매 기능을 나누어 역할과 투자 범위를 정리하는 프로젝트입니다.',
@@ -582,7 +591,9 @@
         ['Jul 2026','Blueberry Valley dashboard meeting and Precision Drain Monitoring discussion'],
         ['Jul 2026','Yeoju Agricultural High School bid submission and proposal evaluation'],
         ['Jul 2026','Jeju Smart Farm Education Center BOQ review and site meeting coordination'],
+        ['Jul 2026','Yeongyang forestry smart farm basic planning service completion target'],
         ['Q4 2026','Hanil Electric Sejong smart farm showroom cooperation and investment structure review'],
+        ['2027-2028','Yeongyang detailed design and KRW 10B construction pipeline with Dohwa Engineering'],
         ['Q3 2026','Vivai proposal follow-up and monitoring pilot decision'],
         ['Q3-Q4 2026','ULMO / ADVA technical qualification and scope validation'],
         ['Q4 2026','Selected pilot conversion and updated quotation package']
