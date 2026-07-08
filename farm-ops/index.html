@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>농장팀 이슈 체크 대시보드</title>
+<style>
+body{margin:0;background:#f4f6f4;color:#17211c;font-family:Arial,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.5;}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 18px 48px;}
+header{background:#173f31;color:white;padding:24px;border-radius:8px;}
+h1{margin:0 0 6px;font-size:26px;}
+.meta{font-size:13px;opacity:.9;}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0;}
+.card{background:white;border:1px solid #dfe7df;border-radius:8px;padding:16px;}
+.card.alert{border-color:#dc2626;background:#fff7f7;}
+.label{font-size:13px;color:#607268;margin-bottom:8px;}
+.value{font-size:24px;font-weight:700;}
+.note{font-size:13px;color:#68756c;margin-top:6px;}
+section{background:white;border:1px solid #dfe7df;border-radius:8px;padding:18px;margin-top:14px;}
+h2{font-size:18px;margin:0 0 12px;color:#173f31;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{border:1px solid #e5ebe5;padding:9px;text-align:left;}
+th{background:#edf3ef;}
+td.warn{background:#fff1f2;color:#991b1b;font-weight:700;}
+ul{margin:0 0 0 20px;padding:0;}
+li{margin:6px 0;}
+a{color:#176b4d;}
+@media(max-width:820px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:520px){.grid{grid-template-columns:1fr;}.value{font-size:21px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>농장팀 이슈 체크 대시보드</h1>
+    <div class="meta">최근 수집일 2026-07-07 · 데이터 범위 2026-06-24 ~ 2026-07-07 · 원본 시트 자동 취합</div>
+  </header>
+  <div class="grid"><div class='card '><div class='label'>농사용전기 최신</div><div class='value'>84,494원</div><div class='note'>기준 90,000원</div></div>
+<div class='card alert'><div class='label'>일반용전기 최신</div><div class='value'>367,590원</div><div class='note'>기준 350,000원</div></div>
+<div class='card '><div class='label'>최근 7일 농사용 평균</div><div class='value'>88,799원</div><div class='note'>직전 7일 대비 +6.8%</div></div>
+<div class='card '><div class='label'>최근 7일 일반용 평균</div><div class='value'>342,058원</div><div class='note'>직전 7일 대비 +7.0%</div></div></div>
+  <section>
+    <h2>현재 알람 기준</h2>
+    <ul>
+      <li>농사용전기 하루 90,000원 초과 시: ceo@mannacea.com, isac@mannacea.com, kcy@mannacea.com</li>
+      <li>일반용전기 하루 350,000원 초과 시: hslee@mannacea.com, kcy@mannacea.com, ceo@mannacea.com</li>
+    </ul>
+  </section>
+  <section>
+    <h2>최근 14일 일별 전기요금</h2>
+    <table>
+      <thead><tr><th>일자</th><th>농사용전기</th><th>일반용전기</th></tr></thead>
+      <tbody><tr><td>2026-06-24</td><td class=''>69,431원</td><td class=''>300,569원</td></tr>
+<tr><td>2026-06-25</td><td class=''>59,897원</td><td class=''>272,897원</td></tr>
+<tr><td>2026-06-26</td><td class=''>77,052원</td><td class=''>315,971원</td></tr>
+<tr><td>2026-06-27</td><td class='warn'>104,363원</td><td class='warn'>375,816원</td></tr>
+<tr><td>2026-06-28</td><td class='warn'>107,777원</td><td class=''>280,091원</td></tr>
+<tr><td>2026-06-29</td><td class=''>82,460원</td><td class=''>345,773원</td></tr>
+<tr><td>2026-06-30</td><td class=''>81,189원</td><td class=''>347,338원</td></tr>
+<tr><td>2026-07-01</td><td class=''>68,379원</td><td class=''>321,672원</td></tr>
+<tr><td>2026-07-02</td><td class=''>79,835원</td><td class=''>327,078원</td></tr>
+<tr><td>2026-07-03</td><td class='warn'>99,432원</td><td class='warn'>388,996원</td></tr>
+<tr><td>2026-07-04</td><td class='warn'>110,770원</td><td class='warn'>408,546원</td></tr>
+<tr><td>2026-07-05</td><td class=''>89,797원</td><td class=''>236,527원</td></tr>
+<tr><td>2026-07-06</td><td class=''>88,886원</td><td class=''>344,000원</td></tr>
+<tr><td>2026-07-07</td><td class=''>84,494원</td><td class='warn'>367,590원</td></tr></tbody>
+    </table>
+  </section>
+  <section>
+    <h2>시트 확인 필요 항목</h2>
+    <ul><li><b>2026-07-04</b> 농사용 최대수요: 150.9 kW <span>최근 평균 대비 20% 이상</span></li>
+<li><b>2026년 6월 요금</b> 수도요금 증가: 1,540,020원 <span>전월 대비 15% 이상</span></li></ul>
+  </section>
+  <section>
+    <h2>수도요금 최신 월</h2>
+    <ul>
+      <li>월: 2026-06</li>
+      <li>근생·업무·스테이: 1,452,070원</li>
+      <li>메인온실·양식장: 87,950원</li>
+    </ul>
+  </section>
+  <section>
+    <h2>이번 실행 알람 결과</h2>
+    <ul><li>2026-07-07 general skipped_duplicate 367,590원</li></ul>
+  </section>
+  <section>
+    <h2>운영 체크</h2>
+    <ul>
+      <li>전기요금 급증일은 칠러, 공조기, 항온항습기, 차광스크린, 순환팬의 수동 ON/OFF 이력과 같이 확인합니다.</li>
+      <li>여름철에는 에어컨 필터와 드레인 막힘, 칠러 과가동, 순환팬 미OFF를 우선 확인합니다.</li>
+      <li>수도요금 증가는 냉방 보충수, 양식장/온실 급수, 누수 가능성을 분리해 봅니다.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>원본</h2>
+    <ul>
+      <li><a href="https://docs.google.com/spreadsheets/d/1mpXOUv8OgT6C80n-6OsZOXODlTUzWlexXrQ6XXp39bI/edit?gid=282035821#gid=282035821">Google Sheet 원본</a></li>
+      <li><a href="https://taebyoungjeon.github.io/mesh-hmi/farm-ops/">공개 대시보드</a></li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>
