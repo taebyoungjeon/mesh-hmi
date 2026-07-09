@@ -366,6 +366,12 @@
     }
     .ir-box h2 { font-size:24px; }
     .ir-box p { margin:6px 0 0; color:#4b5b54; }
+    .download-actions {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:10px;
+    }
 
     footer {
       border-top:1px solid var(--line);
@@ -589,9 +595,12 @@
       <div class="ir-box">
         <div>
           <h2>Updated IR Materials</h2>
-          <p>KPMG 공유용 최신 IR 자료를 PDF로 다운로드할 수 있습니다.</p>
+          <p>KPMG 공유용 최신 IR 자료와 MESH 설명 영상을 다운로드할 수 있습니다.</p>
         </div>
-        <a class="button" href="downloads/MANNA_CEA_Pre-IPO_IR_20260709_v5_NoKPMGTerms.pdf" download>IR 다운로드 받기</a>
+        <div class="download-actions">
+          <a class="button" href="downloads/MANNA_CEA_Pre-IPO_IR_20260709_v5_NoKPMGTerms.pdf" download>IR 다운로드 받기</a>
+          <a class="button" href="downloads/MANNA_CEA_MESH_Page05_Videos.zip" download>영상 확인하기</a>
+        </div>
       </div>
     </section>
   </main>
