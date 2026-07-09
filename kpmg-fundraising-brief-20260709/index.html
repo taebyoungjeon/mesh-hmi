@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MANNA CEA 2026 Fundraising Brief for KPMG</title>
+  <meta name="description" content="MANNA CEA 2026 main round fundraising brief for KPMG: target amount, anchor investor, IR update, special fundraising considerations." />
+  <style>
+    :root {
+      --paper:#fbfcf9;
+      --ink:#13201b;
+      --muted:#66736e;
+      --green:#063f33;
+      --green2:#0c6b53;
+      --mint:#e8f4ee;
+      --mint2:#f3faf6;
+      --line:#dbe5df;
+      --amber:#a66a12;
+      --amber2:#fff4dc;
+      --blue:#205a83;
+      --blue2:#e7f1f6;
+      --red:#aa3e3e;
+      --white:#fff;
+      --shadow:0 18px 48px rgba(13,45,35,.12);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0;
+      background:var(--paper);
+      color:var(--ink);
+      line-height:1.62;
+      letter-spacing:0;
+      word-break:keep-all;
+      overflow-wrap:break-word;
+    }
+    a { color:inherit; }
+    .wrap { width:min(1180px, calc(100% - 34px)); margin:0 auto; }
+
+    header {
+      position:sticky;
+      top:0;
+      z-index:20;
+      border-bottom:1px solid rgba(219,229,223,.92);
+      background:rgba(251,252,249,.92);
+      backdrop-filter:blur(12px);
+    }
+    .nav {
+      min-height:66px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+    }
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+      font-weight:950;
+      color:var(--green);
+    }
+    .mark {
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border-radius:8px;
+      background:var(--green);
+      color:white;
+      font-weight:950;
+      letter-spacing:.02em;
+    }
+    .brand small {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:750;
+      margin-top:1px;
+    }
+    .navlinks {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:8px;
+    }
+    .navlinks a, .button {
+      min-height:36px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:8px 12px;
+      background:white;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:850;
+      white-space:nowrap;
+    }
+    .button.primary {
+      background:var(--green);
+      border-color:var(--green);
+      color:#fff;
+    }
+    .button.disabled {
+      color:#9aa4a0;
+      background:#f7f9f8;
+      cursor:not-allowed;
+    }
+
+    .hero {
+      padding:42px 0 24px;
+      border-bottom:1px solid var(--line);
+      background:
+        linear-gradient(180deg,#fff 0%,#fbfcf9 100%);
+    }
+    .hero-grid {
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(350px,.78fr);
+      gap:32px;
+      align-items:end;
+    }
+    .eyebrow {
+      margin:0 0 11px;
+      color:var(--green2);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    h1 {
+      margin:0;
+      font-size:clamp(34px,5vw,62px);
+      line-height:1.03;
+      letter-spacing:-.035em;
+      overflow-wrap:anywhere;
+    }
+    .lead {
+      margin:18px 0 0;
+      max-width:760px;
+      color:#3f4b46;
+      font-size:18px;
+    }
+    .hero-panel {
+      border:1px solid var(--line);
+      background:var(--white);
+      border-radius:12px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .hero-panel h2 {
+      margin:0 0 14px;
+      font-size:18px;
+      color:var(--green);
+    }
+    .big-number {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .number-box {
+      border:1px solid #cfe1d8;
+      border-radius:10px;
+      background:var(--mint2);
+      padding:14px;
+    }
+    .number-box strong {
+      display:block;
+      color:var(--green);
+      font-size:28px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+    .number-box span {
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      margin-top:5px;
+    }
+
+    main { padding:32px 0 54px; }
+    section { margin:0 0 34px; }
+    .section-head {
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:16px;
+    }
+    h2 {
+      margin:0;
+      font-size:28px;
+      line-height:1.16;
+      letter-spacing:-.02em;
+    }
+    .section-note {
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .grid-3 {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .grid-2 {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .card {
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:white;
+      padding:20px;
+      box-shadow:0 10px 26px rgba(13,45,35,.06);
+    }
+    .card h3 {
+      margin:0 0 8px;
+      color:var(--green);
+      font-size:19px;
+      letter-spacing:-.01em;
+    }
+    .card p { margin:0; color:#435049; }
+    .tag {
+      display:inline-flex;
+      align-items:center;
+      min-height:26px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:var(--mint);
+      color:var(--green);
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+    .tag.amber { background:var(--amber2); color:var(--amber); }
+    .tag.blue { background:var(--blue2); color:var(--blue); }
+    .tag.red { background:#fff0f0; color:var(--red); }
+
+    .capital-stack {
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:hidden;
+      background:white;
+      box-shadow:var(--shadow);
+    }
+    .stack-row {
+      display:grid;
+      grid-template-columns:190px 1fr 160px;
+      gap:0;
+      border-bottom:1px solid var(--line);
+      min-height:72px;
+    }
+    .stack-row:last-child { border-bottom:0; }
+    .stack-label {
+      padding:18px 20px;
+      background:#f7faf8;
+      font-weight:950;
+      color:var(--green);
+      border-right:1px solid var(--line);
+    }
+    .stack-main {
+      padding:18px 20px;
+      color:#3c4944;
+      min-width:0;
+      overflow-wrap:anywhere;
+    }
+    .stack-value {
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      padding:18px 20px;
+      color:var(--green);
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:-.02em;
+    }
+    .bar {
+      height:12px;
+      border-radius:999px;
+      background:#e7eee9;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar > i {
+      display:block;
+      height:100%;
+      border-radius:999px;
+      background:var(--green2);
+    }
+
+    .evidence {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+    }
+    .evidence-item {
+      display:grid;
+      grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+      gap:20px;
+      align-items:center;
+      border:1px solid var(--line);
+      background:white;
+      border-radius:12px;
+      padding:16px;
+      box-shadow:0 12px 30px rgba(13,45,35,.07);
+    }
+    .shot {
+      border:1px solid var(--line);
+      border-radius:10px;
+      overflow:hidden;
+      background:#eef4f1;
+      aspect-ratio:16/10;
+    }
+    .shot img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:top center;
+      display:block;
+    }
+    .evidence-copy h3 {
+      margin:0 0 8px;
+      font-size:23px;
+      color:var(--green);
+      letter-spacing:-.02em;
+    }
+    .evidence-copy p { margin:0 0 14px; color:#45514d; }
+    .bullets {
+      margin:0;
+      padding-left:18px;
+      color:#34423d;
+    }
+    .bullets li { margin:5px 0; }
+
+    .conditions {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    .condition {
+      border:1px solid var(--line);
+      border-left:5px solid var(--green);
+      border-radius:12px;
+      background:white;
+      padding:18px;
+    }
+    .condition.warn { border-left-color:var(--amber); }
+    .condition h3 { margin:0 0 8px; font-size:18px; }
+    .condition p { margin:0; color:#46534e; }
+
+    .ir-box {
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:20px;
+      border:1px solid #b9d5ca;
+      border-radius:14px;
+      background:#f2faf6;
+      padding:22px;
+    }
+    .ir-box h2 { font-size:24px; }
+    .ir-box p { margin:6px 0 0; color:#4b5b54; }
+
+    footer {
+      border-top:1px solid var(--line);
+      padding:22px 0 34px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width:900px) {
+      .hero-grid, .grid-3, .grid-2, .evidence-item, .conditions, .ir-box { grid-template-columns:1fr; }
+      .stack-row { grid-template-columns:1fr; }
+      .stack-label { border-right:0; border-bottom:1px solid var(--line); }
+      .stack-value { justify-content:flex-start; padding-top:0; }
+      header { position:static; }
+    }
+    @media (max-width:620px) {
+      body { word-break:normal; }
+      .wrap { width:100%; padding-left:24px; padding-right:24px; }
+      p, li, .lead, .stack-main, .card, .evidence-copy, .condition {
+        word-break:break-all;
+        overflow-wrap:anywhere;
+      }
+      .nav { align-items:flex-start; flex-direction:column; padding:14px 0; }
+      .navlinks { justify-content:flex-start; }
+      .hero { padding-top:28px; }
+      h1 { max-width:300px; font-size:28px; line-height:1.12; }
+      .lead { max-width:300px; font-size:15px; }
+      .stack-main { max-width:300px; font-size:14px; }
+      .big-number { grid-template-columns:1fr; }
+      main { padding-top:22px; }
+      .section-head { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="mark">M</div>
+        <div>MANNA CEA<small>KPMG fundraising brief · 2026 main round</small></div>
+      </div>
+      <nav class="navlinks" aria-label="Page navigation">
+        <a href="#round">모집 구조</a>
+        <a href="#updates">업데이트</a>
+        <a href="#conditions">특이사항</a>
+        <a href="#ir">IR 자료</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Confidential discussion draft</p>
+        <h1>Pre 400억 기준 80억 본 라운드 조달 브리프</h1>
+        <p class="lead">MANNA CEA는 하드웨어 제조역량과 농업 현장 데이터를 기반으로 MESH AI Agent Platform을 확장하고 있습니다. 이번 라운드는 앵커 투자와 KPMG 공동 조달을 결합해 2026년 수주 회복, 문호리·Rootsquare 고부가가치 프로젝트, 해외 스마트팜 파이프라인을 실행하기 위한 성장자금입니다.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Fundraising summary">
+        <h2>Round Snapshot</h2>
+        <div class="big-number">
+          <div class="number-box"><strong>80억</strong><span>총 모집 희망 규모</span></div>
+          <div class="number-box"><strong>Pre 400억</strong><span>예상 기준 밸류에이션</span></div>
+          <div class="number-box"><strong>20~30억</strong><span>Lee Young-ae / Roy Investment Partners 앵커</span></div>
+          <div class="number-box"><strong>50~60억</strong><span>KPMG 공동 조달 요청 규모</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="round">
+      <div class="section-head">
+        <div>
+          <h2>펀드레이징 요청사항</h2>
+          <p class="section-note">KPMG와 논의하고자 하는 기본 모집 구조입니다.</p>
+        </div>
+      </div>
+      <div class="capital-stack">
+        <div class="stack-row">
+          <div class="stack-label">총 모집액</div>
+          <div class="stack-main">2026년 본 라운드 기준 성장자금. MESH 상용화, B2B/B2G 수주 대응, 해외 모듈 판매 및 프로젝트 실행 역량 강화 목적.</div>
+          <div class="stack-value">80억</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">앵커 투자</div>
+          <div class="stack-main">Lee Young-ae 측 Roy Investment Partners 출자 및 MANNA CEA 투자 예정. 문호리 프로젝트와 Rootsquare 내 화장품 판매 협업이 고부가가치 창출 근거로 연결됨.<div class="bar"><i style="width:34%"></i></div></div>
+          <div class="stack-value">20~30억</div>
+        </div>
+        <div class="stack-row">
+          <div class="stack-label">KPMG 요청</div>
+          <div class="stack-main">Pre 400억 기준으로 참여 가능한 기관투자자 모집. 지역·농식품·AI/로봇·제조 기반 딥테크 투자자와의 연결 기대.<div class="bar"><i style="width:66%"></i></div></div>
+          <div class="stack-value">50~60억</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>투자 논리</h2>
+          <p class="section-note">기존 IR 자료의 핵심 내러티브를 KPMG 전달용으로 압축했습니다.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <span class="tag">Platform</span>
+          <h3>Hardware-to-Software</h3>
+          <p>스마트팜 EPC나 작물 생산 기업이 아니라, 센서·이미지·제어 데이터를 수집하는 하드웨어 접점과 MESH AI Agent Platform을 결합한 데이터 기반 기업으로 포지셔닝합니다.</p>
+        </article>
+        <article class="card">
+          <span class="tag blue">Growth</span>
+          <h3>2026 Revenue Recovery</h3>
+          <p>국내 B2B/B2G, 공공 레퍼런스, 해외 모듈 판매, ENC 파이프라인을 통해 2026년 수주와 매출 회복을 추진합니다.</p>
+        </article>
+        <article class="card">
+          <span class="tag amber">Financial Strategy</span>
+          <h3>Sale & Leaseback Option</h3>
+          <p>Rootsquare 자산의 캠코 매각 후 lease back 구조를 검토해 재무구조 개선과 Pre-IPO 준비 기반을 병행합니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="updates">
+      <div class="section-head">
+        <div>
+          <h2>최근 업데이트 근거</h2>
+          <p class="section-note">KPMG가 투자자 커뮤니케이션에 활용할 수 있는 외부 공유형 근거 페이지입니다.</p>
+        </div>
+      </div>
+      <div class="evidence">
+        <article class="evidence-item">
+          <a class="shot" href="https://taebyoungjeon.github.io/mesh-hmi/sales-pipeline-demo-20260705/?v=remove-jeju-20260706b" target="_blank" rel="noreferrer"><img src="assets/pipeline.png" alt="ENC and global sales pipeline page preview"></a>
+          <div class="evidence-copy">
+            <span class="tag blue">ENC Pipeline</span>
+            <h3>국내외 프로젝트 파이프라인 관리</h3>
+            <p>Global Pipeline, Domestic Pipeline, project-level follow-up view를 통해 2026년 신규 목표 수주액과 공공·해외 기회 관리를 시각화했습니다.</p>
+            <ul class="bullets">
+              <li>9개 글로벌 프로젝트, 6개 국내 후보, 공공 견적 기회 포함</li>
+              <li>투자자 대상 “수주 회복의 가시성”을 설명하는 근거 자료</li>
+            </ul>
+          </div>
+        </article>
+        <article class="evidence-item">
+          <a class="shot" href="https://taebyoungjeon.github.io/mesh-hmi/munhori-weekly-20260628/" target="_blank" rel="noreferrer"><img src="assets/munhori.png" alt="Munhori project weekly update preview"></a>
+          <div class="evidence-copy">
+            <span class="tag amber">Munhori Project</span>
+            <h3>문호리 체험형 스마트팜 개발 및 화장품 판매 협업</h3>
+            <p>이영애씨 측과 문호리 개발 사업을 진행하며, Rootsquare 운영 노하우와 리아네이처 화장품 체험·판매를 결합한 고부가가치 공간 모델을 검토합니다.</p>
+            <ul class="bullets">
+              <li>관광농원, 체험 콘텐츠, 카페 체류, 제품 판매가 결합된 사업 구조</li>
+              <li>Rootsquare 내 사전 운영과 판매 반응 테스트 가능성</li>
+            </ul>
+          </div>
+        </article>
+        <article class="evidence-item">
+          <a class="shot" href="https://taebyoungjeon.github.io/mesh-hmi/samsung-riyadh-strawberry-20260701/#original" target="_blank" rel="noreferrer"><img src="assets/samsung.png" alt="Samsung C&T Riyadh strawberry smart farm page preview"></a>
+          <div class="evidence-copy">
+            <span class="tag">Samsung C&T</span>
+            <h3>리야드 딸기 스마트팜 테스트베드 검토</h3>
+            <p>삼성물산 리야드 법인 자료를 기준으로 3,300㎡ IoT 유리온실 테스트베드, CAPEX 약 41.5억 원, MESH API 연동 참여안을 정리했습니다.</p>
+            <ul class="bullets">
+              <li>Samsung Bynd IoT와 MESH 데이터/API 레이어 연동 가능성</li>
+              <li>Stage 1 성공 후 사우디 주요 도시 확장 시나리오 검토</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="conditions">
+      <div class="section-head">
+        <div>
+          <h2>펀드레이징 특이사항 및 요청사항</h2>
+          <p class="section-note">라운드 진행 시 KPMG와 사전에 맞춰야 할 조건입니다.</p>
+        </div>
+      </div>
+      <div class="conditions">
+        <article class="condition">
+          <h3>기준 시나리오</h3>
+          <p>총 80억 모집. 20~30억 앵커 투자와 KPMG를 통한 50~60억 기관 모집을 병행합니다.</p>
+        </article>
+        <article class="condition warn">
+          <h3>특정 규모 도달 시</h3>
+          <p>앵커 포함 50억 이상 가시화 시, 잔여 기관투자자는 pre 400억 조건을 유지하되 전략적 후속 투자자 위주로 선별합니다.</p>
+        </article>
+        <article class="condition warn">
+          <h3>미도달 시 요청사항</h3>
+          <p>기관 모집 속도가 지연될 경우 bridge 성격의 소규모 전략 투자자, 농금원 펀드 운용사, 지역 성장펀드, 프로젝트 금융 가능성을 병행 검토합니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>KPMG에 기대하는 역할</h2>
+          <p class="section-note">단순 소개가 아니라 투자자별 논리 매칭과 후속 구조화가 필요합니다.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <span class="tag">Investor Matching</span>
+          <h3>50~60억 기관 조달</h3>
+          <p>Pre 400억 기준 투자 가능한 VC, CVC, 정책성 펀드, 지역 성장펀드, AgTech·AI·로봇·제조 기반 투자자를 우선 매칭합니다.</p>
+        </article>
+        <article class="card">
+          <span class="tag blue">Transaction Support</span>
+          <h3>재무개선 옵션 병행 검토</h3>
+          <p>캠코 sale & leaseback 가능성, Rootsquare 자산 유동화, Pre-IPO 준비를 투자자 커뮤니케이션과 충돌하지 않도록 정리합니다.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ir">
+      <div class="ir-box">
+        <div>
+          <h2>Updated IR Materials</h2>
+          <p>IR 자료는 업로드 전입니다. KPMG 공유용 최종 파일 확정 후 이 버튼에 다운로드 링크를 연결합니다.</p>
+        </div>
+        <a class="button disabled" aria-disabled="true" href="#" onclick="return false;">IR 다운로드 준비중</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">MANNA CEA · KPMG fundraising brief · Draft date: 2026.07.09 · For discussion only</div>
+  </footer>
+</body>
+</html>
