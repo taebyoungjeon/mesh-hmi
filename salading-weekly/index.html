@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- salading-financials-refresh: 2026-07-05T07:21:00+09:00 -->
 <html lang="ko">
 <head>
   <meta charset="utf-8">
@@ -16,7 +15,6 @@
       --muted: #647067;
       --line: #d9dfd7;
       --accent: #205d47;
-      --accent-soft: #edf4f0;
       --blue: #0e7490;
       --amber: #a16207;
       --red: #b42318;
@@ -25,12 +23,11 @@
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); }
-    .page { max-width: 960px; margin: 0 auto; padding: 24px 16px 60px; }
+    .page { max-width: 1040px; margin: 0 auto; padding: 24px 16px 60px; }
     .hero { background: linear-gradient(160deg, #1e3e32 0%, #284d3f 58%, #496657 100%); color: #fff; border-radius: 24px; padding: 28px; box-shadow: var(--shadow); }
     .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
     h1 { margin: 8px 0 10px; font-size: 34px; line-height: 1.15; }
     .hero p { margin: 0; color: rgba(255,255,255,.84); line-height: 1.6; }
-    .chip { padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 13px; }
     .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
     .kpi-card { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 16px; }
     .kpi-card span { display: block; font-size: 12px; opacity: .75; margin-bottom: 8px; }
@@ -39,12 +36,10 @@
     .section { margin-top: 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; }
     .section-head { padding: 20px 22px 0; }
     .section-head h2 { margin: 0; font-size: 22px; }
-    .section-head p { margin: 6px 0 0; color: var(--muted); line-height: 1.55; }
     .section-body { padding: 18px 22px 22px; }
     .summary-list, .bullet-list { margin: 0; padding-left: 18px; line-height: 1.8; }
     .grid-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -64,15 +59,21 @@
     .timeline-date { font-size: 13px; color: var(--muted); font-weight: 700; }
     .timeline-body h4 { margin: 0 0 6px; font-size: 17px; }
     .timeline-body p { margin: 4px 0; color: var(--muted); line-height: 1.55; }
-    .status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-    .status-card { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fafbf9; }
-    .status-card b { display: block; margin-bottom: 8px; font-size: 15px; }
-    .status-card p { margin: 0; color: var(--muted); line-height: 1.55; }
     .muted { color: var(--muted); }
-    .footer { margin-top: 18px; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .footer a { color: var(--accent); }
     a { color: var(--blue); text-decoration: none; }
-
+    @media (max-width: 860px) {
+      .kpi-grid, .grid-3, .grid-2, .day-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .page { padding: 14px 12px 40px; }
+      .hero { padding: 22px 18px; border-radius: 18px; }
+      h1 { font-size: 28px; }
+      .kpi-grid, .grid-3, .grid-2, .day-grid { grid-template-columns: 1fr; }
+      .section-head, .section-body { padding-left: 16px; padding-right: 16px; }
+      table { font-size: 13px; }
+    }
+  
     .archive-section details { border: 1px solid var(--line); border-radius: 16px; background: #fbfcf9; overflow: hidden; }
     .archive-section summary { cursor: pointer; padding: 16px 18px; font-weight: 800; list-style: none; }
     .archive-section summary::-webkit-details-marker { display: none; }
@@ -82,19 +83,7 @@
     .archive-card { display: block; padding: 14px 15px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); text-decoration: none; }
     .archive-card b { display: block; font-size: 15px; margin-bottom: 4px; }
     .archive-card span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
-    @media (max-width: 800px) {
-      .kpi-grid, .grid-4, .grid-3, .grid-2, .status-grid, .day-grid { grid-template-columns: 1fr 1fr; }
-      .timeline-item { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 560px) {
-      .page { padding: 14px 12px 40px; }
-      .hero { padding: 22px 18px; border-radius: 18px; }
-      h1 { font-size: 28px; }
-      .kpi-grid, .grid-4, .grid-3, .grid-2, .status-grid, .day-grid { grid-template-columns: 1fr; }
-      .section-head, .section-body { padding-left: 16px; padding-right: 16px; }
-      .timeline-item { gap: 8px; }
-      table { font-size: 13px; }
-    }
+    
   </style>
 </head>
 <body>
@@ -102,27 +91,27 @@
     <section class="hero">
       <div class="eyebrow">Salading Weekly Internal Report</div>
       <h1>샐러딩 내부 주간 전달</h1>
-      <p>2026-06-29 ~ 2026-07-03 (월-금, Asia/Seoul)</p>
+      <p>2026-07-06 ~ 2026-07-10 (월-금, Asia/Seoul)</p>
       <div class="kpi-grid">
         <div class="kpi-card">
           <span>총 생산·판매</span>
-          <b>3,270</b>
-          <small>전주 대비 +3.8%</small>
+          <b>3,359</b>
+          <small>전주 대비 +2.7%</small>
         </div>
         <div class="kpi-card">
-          <span>주요 성장 채널</span>
+          <span>최대 채널</span>
           <b>쿠팡</b>
-          <small>1,684개 / +7.7%</small>
+          <small>1,748개 / +3.8%</small>
         </div>
         <div class="kpi-card">
           <span>1위 품목</span>
           <b>구운야채 샐러드</b>
-          <small>718개 / 비중 22.0%</small>
+          <small>772개 / 비중 23.0%</small>
         </div>
         <div class="kpi-card">
-          <span>리뷰 캡처</span>
-          <b>84건</b>
-          <small>컬리 47 / 쿠팡 37</small>
+          <span>리뷰 확인</span>
+          <b>1건</b>
+          <small>컬리 1 / 쿠팡 0</small>
         </div>
       </div>
     </section>
@@ -132,47 +121,46 @@
         <h2>Executive Summary</h2>
       </div>
       <div class="section-body">
-        <ul class="summary-list"><li>이번 주 생산·판매 합계는 3,270개로 전주 대비 +3.8% 증가했고, 증가는 거의 전부 쿠팡 +7.7%에서 나왔습니다.</li><li>상위 품목은 구운야채 샐러드 718개, 리코타 치즈 샐러드 471개, 시저 샐러드 318개이며 상위 2개 품목 비중이 36.4%입니다.</li><li>증가 기여는 구운야채 샐러드 중심이었고, 특히 쿠팡 채널에서 해당 품목이 강하게 늘어 총량 증가를 견인했습니다.</li><li>리뷰는 컬리 47건, 쿠팡 가시 리뷰 37건을 확인했고, 컬리에서는 신선도 관련 언급이 6건으로 가장 뚜렷한 리스크였습니다.</li><li>엔보그 전 제품 행사가 보고 기간과 전부 겹쳐 이번 주 수요는 평시 실수요와 분리해서 봐야 합니다.</li><li>쿠팡 전체 만족도는 탄두리치킨, 야키토리 순으로 낮아 할인 유입 이후 재구매 품질 점검이 필요합니다.</li></ul>
+        <ul class="summary-list"><li>이번 주 생산·판매 합계는 3,359개로 전주 대비 +2.7% 변동했고, 최대 채널은 쿠팡 1,748개였습니다.</li><li>쿠팡 채널 흐름은 전주 대비 +3.8%로, 요청 수량 변화가 전체 주간 물량 방향을 좌우했습니다.</li><li>상위 품목은 구운야채 샐러드 772개, 리코타 치즈 샐러드 426개, 시저 샐러드 301개이며 상위 2개 품목 비중은 35.7%입니다.</li><li>증가 기여가 가장 큰 품목은 구운야채 샐러드로 전주 대비 +54개였고, 특히 쿠팡 요청 수량 변화가 크게 반영됐습니다.</li><li>이번 기간 확인된 리뷰는 컬리 1건, 쿠팡 0건이며 컬리에서는 신선도 관련 언급 1건이 가장 먼저 확인됐습니다.</li><li>엔보그 전 제품 행사 영향이 2026-07-06 하루 겹쳐 해당일 수요는 평시 흐름과 분리해서 봐야 합니다.</li></ul>
       </div>
     </section>
 
     <section class="section">
       <div class="section-head">
         <h2>이번 주 생산·판매 요약</h2>
-        <p>월-금 기준 총량, 일별 흐름, 채널별 증감을 나란히 봅니다.</p>
       </div>
       <div class="section-body">
         <div class="grid-2">
           <div>
             <div class="day-grid">
             <div class="day-card">
-              <div class="day-head">06-29 (월)</div>
+              <div class="day-head">07-06 (월)</div>
               <div class="day-bar"><span style="height:140px"></span></div>
-              <div class="day-value">754</div>
+              <div class="day-value">816</div>
             </div>
             
             <div class="day-card">
-              <div class="day-head">06-30 (화)</div>
-              <div class="day-bar"><span style="height:132px"></span></div>
-              <div class="day-value">715</div>
+              <div class="day-head">07-07 (화)</div>
+              <div class="day-bar"><span style="height:120px"></span></div>
+              <div class="day-value">705</div>
             </div>
             
             <div class="day-card">
-              <div class="day-head">07-01 (수)</div>
-              <div class="day-bar"><span style="height:121px"></span></div>
-              <div class="day-value">654</div>
+              <div class="day-head">07-08 (수)</div>
+              <div class="day-bar"><span style="height:119px"></span></div>
+              <div class="day-value">698</div>
             </div>
             
             <div class="day-card">
-              <div class="day-head">07-02 (목)</div>
-              <div class="day-bar"><span style="height:105px"></span></div>
-              <div class="day-value">570</div>
+              <div class="day-head">07-09 (목)</div>
+              <div class="day-bar"><span style="height:98px"></span></div>
+              <div class="day-value">575</div>
             </div>
             
             <div class="day-card">
-              <div class="day-head">07-03 (금)</div>
-              <div class="day-bar"><span style="height:107px"></span></div>
-              <div class="day-value">577</div>
+              <div class="day-head">07-10 (금)</div>
+              <div class="day-bar"><span style="height:96px"></span></div>
+              <div class="day-value">565</div>
             </div>
             </div>
           </div>
@@ -191,20 +179,20 @@
               <tbody>
             <tr>
               <td>컬리</td>
+              <td>1,611</td>
+              <td>48.0%</td>
               <td>1,586</td>
-              <td>48.5%</td>
-              <td>1,585</td>
-              <td>+1</td>
-              <td>+0.1%</td>
+              <td>+25</td>
+              <td>+1.6%</td>
             </tr>
             
             <tr>
               <td>쿠팡</td>
+              <td>1,748</td>
+              <td>52.0%</td>
               <td>1,684</td>
-              <td>51.5%</td>
-              <td>1,564</td>
-              <td>+120</td>
-              <td>+7.7%</td>
+              <td>+64</td>
+              <td>+3.8%</td>
             </tr>
             </tbody>
             </table>
@@ -233,84 +221,79 @@
             <tbody>
             <tr>
               <td>구운야채 샐러드</td>
-              <td>718</td>
-              <td>22.0%</td>
-              <td>+114</td>
-              <td>+18.9%</td>
-              <td>컬리 142 / 쿠팡 576</td>
+              <td>772</td>
+              <td>23.0%</td>
+              <td>+54</td>
+              <td>+7.5%</td>
+              <td>컬리 140 / 쿠팡 632</td>
             </tr>
             
             <tr>
               <td>리코타 치즈 샐러드</td>
-              <td>471</td>
-              <td>14.4%</td>
-              <td>+26</td>
-              <td>+5.8%</td>
-              <td>컬리 239 / 쿠팡 232</td>
+              <td>426</td>
+              <td>12.7%</td>
+              <td>-45</td>
+              <td>-9.6%</td>
+              <td>컬리 234 / 쿠팡 192</td>
             </tr>
             
             <tr>
               <td>시저 샐러드</td>
-              <td>318</td>
-              <td>9.7%</td>
-              <td>-12</td>
-              <td>-3.6%</td>
-              <td>컬리 206 / 쿠팡 112</td>
-            </tr>
-            
-            <tr>
-              <td>콥 샐러드</td>
-              <td>241</td>
-              <td>7.4%</td>
-              <td>+21</td>
-              <td>+9.5%</td>
-              <td>컬리 169 / 쿠팡 72</td>
-            </tr>
-            
-            <tr>
-              <td>야키토리 샐러드</td>
-              <td>201</td>
-              <td>6.1%</td>
+              <td>301</td>
+              <td>9.0%</td>
               <td>-17</td>
-              <td>-7.8%</td>
-              <td>컬리 161 / 쿠팡 40</td>
+              <td>-5.3%</td>
+              <td>컬리 197 / 쿠팡 104</td>
             </tr>
             
             <tr>
               <td>탄두리 치킨 샐러드</td>
-              <td>200</td>
-              <td>6.1%</td>
-              <td>+7</td>
-              <td>+3.6%</td>
-              <td>컬리 160 / 쿠팡 40</td>
+              <td>222</td>
+              <td>6.6%</td>
+              <td>+22</td>
+              <td>+11.0%</td>
+              <td>컬리 182 / 쿠팡 40</td>
+            </tr>
+            
+            <tr>
+              <td>콥 샐러드</td>
+              <td>219</td>
+              <td>6.5%</td>
+              <td>-22</td>
+              <td>-9.1%</td>
+              <td>컬리 155 / 쿠팡 64</td>
+            </tr>
+            
+            <tr>
+              <td>야키토리 샐러드</td>
+              <td>218</td>
+              <td>6.5%</td>
+              <td>+17</td>
+              <td>+8.5%</td>
+              <td>컬리 178 / 쿠팡 40</td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="grid-3" style="margin-top:16px">
             <div class="mini-card warning">
-              <h4>야키토리 샐러드</h4>
-              <p>201개, 전주 대비 -17개</p>
+              <h4>리코타 치즈 샐러드</h4>
+              <p>426개, 전주 대비 -45개</p>
+            </div>
+            
+            <div class="mini-card warning">
+              <h4>콥 샐러드</h4>
+              <p>219개, 전주 대비 -22개</p>
             </div>
             
             <div class="mini-card warning">
               <h4>시저 샐러드</h4>
-              <p>318개, 전주 대비 -12개</p>
+              <p>301개, 전주 대비 -17개</p>
             </div>
             
             <div class="mini-card warning">
-              <h4>치킨바베큐 샐러드</h4>
-              <p>185개, 전주 대비 -8개</p>
-            </div>
-            
-            <div class="mini-card warning">
-              <h4>뽈보샐러드</h4>
-              <p>129개, 전주 대비 -5개</p>
-            </div>
-            
-            <div class="mini-card warning">
-              <h4>쉬림프누들샐러드</h4>
-              <p>131개, 전주 대비 -2개</p>
+              <h4>콜드파스타 샐러드</h4>
+              <p>125개, 전주 대비 -12개</p>
             </div>
             </div>
       </div>
@@ -319,23 +302,22 @@
     <section class="section">
       <div class="section-head">
         <h2>리뷰 VOC 요약</h2>
-        <p>컬리 기간 필터 리뷰와 쿠팡 최신 상품 리뷰 캡처를 함께 정리했습니다.</p>
       </div>
       <div class="section-body">
         <div class="grid-2">
           <div class="mini-card">
             <h4>컬리</h4>
-            <p>기간 리뷰 47건, 상품 언급 상위 콥 샐러드 9건, 리코타 치즈 샐러드 7건, 야키토리 샐러드 7건, 뽈보 샐러드 5건, 구운 야채 샐러드 5건</p>
-            <p>주요 테마: 맛 18건, 신선도 6건, 포만감/편의 2건, 식감/품질 1건</p>
-            <p>품목 리스크: 탄두리 치킨 샐러드 1건, 시저 샐러드 1건, 뽈보 샐러드 1건, 리코타 치즈 샐러드 1건, 타코 샐러드 1건</p>
-            <ul class="bullet-list"><li><b>콥 샐러드</b> 컬리나우에서 할인 많이해서 먹어봤어요. 맛있어요.</li><li><b>쉬림프 누들 샐러드</b> 샐러딩 최애 샐러드여요~!!</li><li><b>탄두리 치킨 샐러드</b> 저한테는 별로였어요 브로콜리 비리고 닭은 죽같고 감자도 너무비려서 다시는 안사먹을것 같아요 야채는 괜찮아요</li><li><b>시저 샐러드</b> 이번꺼는 조금 오래된거같아요 야채 상태도 그렇고 ㅠㅠ 다 못먹었네요</li><li><b>뽈보 샐러드</b> 채소가 좀 더 싱싱했음 좋았을듯 싶네요</li></ul>
+            <p>기간 리뷰 1건, 상품 언급 상위 탄두리 치킨 샐러드 1건</p>
+            <p>주요 테마: 신선도 1건</p>
+            <p>품목 리스크: 반복 리스크 없음</p>
+            <ul class="bullet-list"><li>이번 기간 컬리 공개 리뷰는 신선도와 구성 체감 중심으로 확인됐습니다.</li></ul>
           </div>
           <div class="mini-card">
             <h4>쿠팡</h4>
-            <p>가시 리뷰 37건, 활동 상위 구운야채 10건, 타코 6건, 야키토리 5건, 시저 4건, 콜드 파스타 4건</p>
-            <p>만족도 상위: 콜드 파스타 최고 85%, 시저 최고 80%, 리코타 치즈 최고 80%</p>
-            <p>낮은 만족도: 탄두리치킨 최고 68%, 야키토리 최고 72%, 타코 최고 73%</p>
-            <ul class="bullet-list"><li><b>타코</b> 샐러딩 타코 샐러드, 233g, 1개 간편하게 먹기 좋아요. 소스 양이 아쉽긴 하지만 소스도 맛있고 샐러드가 물릴만 하면 타코도 곁들여서 먹을 수 있어서 그냥 샐러드 질린 분들한테는 추천입니다~!! 맛 만족도 맛있어요 싱싱함 아주 싱싱해요   조*선</li><li><b>야키토리</b> 샐러딩 야키토리 샐러드, 225g, 1개 약간시큼한 냄새가 나는데 이게 맞나모르겠음. 원래 이런건지 쉰건지는 모르겠음.. 고기에서 약간 시큼한 쉰 냄새가 나요 근데소비기한 내일까지라서 괜찮겠죠??? 원래 이런 향인건지 아님 약간 갈랑말랑인건지 모르겠어요! 담당자분이 …</li><li><b>야키토리</b> 샐러딩 야키토리 샐러드, 225g, 1개 닭다리살 같은 촉촉살과 쿠스쿠스같은 낱알들 샐러딩 종류별로 먹어보구 있는데요 일단 드레싱이 다들 가벼운 편이고 새콤한 드레싱 종류가 많아요 저는 개인적으로 퍽퍽살을 더 좋아하는데 데리야끼 소스 베이스라 그런지 촉촉살이었구요 양…</li></ul>
+            <p>기간 리뷰 0건, 활동 상위 이번 기간 노출 리뷰 없음</p>
+            <p>긍정 반응 상위: 이번 기간 노출 리뷰 없음</p>
+            <p>부정 신호 상위: 낮은 만족도 신호 없음</p>
+            <ul class="bullet-list"><li>이번 기간 쿠팡 공개 리뷰 노출은 확인되지 않았습니다.</li></ul>
           </div>
         </div>
       </div>
@@ -344,11 +326,10 @@
     <section class="section">
       <div class="section-head">
         <h2>운영 이벤트 반영</h2>
-        <p>이벤트 구간 수요는 평상시와 분리해서 해석했습니다.</p>
       </div>
       <div class="section-body">
             <div class="timeline-item">
-              <div class="timeline-date">2026-06-29 ~ 2026-07-06</div>
+              <div class="timeline-date">2026-07-06</div>
               <div class="timeline-body">
                 <h4>엔보그 전 제품 행사</h4>
                 <p>엔보그 전 제품</p>
@@ -362,28 +343,30 @@
     <section class="section">
       <div class="section-head">
         <h2>다음 주 체크포인트</h2>
-        <p>축소·중단·개선 여부와 생산량 조정 후보를 명확히 잡았습니다.</p>
       </div>
       <div class="section-body">
-        <ul class="bullet-list"><li>전주 대비 하락 품목인 연어 스테이크 샐러드(-24개), 야키토리 샐러드(-17개), 시저 샐러드(-12개)의 생산량과 판촉 지속 여부를 다음 주 초에 재점검합니다.</li><li>컬리 VOC 기준 신선도/품질 리스크가 반복된 탄두리 치킨 샐러드(1건), 시저 샐러드(1건), 뽈보 샐러드(1건)는 원재료 상태와 보관시간을 우선 점검합니다.</li><li>프로모션 종료 후 첫 3영업일 판매량을 별도로 비교해 행사 반짝 수요와 기본 수요를 분리합니다.</li><li>7월 13일 저당 포케볼 5종 오픈 후에 탄두리·타코·유사 SKU의 축소 기준과 대체 생산 슬롯을 확정합니다.</li></ul>
+        <ul class="bullet-list"><li>하락 폭이 큰 리코타 치즈 샐러드(-45개), 콥 샐러드(-22개), 시저 샐러드(-17개)는 컬리 판매 흐름과 재고 회전을 같이 보며 생산량 조정 후보로 검토합니다.</li><li>행사 종료 후 쿠팡 요청 수량이 유지되는지 구운야채 샐러드, 리코타 치즈 샐러드, 시저 샐러드 중심으로 3영업일 더 확인합니다.</li><li>저당 포케볼 5종은 오픈 후 판매·리뷰 흐름을 보고 탄두리·타코·유사 SKU 축소 여부를 확정합니다.</li></ul>
       </div>
     </section>
-
-
+  
     <section class="section archive-section">
       <div class="section-head">
         <h2>과거 리포트</h2>
       </div>
       <div class="section-body">
         <details>
-          <summary>지난 리포트 보기</summary>
+          <summary>이전 주차 보기</summary>
           <div class="archive-list">
-            <p class="muted" style="margin:0;line-height:1.6">다음 주부터 이전 주차 리포트가 이곳에 누적됩니다.</p>
-          </div>
+                <a class="archive-card" href="https://taebyoungjeon.github.io/mesh-hmi/salading-weekly-20260703/">
+                  <b>2026-07-03</b>
+                  <span>2026-06-29 ~ 2026-07-03 (월-금, Asia/Seoul)</span>
+                  <span>이번 주 생산·판매 합계는 3,270개로 전주 대비 +3.8% 증가했고, 증가는 거의 전부 쿠팡 +7.7%에서 나왔습니다.</span>
+                </a>
+                </div>
         </details>
       </div>
     </section>
-
+    
   </main>
 </body>
 </html>
