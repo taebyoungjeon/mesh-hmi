@@ -83,6 +83,11 @@
     .archive-card { display: block; padding: 14px 15px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); text-decoration: none; }
     .archive-card b { display: block; font-size: 15px; margin-bottom: 4px; }
     .archive-card span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .benchmark-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .benchmark-link { display: block; border: 1px solid var(--line); border-radius: 16px; padding: 15px 16px; background: #fbfcf9; color: var(--ink); text-decoration: none; }
+    .benchmark-link b { display: block; margin-bottom: 5px; font-size: 15px; }
+    .benchmark-link span { display: block; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    @media (max-width: 560px) { .benchmark-actions { grid-template-columns: 1fr; } }
     
   </style>
 </head>
@@ -338,6 +343,43 @@
               </div>
             </div>
             </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>기내식 메뉴 벤치마크</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-3">
+          <div class="mini-card">
+            <h4>핵심 판단</h4>
+            <p>특색 있는 콜드샐러드는 아직 약하고, 웜샐러드·파스타·해산물·구운채소 조합이 제품화 가능성이 더 높습니다.</p>
+          </div>
+          <div class="mini-card">
+            <h4>우선 후보</h4>
+            <p>새우 토마토 파스타, 연어·그린파스타 웜볼, 파인애플 치킨 콜드샐러드를 1차 테스트 후보로 봅니다.</p>
+          </div>
+          <div class="mini-card">
+            <h4>포장 방향</h4>
+            <p>본품·과일·드레싱을 분리하고, 구운채소와 소스 별첨을 활용하면 기내식형 프리미엄감을 만들 수 있습니다.</p>
+          </div>
+        </div>
+        <ul class="bullet-list" style="margin-top:16px">
+          <li>대한항공과 해외 항공사 사례를 함께 보면, 복잡한 조리보다 담백한 단백질, 선명한 채소, 과일/산미, 분리 포장이 반복됩니다.</li>
+          <li>기존 탄두리·타코처럼 강한 양념 SKU와 별도로, 저자극·저염·글루텐프리·저당·고단백 라벨을 붙일 수 있는 메뉴군을 테스트할 만합니다.</li>
+          <li>이번 검수본은 체크했던 라운지/빵 위주 항목을 제외하고 실제 기내식 중심으로 다시 정리했습니다.</li>
+        </ul>
+        <div class="benchmark-actions">
+          <a class="benchmark-link" href="../salading-menu-benchmark-v3/">
+            <b>HTML 보고서 보기</b>
+            <span>Cold 10개, Warm/Pasta 10개, 대한항공 및 해외 항공사 사례 정리</span>
+          </a>
+          <a class="benchmark-link" href="../salading-menu-benchmark-v3/salading_korean_air_menu_benchmark_v3.pdf">
+            <b>PDF 보고서 열기</b>
+            <span>모바일에서 이미지가 깨질 때 확인하기 좋은 렌더링본</span>
+          </a>
+        </div>
+      </div>
     </section>
 
     <section class="section">
