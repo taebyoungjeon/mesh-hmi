@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>울산 울주군 12,000평 영농형 개발·농업복합문화공간 조성 검토 자료</title>
+  <style>
+    :root {
+      --ink: #17231f;
+      --muted: #64726c;
+      --line: #d9e2dd;
+      --green: #0f5d45;
+      --green-2: #2f7d5b;
+      --mint: #edf6f1;
+      --blue: #28506f;
+      --gold: #9b7334;
+      --paper: #fbfcfa;
+      --white: #ffffff;
+      --shadow: 0 18px 50px rgba(30, 46, 40, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .page { min-height: 100vh; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px clamp(18px, 4vw, 52px);
+      background: rgba(251, 252, 250, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(217, 226, 221, 0.8);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--green);
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav a {
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .nav a:hover { background: var(--mint); color: var(--green); }
+
+    .hero {
+      position: relative;
+      min-height: 640px;
+      display: grid;
+      align-items: end;
+      background: #10241e;
+      overflow: hidden;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.62;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(11, 24, 20, 0.9), rgba(11, 24, 20, 0.56) 48%, rgba(11, 24, 20, 0.14)),
+        linear-gradient(0deg, rgba(11, 24, 20, 0.62), transparent 44%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 80px 0 58px;
+      color: white;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 22px 0 18px;
+      font-size: clamp(40px, 6vw, 76px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: clamp(16px, 2vw, 21px);
+      word-break: keep-all;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--green);
+    }
+
+    .button.secondary {
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    section {
+      padding: 74px clamp(20px, 5vw, 58px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(300px, 1.15fr);
+      gap: 44px;
+      align-items: end;
+      margin-bottom: 30px;
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.16;
+      letter-spacing: 0;
+      word-break: keep-all;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 19px;
+      line-height: 1.32;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      word-break: keep-all;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 1px 0 rgba(23, 35, 31, 0.04);
+    }
+
+    .metric {
+      display: flex;
+      flex-direction: column;
+      min-height: 142px;
+      justify-content: space-between;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--green);
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .visual {
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .visual.cover img {
+      aspect-ratio: 4 / 3;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .quote-shots .visual img {
+      max-height: 620px;
+      object-fit: contain;
+      background: white;
+    }
+
+    .caption {
+      padding: 10px 12px 12px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--green);
+      background: var(--mint);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .production-scenarios table,
+    .production-costs table {
+      min-width: 0;
+      table-layout: fixed;
+    }
+
+    .production-scenarios table {
+      font-size: 13px;
+    }
+
+    .production-scenarios th,
+    .production-scenarios td,
+    .production-costs th,
+    .production-costs td {
+      padding: 12px 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .production-scenarios th:nth-child(1),
+    .production-scenarios td:nth-child(1) { width: 9%; }
+    .production-scenarios th:nth-child(2),
+    .production-scenarios td:nth-child(2) { width: 22%; }
+    .production-scenarios th:nth-child(3),
+    .production-scenarios td:nth-child(3) { width: 16%; }
+    .production-scenarios th:nth-child(4),
+    .production-scenarios td:nth-child(4) { width: 16%; }
+    .production-scenarios th:nth-child(5),
+    .production-scenarios td:nth-child(5) { width: 14%; }
+    .production-scenarios th:nth-child(6),
+    .production-scenarios td:nth-child(6) { width: 23%; }
+
+    .production-costs th:nth-child(1),
+    .production-costs td:nth-child(1) { width: 27%; }
+    .production-costs th:nth-child(2),
+    .production-costs td:nth-child(2) { width: 34%; }
+    .production-costs th:nth-child(3),
+    .production-costs td:nth-child(3) { width: 14%; }
+    .production-costs th:nth-child(4),
+    .production-costs td:nth-child(4) { width: 25%; }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .scenario-card {
+      display: grid;
+      gap: 10px;
+      min-height: 220px;
+      padding: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .scenario-card h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .scenario-card dl {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .scenario-card div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .scenario-card div:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .scenario-card dt {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .scenario-card dd {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 4px 8px;
+      border: 1px solid #bad2c5;
+      border-radius: 8px;
+      color: var(--green);
+      background: #f4faf7;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-left: 4px solid var(--gold);
+      background: #fff9ed;
+      color: #67522d;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      min-height: 156px;
+      padding: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .step .num {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      margin-bottom: 14px;
+      background: var(--green);
+      color: white;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .step span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .scope-list {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .scope-list li {
+      padding: 12px 0 12px 18px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      color: var(--muted);
+    }
+
+    .scope-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 20px;
+      width: 7px;
+      height: 7px;
+      background: var(--green-2);
+      border-radius: 2px;
+    }
+
+    .scope-list li:last-child { border-bottom: 0; }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .link-grid.four {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .link-card {
+      display: block;
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 156px;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-2px);
+      border-color: #9ab7a8;
+    }
+
+    .link-card small {
+      display: block;
+      color: var(--green);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .card,
+    .visual,
+    .link-card,
+    .table-wrap,
+    .note {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .footer {
+      padding: 42px clamp(20px, 5vw, 58px);
+      color: #dfe9e4;
+      background: #12231d;
+    }
+
+    .footer-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer p { color: #b8c8c0; }
+
+    @media (max-width: 940px) {
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .grid,
+      .grid.two,
+      .grid.four,
+      .link-grid,
+      .timeline,
+      .scenario-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav { display: none; }
+      .hero { min-height: 620px; }
+      section { padding-top: 56px; padding-bottom: 56px; }
+    }
+
+    @media print {
+      .topbar { display: none; }
+      section { padding: 42px 34px; }
+      .hero { min-height: 560px; }
+      .section-head,
+      .split {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid.three,
+      .link-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .link-grid.four {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid.four,
+      .timeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .card { padding: 18px; }
+      .metric { min-height: 118px; }
+      .metric strong { font-size: 26px; }
+      .visual.cover img { aspect-ratio: 4 / 3; }
+      .quote-shots .visual img { max-height: 540px; }
+      .table-wrap { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="처음으로">
+        <span class="mark">M</span>
+        <span>MANNA CEA</span>
+      </a>
+      <nav class="nav" aria-label="페이지 내 이동">
+        <a href="#summary">요약</a>
+        <a href="#scope">과업 범위</a>
+        <a href="#timeline">기간</a>
+        <a href="#budget">비용</a>
+        <a href="#production">생산</a>
+        <a href="#references">사례</a>
+        <a href="#next">확인사항</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="울산 울주군 영농형 개발 및 농업복합문화공간 조성 검토">
+        <img src="samil_intro_assets/mesh_product_photo.jpg" alt="딸기 온실 안 MESH 복합환경제어 장비">
+        <div class="hero-inner">
+          <h1>울산 울주군 12,000평 영농형 개발·농업복합문화공간 조성 검토</h1>
+          <p class="hero-copy">
+            토지 소유권 이전 및 농업법인 설립 이슈는 법률·세무·등기 검토와 병행하고,
+            만나CEA는 생산형 스마트팜 중심의 영농형 개발과 체험·판매·F&B형 농업복합문화공간을 두 축으로 나누어 사업화 검토를 담당할 수 있습니다.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#scope">과업 범위 보기</a>
+            <a class="button secondary" href="#references">실적·사례 보기</a>
+            <a class="button secondary" href="samil_agri_cultural_complex_intro.pdf">PDF 보기</a>
+            <a class="button secondary" href="samil_greenhouse_production_estimate.xlsx">산출근거 XLSX</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="summary">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Executive Summary</p>
+              <h2>영농형 개발과 복합문화공간을 분리 검토한 뒤 결합하는 접근이 필요합니다.</h2>
+            </div>
+            <p>
+              현재 문의는 순수 생산농장 조성 가능성과 체험·판매·F&B가 결합된 복합문화공간 개발 가능성을 함께 검토하는 상황으로 이해됩니다.
+              따라서 초기 현장실사 및 고객사 미팅 이후 2주 내 기초 방향성을 제시하고, 기본구상용역과 기본·상세설계, 공사 발주를 분리하는 방식이 적합합니다.
+            </p>
+          </div>
+
+          <div class="grid four">
+            <div class="card metric">
+              <div>
+                <strong>12,000평</strong>
+                <span>울산 울주군 대상 토지 규모. 전체 개발이 아니라 농업시설·체험·주차·조경·판매동 비율을 먼저 정해야 함.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>2주 내</strong>
+                <span>초기 현장실사 및 고객사 미팅 이후 기초 방향성 제시 예상 기간.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>8주 이내</strong>
+                <span>기본구상용역 기간. 영농형 개발과 복합문화공간 양쪽의 사업성·배치 검토 포함.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>6개월</strong>
+                <span>기본설계 및 상세설계용역 기간. 설계비는 전체 프로젝트 예산의 5-7% 기준.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            본 문서는 초기 상담용 초안입니다. 토지 소유권 이전 가능성, 농업법인 요건, 농지취득자격, 개발행위·건축·관광농원·농어촌정비 관련 인허가는 삼일회계법인, 법무사, 변호사, 관할 지자체 확인이 필요합니다.
+          </div>
+        </div>
+      </section>
+
+      <section id="scope">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Scope</p>
+              <h2>과업은 기본구상, 기본·상세설계, 공사 발주를 분리해 진행합니다.</h2>
+            </div>
+            <p>
+              고객이 영농형 개발과 복합문화공간 개발을 모두 고려하고 있으므로, 처음부터 공사 견적으로 들어가기보다
+              현장실사 및 고객사 미팅 후 2주 내 기초 방향성을 제시하고, 8주 이내 기본구상에서 개발방향과 시설규모를 정한 뒤 설계·인허가·공사 발주로 넘기는 구조가 적합합니다.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <div class="card">
+              <h3>1. 기본구상용역</h3>
+              <ul class="scope-list">
+                <li>기간 및 비용: 8주 이내, 2,000만원 기준</li>
+                <li>대상지 현황 분석: 토지이용, 지형, 진입로, 용수, 전기, 배수, 인접 민원 리스크</li>
+                <li>영농형 개발 검토: 작물 후보, 재배방식, 온실 형식, 생산량, 출하·판매 구조</li>
+                <li>복합문화공간 검토: 체험형 스마트팜, 카페, 판매장, 교육, 팜투어, 주차·방문객 동선</li>
+                <li>기본 배치안, 시설 규모, 단계별 추진안, 개략사업비, 예상 일정, 후속 설계 과업 범위 정리</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>2. 기본설계·상세설계용역</h3>
+              <ul class="scope-list">
+                <li>기간 및 비용: 6개월, 전체 프로젝트 예산의 5-7% 기준</li>
+                <li>도화엔지니어링과 파트너사 구조로 공동수주를 검토하고, 만나CEA는 영농·스마트팜·운영시스템 요구사항을 설계에 반영</li>
+                <li>나라장터 기본·실시설계 과업지시서 유형을 준용해 현장조사, 법규검토, 관계기관 협의 포함</li>
+                <li>건축·토목·조경·기계·전기·통신·소방·온실·MESH 연동 범위의 기본 및 상세 설계도서 작성</li>
+                <li>중간설계 보고서, 공종별 도면, 구조·설비 계산서, 시방서, 수량산출서, 내역서, 공정표 작성</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>3. 법인·토지·인허가 연계</h3>
+              <ul class="scope-list">
+                <li>농업법인 설립 후 소유권 이전이 필요한 상황을 과업 전제로 반영</li>
+                <li>등기 이전 조건과 농업법인 설립 전제를 확인해 영농계획서와 개발방향에 반영</li>
+                <li>농지 소유·이용계획과 실제 영농계획서의 정합성 검토 자료 작성</li>
+                <li>세무·회계·법률 검토 항목을 삼일회계법인과 분리한 체크리스트로 제공</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>4. 공사 별도발주 및 운영 준비</h3>
+              <ul class="scope-list">
+                <li>공사는 설계도서와 수량산출이 확정된 뒤 별도 발주</li>
+                <li>온실, 기반토목, 전기·수배전, 양액·관수, 냉장·전처리, 카페·판매장 공종 분리 가능</li>
+                <li>MESH 환경제어, 운영 KPI, 생산·체험·판매 동선은 시공 전 운영 요구사항으로 반영</li>
+                <li>공사 발주 전 예산 조정, VE, 단계별 착공 범위, 운영인력·매뉴얼 준비 지원</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="timeline">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Period</p>
+              <h2>기초 방향성은 2주 내, 기본구상은 8주 이내, 설계는 6개월로 예상합니다.</h2>
+            </div>
+            <p>
+              토지 소유권 이전 조건과 농업법인 설립 일정은 별도로 확인하되, 만나CEA 과업은 초기 방향성 제시, 기본구상, 설계·발주 준비로 단계화합니다.
+              공사 기간은 설계도서, 인허가, 발주 방식, 시공 범위가 확정된 뒤 별도 산정합니다.
+            </p>
+          </div>
+
+          <div class="timeline">
+            <div class="step">
+              <span class="num">1</span>
+              <strong>현장실사·고객사 미팅</strong>
+              <span>착수 후 · 지번, 계약서, 지적도, 토지이용계획, 고객 니즈 정리</span>
+            </div>
+            <div class="step">
+              <span class="num">2</span>
+              <strong>기초 방향성 제시</strong>
+              <span>2주 내 · 영농형 개발·복합문화공간 개발 가능성, 우선 검토 방향 정리</span>
+            </div>
+            <div class="step">
+              <span class="num">3</span>
+              <strong>기본구상용역</strong>
+              <span>8주 이내 · 배치안, 시설규모, 개략사업비, 추진 단계 정리</span>
+            </div>
+            <div class="step">
+              <span class="num">4</span>
+              <strong>기본·상세설계</strong>
+              <span>6개월 · 공종별 설계도서, 내역서, 시방서, 인허가 협의자료</span>
+            </div>
+            <div class="step">
+              <span class="num">5</span>
+              <strong>공사 별도발주</strong>
+              <span>설계 후 산정 · 온실, 기반시설, MESH, 전처리·냉장, 카페·판매장</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="budget">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Budget</p>
+              <h2>비용은 컨설팅비, 설계비, 시설공사비로 나누어 제시합니다.</h2>
+            </div>
+            <p>
+              기본구상은 만나CEA 컨설팅 과업으로 수행하고, 기본설계 및 상세설계는 도화엔지니어링과 파트너사 공동수주 구조를 검토합니다.
+              시설공사는 설계도서와 수량산출 확정 후 만나CEA 및 금속창호면허 보유 협력업체 중심으로 별도 산정합니다.
+            </p>
+          </div>
+
+          <div class="table-wrap production-scenarios">
+            <table>
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>예비 비용 범위</th>
+                  <th>포함 범위</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag">컨설팅비</span></td>
+                  <td>2,000만원</td>
+                  <td>기본구상용역. 8주 이내 대상지 현황분석, 영농형 개발·농업복합문화공간 도입시설 검토, 기본 배치, 개략사업비, 추진 단계 정리</td>
+                  <td>초기 현장실사 및 고객사 미팅 이후 2주 내 기초 방향성 제시 포함</td>
+                </tr>
+                <tr>
+                  <td><span class="tag">설계비</span></td>
+                  <td>전체 프로젝트 예산의 5-7%</td>
+                  <td>기본설계 및 상세설계비. 6개월. 현장조사, 법규검토, 공종별 설계도면, 계산서, 시방서, 수량산출서, 내역서, 인허가 협의자료</td>
+                  <td>도화엔지니어링과 파트너사 공동수주 구조 검토. 도화는 도시계획, 조경·레저, 스마트시티, 수자원, 교통, 에너지 등 다분야 엔지니어링 역량 보유</td>
+                </tr>
+                <tr>
+                  <td><span class="tag">시설공사비</span></td>
+                  <td>별도 발주</td>
+                  <td>온실, 기반토목, 전기·수배전, 양액·관수, 냉난방, 전처리·냉장, 카페·판매장, 조경·주차, MESH 시스템 설치</td>
+                  <td>만나CEA 및 협력업체 수행. 온실·금속창호 공종은 금속창호면허 보유 협력업체와 공사 범위별 발주 가능</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="note">
+            도화엔지니어링은 공식 소개 기준 수자원, 도시계획·개발, 조경·레저, 스마트시티, 교통, 에너지 등 다분야 엔지니어링 사업을 수행하는 종합 엔지니어링사입니다. 본 건에서는 도화엔지니어링이 토목·도시계획·조경·인허가 설계 축을 맡고, 만나CEA가 영농형 스마트팜, MESH 운영시스템, 생산·체험 운영 요구사항을 결합하는 공동수주 구조를 제안할 수 있습니다.
+          </div>
+
+          <div class="note">
+            위 금액은 부가세 별도 예비 기준입니다. 법률·세무 자문, 등기, 감정평가, 측량, 지질조사, 인허가 수수료, 외부 전문기관 비용은 별도 산정이 필요합니다.
+          </div>
+        </div>
+      </section>
+
+      <section id="production">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Production Plan</p>
+              <h2>12,000평 중 4,000-5,000평을 생산형 연동하우스로 배치하는 경우를 가정해보았습니다.</h2>
+            </div>
+            <p>
+              온라인 온실 견적 시뮬레이터의 연동형 단가와 금속창호스터디 폴더의 공종 구조를 기준으로,
+              기준안은 4,500평 연동형 비닐하우스와 하우스 면적 6% 수준의 전처리·선별·냉장동을 붙여 산정했습니다.
+              작물은 논산 3,000평 딸기농장 수익분석자료의 9,900㎡ 70.4t 생산 시나리오를 반영했습니다.
+            </p>
+          </div>
+
+          <div class="grid four">
+            <div class="card metric">
+              <div>
+                <strong>4,500평</strong>
+                <span>기준 생산 하우스 면적. 전체 12,000평 중 약 37.5%를 온실로 쓰고 나머지는 주차·동선·조경·체험·관리동 여지로 남김.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>270평</strong>
+                <span>전처리·선별·냉장·자재실 기준 면적. 하우스 면적의 6%, 적정 검토 범위는 5-7%.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>36.8억원</strong>
+                <span>기준안 VAT 제외 예비 공사비. 연동하우스, 생산설비, 전처리·냉장동, 예비비 7% 포함.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>85t/년</strong>
+                <span>기준 생산량. 유효재배면적 80%, 딸기 고설재배 7.1kg/㎡/년 가정.</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="scenario-grid">
+            <article class="scenario-card">
+              <h3>보수 <span class="tag">4,000평</span></h3>
+              <dl>
+                <div><dt>하우스 면적</dt><dd>13,223㎡</dd></div>
+                <div><dt>유효재배면적</dt><dd>10,579㎡</dd></div>
+                <div><dt>수량 가정</dt><dd>5.5kg/㎡/년</dd></div>
+                <div><dt>예상 생산량</dt><dd>58.2t/년</dd></div>
+                <div><dt>매출 참고</dt><dd>약 4.65억원</dd></div>
+              </dl>
+            </article>
+            <article class="scenario-card">
+              <h3>기준 <span class="tag">4,500평</span></h3>
+              <dl>
+                <div><dt>하우스 면적</dt><dd>14,876㎡</dd></div>
+                <div><dt>유효재배면적</dt><dd>11,901㎡</dd></div>
+                <div><dt>수량 가정</dt><dd>7.1kg/㎡/년</dd></div>
+                <div><dt>예상 생산량</dt><dd>84.7t/년</dd></div>
+                <div><dt>매출 참고</dt><dd>약 8.47억원</dd></div>
+              </dl>
+            </article>
+            <article class="scenario-card">
+              <h3>상향 <span class="tag">5,000평</span></h3>
+              <dl>
+                <div><dt>하우스 면적</dt><dd>16,529㎡</dd></div>
+                <div><dt>유효재배면적</dt><dd>13,223㎡</dd></div>
+                <div><dt>수량 가정</dt><dd>8.5kg/㎡/년</dd></div>
+                <div><dt>예상 생산량</dt><dd>112.4t/년</dd></div>
+                <div><dt>매출 참고</dt><dd>약 13.49억원</dd></div>
+              </dl>
+            </article>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="grid two">
+            <div class="card">
+              <h3>전처리·냉장창고 면적 기준</h3>
+              <ul class="scope-list">
+                <li>적정 범위는 하우스 면적의 5-7%로 보고, 기준안은 6%를 적용합니다.</li>
+                <li>4,500평 기준 270평: 선별·포장 135평, 세척·작업 45평, 예냉·냉장 67.5평, 자재·기계 22.5평.</li>
+                <li>예비 비용: 선별·포장 2.70억원, 세척·작업 0.90억원, 예냉·냉장 3.04억원, 자재·기계 0.56억원, 합계 약 7.20억원.</li>
+                <li>생산량 85t/년 내외이면 수확 피크 시간대 병목을 막기 위해 예냉·냉장 면적을 1.5-2.0%까지 확보하는 편이 안전합니다.</li>
+                <li>체험·직판 비중이 커질 경우 냉장창고보다 포장·판매 전 대기공간과 방문객 동선 분리가 더 중요합니다.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>예비 공사비 집계</h3>
+              <ul class="scope-list">
+                <li>온실 구조·피복·개폐·스크린: 약 14.98억원</li>
+                <li>생산설비: 행잉거터·고설베드, 양액·관수, 전기, MESH 포함 약 12.25억원</li>
+                <li>전처리·선별·예냉·냉장·자재실: 270평 기준 약 7.20억원</li>
+                <li>예비비 7%: 약 2.41억원</li>
+                <li>총계: VAT 제외 약 36.84억원, VAT 포함 약 40.52억원</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="table-wrap production-costs">
+            <table>
+              <thead>
+                <tr>
+                  <th>공종</th>
+                  <th>산출 기준</th>
+                  <th>금액</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>연동형 비닐하우스 구조·피복</td>
+                  <td>4,500평 x 387,000원/평</td>
+                  <td>17.42억원</td>
+                  <td>온라인 견적 시뮬레이터 08-연동-1 기준 단가</td>
+                </tr>
+                <tr>
+                  <td>행잉거터·고설베드</td>
+                  <td>4,500평 x 120,000원/평</td>
+                  <td>5.40억원</td>
+                  <td>딸기 고설재배 생산라인</td>
+                </tr>
+                <tr>
+                  <td>양액·관수설비</td>
+                  <td>4,500평 x 85,000원/평</td>
+                  <td>3.83억원</td>
+                  <td>양액기, 관수라인, EC/pH 제어 예비</td>
+                </tr>
+                <tr>
+                  <td>전기·수배전·MESH</td>
+                  <td>전기 2.48억원 + MESH 0.55억원</td>
+                  <td>3.03억원</td>
+                  <td>한전 인입, 수전설비 대공사는 별도</td>
+                </tr>
+                <tr>
+                  <td>전처리·선별·냉장 부대동</td>
+                  <td>선별·포장 135평 x 200만원/평, 세척·작업 45평 x 200만원/평, 예냉·냉장 67.5평 x 450만원/평, 자재·기계 22.5평 x 250만원/평</td>
+                  <td>7.20억원</td>
+                  <td>하우스 면적의 6%</td>
+                </tr>
+                <tr>
+                  <td>예비비</td>
+                  <td>직접공사비 x 7%</td>
+                  <td>2.41억원</td>
+                  <td>수량산출 전 단계 리스크</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="section-head">
+            <div>
+              <p class="kicker">Quote Example</p>
+              <h2>첨부 옵션 기준 상세견적 예시는 4,460평, 17.1-17.2억원 범위입니다.</h2>
+            </div>
+            <p>
+              carillon.kr 견적내기 화면에서 연동 8m x 97m, 19연동, 측고 3.5m, 딸기, PO필름, MESH 100ch·센서 20점, 측창 자동개폐·다겹보온커튼·차광/스크린·관수/양액 연동 조건으로 산출한 예시입니다.
+              기존 4,500평 예비 공종표와 면적이 거의 같아 구조·피복 단가 검증용 참고자료로 첨부할 수 있습니다.
+            </p>
+          </div>
+
+          <div class="grid three">
+            <div class="card metric">
+              <div>
+                <strong>14,744㎡</strong>
+                <span>8m x 97m x 19연동. 약 4,460평 기준.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>17.1-17.2억원</strong>
+                <span>초기 투자 범위. VAT 별도 참고가.</span>
+              </div>
+            </div>
+            <div class="card metric">
+              <div>
+                <strong>08-연동-1</strong>
+                <span>추천 표준규격. 내재해 기준 적설 57cm, 풍속 36m/s.</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 18px"></div>
+
+          <div class="grid two quote-shots">
+            <div class="visual">
+              <img src="samil_intro_assets/carillon_quote_conditions_crop.png" alt="carillon.kr 견적내기 선택 조건: 연동 8m x 97m, 19연동, 딸기, PO필름, MESH 100ch">
+              <div class="caption">견적내기 선택 조건</div>
+            </div>
+            <div class="visual">
+              <img src="samil_intro_assets/carillon_quote_detail_no_subscription_crop.png" alt="carillon.kr 상세견적 예시: 17.1억원에서 17.2억원, 추천 모델 스펙과 견적 구성">
+              <div class="caption">상세견적 예시 화면</div>
+            </div>
+          </div>
+
+          <div class="note">
+            위 생산시설 산정은 토목 정지, 배수, 진입로, 인허가, 건축·구조 설계, 한전 전기 인입, 지질조사, 외부 감리, 부가세를 별도로 둔 예비 견적입니다. 실제 견적 전환 시 온실 형식, 피복재, 보온커튼, 난방 방식, 수확·출하 동선, 냉장창고 온도대별 구획을 확정해야 합니다.
+          </div>
+        </div>
+      </section>
+
+      <section id="references">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">References</p>
+              <h2>만나CEA는 농업개발, 스마트팜 구축, 체험형 공간 운영 실적 다수를 보유하고 있습니다.</h2>
+            </div>
+            <p>
+              만나CEA는 단순 시공사가 아니라 기획, 설계, 구축, 운영데이터, 후속 수주까지 연결하는 통합 사업자로 포지셔닝할 수 있습니다.
+              IR 자료 기준 2024년 매출 69억원, 2026E 매출 80억원 내외, 국내외 스마트팜 및 공공·해외 레퍼런스 120+를 보유하고 있습니다.
+              특히 충북 진천에 위치한 뤁스퀘어는 연간 방문객 15만명 이상이 방문하는 지역명소로 자리잡아, 농업생산과 복합문화공간 운영 사업 모두에 전문성을 갖추고 있음을 보여줍니다.
+              또한 샐러딩 브랜드를 통해 마켓컬리와 쿠팡 등 주요 온라인 채널에 유통하며, 상품력과 재구매 기반의 organic 성장을 지속하는 농산물 유통 역량을 보유하고 있습니다.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="visual">
+              <img src="samil_intro_assets/ir_global_map-04.png" alt="MANNA CEA 국내외 스마트팜 수행 및 진출 레퍼런스 지도">
+            </div>
+            <div class="grid two">
+              <div class="card metric">
+                <div>
+                  <strong>2013년</strong>
+                  <span>농업회사법인 만나씨이에이 설립. KAIST 출신 엔지니어 중심 R&D·HW·SW 역량 보유.</span>
+                </div>
+              </div>
+              <div class="card metric">
+                <div>
+                  <strong>24명</strong>
+                  <span>엔지니어링, SW/HW 개발, 농장, F&B, 운영, 경영관리 조직 구성.</span>
+                </div>
+              </div>
+              <div class="card metric">
+                <div>
+                  <strong>100+농가</strong>
+                  <span>2026년 MESH·복합환경제어 보급 현황. 2026-2027년 200+에서 500+ 보급 목표 관리.</span>
+                </div>
+              </div>
+              <div class="card metric">
+                <div>
+                  <strong>18건</strong>
+                  <span>기술특허 보유. 최근 3년 솔루션 보급수 2022년 2건, 2023년 10건, 2024년 53건.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="link-grid four">
+            <div class="link-card">
+              <small>ENC Pipeline</small>
+              <h3>글로벌·국내 수주 파이프라인</h3>
+              <p>글로벌 9개 프로젝트, 19개 footprint 기록, 국내 6개 후보를 관리 중인 내부 실행 및 투자 커뮤니케이션 사례. 주요 진출·검토 국가: 미국, 카자흐스탄, 타지키스탄, 키르기스스탄, 사우디아라비아, 카타르, 캄보디아, 베트남, 싱가포르, 인도네시아, 한국.</p>
+            </div>
+            <div class="link-card">
+              <small>뤁스퀘어·문호리</small>
+              <h3>체험형 스마트팜·복합문화공간</h3>
+              <p>충북 진천 뤁스퀘어의 연 15만명 이상 방문 관광농원 운영 경험을 바탕으로 딸기 재배온실, 스마트팜 쇼룸, F&B, 교육, 팜투어, 제품 판매를 연결하는 공간 운영 사례.</p>
+            </div>
+            <div class="link-card">
+              <small>영양군 어수리 농장</small>
+              <h3>임업 스마트팜 기본계획</h3>
+              <p>경북 영양 어수리 농장을 대상으로 기본계획 수립, 온실 평면·단면 검토, 구역계 변경, 전문가 자문, 보고자료 정리를 수행한 국내 공공형 과업 사례.</p>
+            </div>
+            <div class="link-card">
+              <small>Salading Distribution</small>
+              <h3>농산물 유통·커머스 운영</h3>
+              <p>샐러딩 브랜드로 마켓컬리와 쿠팡에 유통 중이며, 상품력·재구매·채널 운영 기반의 organic 성장을 지속하는 농산물 유통 운영 사례.</p>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="split">
+            <div class="card">
+              <p class="kicker">Root Square Operation</p>
+              <h3>뤁스퀘어 관광농원 운영현황</h3>
+              <ul class="scope-list">
+                <li>충북 진천에 위치한 뤁스퀘어는 공유 자료 기준 연 15만명 이상 방문하는 체험형 스마트팜·관광농원 운영 사례</li>
+                <li>지역 방문객과 기관·기업 견학 수요가 누적되며 농업생산 시설을 지역명소형 복합문화공간으로 확장한 사례</li>
+                <li>온실 투어, 딸기 수확 체험, 교육·워크숍, F&B, 판매 프로그램을 한 동선으로 구성</li>
+                <li>샐러딩 유통 경험을 통해 생산 작물의 상품화, 온라인 채널 입점, 반복 구매 기반 판매 운영까지 연결 가능</li>
+                <li>대전농장 관광농원 자료처럼 농업시설을 체험·판매·교육형 공간으로 전환하는 인허가·운영 사례 제시 가능</li>
+              </ul>
+            </div>
+            <div class="grid two">
+              <div class="card metric">
+                <div>
+                  <strong>15만명+</strong>
+                  <span>연간 방문객 규모. 관광농원형 스마트팜의 시장성·운영 신뢰도를 설명하는 핵심 지표.</span>
+                </div>
+              </div>
+              <div class="card metric">
+                <div>
+                  <strong>B2B/B2G</strong>
+                  <span>투어와 교육을 통해 지자체, 학교, 기업 고객 상담으로 연결되는 운영형 쇼룸.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="grid two">
+            <div class="visual">
+              <img src="samil_intro_assets/rootsquare_aerial.jpg" alt="뤁스퀘어 전경과 체험형 스마트팜 시설">
+            </div>
+            <div class="visual">
+              <img src="samil_intro_assets/rootsquare_front.jpg" alt="뤁스퀘어 온실과 복합문화공간 전면">
+            </div>
+          </div>
+
+          <div style="height: 16px"></div>
+
+          <div class="grid three">
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_visit_event.jpg" alt="뤁스퀘어 야외 방문객 행사">
+              <div class="caption">단체 방문·행사 운영</div>
+            </div>
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_tour_greenhouse.jpg" alt="뤁스퀘어 온실 투어">
+              <div class="caption">스마트팜 온실 투어</div>
+            </div>
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_education_room.jpg" alt="뤁스퀘어 교육 프로그램">
+              <div class="caption">교육·워크숍 프로그램</div>
+            </div>
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_strawberry_harvest.jpg" alt="뤁스퀘어 딸기 수확 체험">
+              <div class="caption">딸기 수확 체험</div>
+            </div>
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_fnb_program.jpg" alt="뤁스퀘어 F&B 체험 프로그램">
+              <div class="caption">F&B·판매 연계</div>
+            </div>
+            <div class="visual cover">
+              <img src="samil_intro_assets/rootsquare_aquaponics_tour.jpg" alt="뤁스퀘어 아쿠아포닉스 체험 투어">
+              <div class="caption">아쿠아포닉스 체험</div>
+            </div>
+          </div>
+
+          <div style="height: 24px"></div>
+
+          <div class="split">
+            <div class="card">
+              <h3>영양군 임업 스마트팜 과업 예시</h3>
+              <ul class="scope-list">
+                <li>어수리 재배 시나리오와 임산물 스마트팜 기본계획 검토</li>
+                <li>96m x 65m 규모 온실 평면, 육묘온실, 부대시설 배치 자료 검토</li>
+                <li>토지주 협의와 구역계 변경 가능성을 반영한 보고자료 정리</li>
+                <li>전문가 자문회의, 지자체 보고, 공모·기본계획 자료 대응</li>
+              </ul>
+            </div>
+            <div class="visual">
+              <img src="samil_intro_assets/yeongyang_aerial_perspective.png" alt="영양군 임산물 스마트팜 실증단지 조감도">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="next">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Next Step</p>
+              <h2>다음 단계는 고객 인터뷰, 부지 방문, 소유부지 자료 수령입니다.</h2>
+            </div>
+            <p>
+              현재 정보만으로도 과업 소개와 예비 기간·비용 안내는 가능하지만, 실제 제안서로 전환하려면 고객의 개발 의도와 토지·계약 상태를 먼저 확인해야 합니다.
+            </p>
+          </div>
+
+          <div class="grid two">
+            <div class="card">
+              <h3>다음 단계 및 요청 자료</h3>
+              <ul class="scope-list">
+                <li>고객 인터뷰: 영농형 개발, 복합문화공간, 자가 운영·위탁 운영, 목표 수익모델 확인</li>
+                <li>부지 방문: 진입로, 경사, 배수, 용수, 전기 인입, 주변 민원, 주차·방문객 동선 확인</li>
+                <li>소유부지 자료 수령: 지번, 경계, 계약 상태, 소유권 이전 조건, 농업법인 설립 전제 확인</li>
+                <li>지번, 토지이용계획확인원, 지적도, 임야도 또는 경계자료</li>
+                <li>농업법인 설립 주체, 주주·임원 구성, 실제 영농 주체</li>
+                <li>고객이 원하는 시설 비율: 순수 영농, 체험, 카페, 판매, 숙박, 교육</li>
+                <li>예산 상한, 목표 개장 시점, 운영 직접 수행 여부</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Summary</h3>
+              <p>
+                “울산 울주군 12,000평 부지는 단순 시설 견적보다 토지 소유권 이전, 농업법인 요건, 영농계획, 개발행위 가능성, 운영수익 모델을 함께 검토하는 것이 우선입니다.
+                만나CEA는 스마트팜 영농개발, 체험·판매형 복합문화공간 기획, MESH 기반 운영시스템, 시설 구축 범위 산정 경험을 바탕으로 1차 검토를 진행할 수 있습니다.
+                다음 단계로는 고객 인터뷰, 부지 방문, 소유부지 관련 자료 수령을 먼저 진행하고, 초기 현장실사 및 고객사 미팅 이후 2주 내 기초 방향성을 제시드릴 수 있습니다.
+                이후 기본구상용역은 8주 이내, 2,000만원 기준으로 대상지 현황, 개발방향, 시설규모, 배치안, 개략사업비를 정리하고, 후속 기본설계 및 상세설계는 6개월, 전체 프로젝트 예산의 5-7% 수준으로 별도 제안드릴 수 있습니다. 공사는 설계도서와 수량산출 확정 후 별도 발주가 적절합니다.”
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <strong>MANNA CEA</strong>
+          <p>Hardware-to-Software AI Agent Platform for Controlled Environment Agriculture</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
