@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESH Application Casebook Viewer</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #667085;
+      --line: #d8e1df;
+      --green: #075c45;
+      --green-2: #0a7b5d;
+      --bg: #f5f8f7;
+      --paper: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(8, 120, 88, 0.12), transparent 34rem),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .title h1 {
+      margin: 0;
+      font-size: clamp(20px, 2.4vw, 32px);
+      letter-spacing: 0;
+    }
+    .title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    button, a.button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 16px;
+      font-size: 15px;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+    button.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .counter {
+      min-width: 92px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 14px;
+    }
+    main {
+      width: min(1180px, calc(100% - 28px));
+      margin: 18px auto 40px;
+    }
+    .stage {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.78);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.11);
+      overflow: hidden;
+    }
+    .slide-wrap {
+      display: grid;
+      place-items: center;
+      min-height: calc(100vh - 150px);
+      padding: clamp(10px, 2vw, 22px);
+    }
+    .slide {
+      display: block;
+      max-width: 100%;
+      max-height: calc(100vh - 190px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+    }
+    .footerbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      background: rgba(255,255,255,0.72);
+    }
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      padding: 2px 7px;
+      border: 1px solid #cfd8d6;
+      border-bottom-width: 2px;
+      border-radius: 7px;
+      background: #fff;
+      color: #334155;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    @media (max-width: 760px) {
+      header { align-items: flex-start; flex-direction: column; padding: 14px; }
+      .controls { width: 100%; justify-content: space-between; }
+      button, a.button { padding: 10px 13px; font-size: 14px; }
+      main { width: calc(100% - 16px); margin-top: 10px; }
+      .slide-wrap { min-height: calc(100vh - 210px); padding: 8px; }
+      .slide { max-height: calc(100vh - 245px); }
+      .footerbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>MESH Application Casebook</h1>
+      <p>Presentation viewer · one page at a time</p>
+    </div>
+    <div class="controls">
+      <a class="button" href="./script.html">Script</a>
+      <button id="prevBtn">Prev</button>
+      <span class="counter" id="counter">1 / 14</span>
+      <button class="primary" id="nextBtn">Next</button>
+      <button id="fullBtn">Full Screen</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage">
+      <div class="slide-wrap">
+        <img class="slide" id="slide" src="pages/page-01.png" alt="MESH Application Casebook page 1" />
+      </div>
+      <div class="footerbar">
+        <div>Use <span class="kbd">←</span> <span class="kbd">→</span> or <span class="kbd">Space</span> to move pages.</div>
+        <div id="caption">Page 1 · Cover</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const pages = Array.from({ length: 14 }, (_, i) => `pages/page-${String(i + 1).padStart(2, "0")}.png`);
+    const captions = [
+      "Cover",
+      "MESH system concept",
+      "Product roles",
+      "App / Web workflow",
+      "Third-party endpoints",
+      "1 ha greenhouse reference",
+      "Five use cases",
+      "Venlo strawberry greenhouse",
+      "Blueberry phased expansion",
+      "Egypt lean base + options",
+      "Open-field monitoring",
+      "Rooting greenhouse retrofit",
+      "Cross-case patterns",
+      "Closing message"
+    ];
+    let current = 0;
+    const slide = document.getElementById("slide");
+    const counter = document.getElementById("counter");
+    const caption = document.getElementById("caption");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const fullBtn = document.getElementById("fullBtn");
+
+    function render() {
+      slide.src = pages[current];
+      slide.alt = `MESH Application Casebook page ${current + 1}`;
+      counter.textContent = `${current + 1} / ${pages.length}`;
+      caption.textContent = `Page ${current + 1} · ${captions[current]}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === pages.length - 1;
+      const url = new URL(window.location.href);
+      url.searchParams.set("p", String(current + 1));
+      window.history.replaceState({}, "", url);
+    }
+
+    function next() {
+      if (current < pages.length - 1) {
+        current += 1;
+        render();
+      }
+    }
+
+    function prev() {
+      if (current > 0) {
+        current -= 1;
+        render();
+      }
+    }
+
+    prevBtn.addEventListener("click", prev);
+    nextBtn.addEventListener("click", next);
+    fullBtn.addEventListener("click", () => {
+      const target = document.querySelector(".stage");
+      if (!document.fullscreenElement) target.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === " ") {
+        event.preventDefault();
+        next();
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        prev();
+      }
+      if (event.key === "Home") {
+        current = 0;
+        render();
+      }
+      if (event.key === "End") {
+        current = pages.length - 1;
+        render();
+      }
+    });
+    const initial = Number(new URL(window.location.href).searchParams.get("p"));
+    if (Number.isFinite(initial) && initial >= 1 && initial <= pages.length) current = initial - 1;
+    render();
+  </script>
+</body>
+</html>

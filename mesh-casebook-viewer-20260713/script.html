@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dan Rustia Meeting Script · MESH</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #d9e2df;
+      --green: #075c45;
+      --soft: #edf7f3;
+      --paper: #ffffff;
+      --amber: #a66f00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8f7 100%);
+      line-height: 1.58;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 18px clamp(18px, 4vw, 48px);
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 40px);
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    main {
+      width: min(1120px, calc(100% - 28px));
+      margin: 26px auto 56px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.45fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .panel, .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+    }
+    .panel {
+      position: sticky;
+      top: 96px;
+      padding: 18px;
+    }
+    .panel h2, .card h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    .panel ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: #334155;
+    }
+    .panel li { margin: 8px 0; }
+    .card {
+      padding: clamp(18px, 3vw, 28px);
+      margin-bottom: 18px;
+    }
+    .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .script {
+      margin: 12px 0 0;
+      padding: 16px 18px;
+      border-left: 5px solid var(--green);
+      border-radius: 12px;
+      background: #fbfdfc;
+      font-size: clamp(17px, 1.65vw, 22px);
+      font-weight: 520;
+    }
+    .note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .question {
+      border-left-color: var(--amber);
+    }
+    .small-script {
+      font-size: clamp(16px, 1.35vw, 19px);
+    }
+    @media (max-width: 880px) {
+      .top { align-items: flex-start; flex-direction: column; }
+      .grid { grid-template-columns: 1fr; }
+      .panel { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <h1>Dan Rustia / WUR Meeting Script</h1>
+        <p class="subtitle">July 13, 2026 · MESH, AI-based greenhouse automation, computer vision, and collaboration discussion</p>
+      </div>
+      <a class="button" href="./index.html">Open Casebook Viewer</a>
+    </div>
+  </header>
+
+  <main class="grid">
+    <aside class="panel">
+      <h2>Meeting Goal</h2>
+      <ul>
+        <li>Sell less, exchange more. Dan is a researcher and project leader.</li>
+        <li>Let WUR explain their current research direction first.</li>
+        <li>Position MESH as an AI-ready farm data and operation layer.</li>
+        <li>Explore collaboration: technical exchange, data pilot, Korea-Netherlands research link.</li>
+      </ul>
+      <h2 style="margin-top:22px;">Core Message</h2>
+      <p class="script small-script">MESH is not only a controller. It is a modular operating layer that connects farm devices, sensors, operation records, and AI-ready data workflows.</p>
+    </aside>
+
+    <section>
+      <article class="card">
+        <span class="tag">1. Opening</span>
+        <h2>Start by asking about WUR</h2>
+        <p class="script">Hi Dan, thank you for taking the time today. It was very nice meeting you at GreenTech Amsterdam, and I’m glad we could continue the conversation.</p>
+        <p class="script question">Before I introduce MESH, I would actually like to hear a little more from your side first. I looked into your work around computer vision, machine learning, and greenhouse horticulture, but I am sure there are many details I do not fully understand yet. Could you briefly share what research topics or project areas you are currently focusing on at Wageningen University & Research?</p>
+        <p class="note">한국어 메모: 처음부터 우리 소개로 밀지 말고, WUR 연구방향을 먼저 듣는 구조가 좋음.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">2. MANNA CEA</span>
+        <h2>Company introduction</h2>
+        <p class="script">Let me briefly introduce MANNA CEA. MANNA CEA was founded in 2013. We have supplied turnkey controlled-environment agriculture solutions to around ten countries, including greenhouse, hydroponic, vertical farming, and smart farm projects.</p>
+        <p class="script">In the past, we were known more for aquaponics and turnkey farm construction. Recently, however, we are focusing our company direction more clearly around MESH.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">3. MESH</span>
+        <h2>MESH positioning</h2>
+        <p class="script">MESH is our AI-ready farm automation and management platform. It connects sensors, control modules, existing equipment, farm operation records, and dashboard workflows, so that growers can monitor, control, and gradually use data for better decision-making.</p>
+        <p class="script">The key point is that MESH is not only a climate controller. We see it more as a modular operating layer for farms.</p>
+        <p class="script">Depending on the site, MESH can start as simple monitoring, a control base, a retrofit integration layer, or a phased automation platform.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">4. Casebook</span>
+        <h2>How to explain the PDF</h2>
+        <p class="script">I also prepared a small application casebook. The purpose of this document is not to show final product packages. It is more a practical reference showing how MESH can be applied to different farm situations.</p>
+        <p class="script">For example, we included a Venlo strawberry greenhouse case, a phased blueberry greenhouse pilot, a lean greenhouse control case in Egypt, an open-field monitoring case, and a retrofit rooting greenhouse case.</p>
+        <p class="script">Each case shows a different starting point: new-build greenhouse, phased expansion, lean monitoring, open-field baseline, or existing-controller retrofit.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">5. AI / Data</span>
+        <h2>Connect MESH to research value</h2>
+        <p class="script">For today’s discussion, I think the most relevant topic may be how MESH can create structured farm data for AI and computer vision applications.</p>
+        <p class="script">In many farms, sensor data, control logs, crop observations, irrigation events, and grower notes are separated. Our goal with MESH is to connect these layers into a usable operational dataset.</p>
+        <p class="script">This could be useful for AI-based greenhouse operation, crop monitoring, anomaly detection, image-based crop analysis, and eventually decision-support models.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">6. Computer Vision</span>
+        <h2>Questions for Dan</h2>
+        <p class="script question">We are also interested in image-based crop analysis, but we are still careful about how to apply it practically. From our perspective, computer vision becomes more useful when image data is connected with environmental data, irrigation data, growth stage, and actual grower actions.</p>
+        <p class="script question">So I would be very interested in your view: what kind of image data or greenhouse operation data is most useful for research in crop monitoring or AI-based cultivation support?</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">7. Collaboration</span>
+        <h2>Possible cooperation</h2>
+        <p class="script">I think there could be several possible ways to collaborate. One possibility is technical exchange: understanding how Wageningen approaches computer vision and AI for greenhouse horticulture, while we share field-side data collection and automation experience from Korea and overseas projects.</p>
+        <p class="script">Another possibility is a small pilot or research collaboration, where MESH is used as a data collection and operation layer, and the data can support AI or computer vision validation.</p>
+        <p class="script">A third possibility could be Korea-Netherlands knowledge exchange, especially because you also have a connection with South Korea.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">8. If Asked</span>
+        <h2>If he asks: Is MESH a climate computer?</h2>
+        <p class="script">That is a good question. We do not position MESH as a direct replacement for established climate computers in every case.</p>
+        <p class="script">In some sites, MESH can control devices directly. But in retrofit or advanced greenhouse sites, MESH can also work as a complementary layer: collecting data, connecting additional sensors, organizing operation records, and preparing the farm data for AI-based analysis.</p>
+        <p class="script">So the role depends on the site. Sometimes MESH controls. Sometimes it monitors. Sometimes it integrates. The important point is that it can start small and expand after validation.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">9. Closing</span>
+        <h2>Close with next steps</h2>
+        <p class="script">Thank you, Dan. This was very helpful for me. As a next step, I can share the MESH application casebook and, if useful, a more technical overview of our dashboard, sensor structure, and data workflow.</p>
+        <p class="script">It would also be helpful if you could share any research themes, project formats, or collaboration channels at WUR where you think MANNA CEA and MESH may fit.</p>
+        <p class="script">I would be happy to continue the discussion after today.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
