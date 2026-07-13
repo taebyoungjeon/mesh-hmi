@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESH Application Casebook · Page-by-Page Script</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #d9e2df;
+      --green: #075c45;
+      --soft: #edf7f3;
+      --paper: #ffffff;
+      --blue: #285da8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(7, 92, 69, 0.12), transparent 28rem),
+        linear-gradient(180deg, #ffffff 0%, #f5f8f7 100%);
+      line-height: 1.58;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 18px clamp(18px, 4vw, 48px);
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 40px);
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    main {
+      width: min(1120px, calc(100% - 28px));
+      margin: 26px auto 60px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    nav {
+      position: sticky;
+      top: 98px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.84);
+      padding: 14px;
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+    }
+    nav a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 10px;
+      color: #334155;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 750;
+    }
+    nav a:hover {
+      background: var(--soft);
+      color: var(--green);
+    }
+    .page {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding: clamp(16px, 2.5vw, 24px);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+    }
+    .thumb {
+      position: sticky;
+      top: 98px;
+      align-self: start;
+    }
+    .thumb img {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+    }
+    .badge {
+      display: inline-flex;
+      margin-bottom: 8px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--green);
+      font-weight: 900;
+      font-size: 13px;
+    }
+    h2 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2.3vw, 32px);
+      letter-spacing: 0;
+    }
+    .purpose {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .script {
+      margin: 12px 0;
+      padding: 15px 17px;
+      border-left: 5px solid var(--green);
+      border-radius: 12px;
+      background: #fbfdfc;
+      font-size: clamp(17px, 1.45vw, 21px);
+      font-weight: 520;
+    }
+    .bridge {
+      border-left-color: var(--blue);
+    }
+    .memo {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .memo strong { color: var(--ink); }
+    @media (max-width: 900px) {
+      .top { align-items: flex-start; flex-direction: column; }
+      main { grid-template-columns: 1fr; }
+      nav { position: static; }
+      .page { grid-template-columns: 1fr; }
+      .thumb { position: static; width: min(260px, 100%); }
+    }
+    @media print {
+      header, nav { display: none; }
+      body { background: #fff; }
+      main { width: 100%; display: block; margin: 0; }
+      .page { break-inside: avoid; box-shadow: none; }
+      .thumb { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <h1>MESH Application Casebook · Page-by-Page Script</h1>
+        <p class="subtitle">Speaker notes for explaining each page clearly during an online meeting.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="button" href="./index.html">Open Viewer</a>
+        <a class="button" href="./script.html">Meeting Script</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav>
+      <a href="#p1">01 Cover</a>
+      <a href="#p2">02 System Concept</a>
+      <a href="#p3">03 Lineup</a>
+      <a href="#p4">04 App / Web</a>
+      <a href="#p5">05 Third-party Integration</a>
+      <a href="#p6">06 1 ha Reference</a>
+      <a href="#p7">07 Five Use Cases</a>
+      <a href="#p8">08 France / Strawberry</a>
+      <a href="#p9">09 Georgia / Blueberry</a>
+      <a href="#p10">10 Egypt / Lean Base</a>
+      <a href="#p11">11 Open-field</a>
+      <a href="#p12">12 Retrofit</a>
+      <a href="#p13">13 Patterns</a>
+      <a href="#p14">14 Closing</a>
+    </nav>
+
+    <section>
+      <article class="page" id="p1">
+        <div class="thumb"><img src="pages/page-01.png" alt="Page 1" /></div>
+        <div>
+          <span class="badge">Page 1</span>
+          <h2>Cover · Why this casebook exists</h2>
+          <p class="purpose">Purpose: Set expectation that this is a practical application reference, not a final quotation.</p>
+          <p class="script">This is a short MESH application casebook. The purpose is not to present one fixed product package, but to show how MESH can be translated into different field situations.</p>
+          <p class="script">The cases include new-build greenhouses, phased crop projects, open-field monitoring, and retrofit integration. Each case is a reference pattern, so the final configuration still needs site validation.</p>
+          <p class="script bridge">For today, I would like to use this as a conversation tool: which application patterns may be relevant for research, pilot projects, or data-driven greenhouse operation?</p>
+          <p class="memo"><strong>Korean memo:</strong> “견적서”가 아니라 “적용 패턴 설명자료”라고 선을 긋는 게 좋음.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p2">
+        <div class="thumb"><img src="pages/page-02.png" alt="Page 2" /></div>
+        <div>
+          <span class="badge">Page 2</span>
+          <h2>MESH System Concept</h2>
+          <p class="purpose">Purpose: Explain MESH as one ecosystem connecting sensing, control, integration, and operation.</p>
+          <p class="script">This page explains the basic concept of MESH. We divide the system into four roles: sense, control, integrate, and operate.</p>
+          <p class="script">The important point is that MESH does not have to start as a full automation system. Depending on the farm’s current decision, it can start as a monitoring layer, a control base, a retrofit interface, or a phased automation platform.</p>
+          <p class="script">This modular structure is useful because every greenhouse has a different starting point: some farms need sensors first, some need control, and some already have controllers but need better data visibility.</p>
+          <p class="memo"><strong>Dan에게 포인트:</strong> “AI-ready data workflow”는 여기서 시작. 연구자가 관심 가질 만한 구조.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p3">
+        <div class="thumb"><img src="pages/page-03.png" alt="Page 3" /></div>
+        <div>
+          <span class="badge">Page 3</span>
+          <h2>MESH Product Lineup</h2>
+          <p class="purpose">Purpose: Describe each product by role, not by catalog-style selling.</p>
+          <p class="script">Here we show the product family. AI Hub is the local orchestration and data continuity layer. Control Box and FR/SW modules handle field control. Air Nano provides internal climate sensing. MESH Link is used for validated third-party integration.</p>
+          <p class="script">The selection logic is practical: we do not install everything from the beginning. We select the minimum useful combination based on the site objective, device schedule, interface map, and operating logic.</p>
+          <p class="script bridge">For research collaboration, the interesting part may be how these modules can create structured datasets from real greenhouse operations.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p4">
+        <div class="thumb"><img src="pages/page-04.png" alt="Page 4" /></div>
+        <div>
+          <span class="badge">Page 4</span>
+          <h2>App / Web Workflow</h2>
+          <p class="purpose">Purpose: Show that hardware becomes useful only when operators can act on the data.</p>
+          <p class="script">This page shows the MESH App and Web workflow. For growers, the value is not only collecting data. They need to see current conditions, understand trends, keep operation records, and respond faster.</p>
+          <p class="script">The current core is status, alerts, trends, history, logs, and remote visibility. Advanced analysis and AI guidance can be added after the data structure and site behavior are validated.</p>
+          <p class="script bridge">This is also why we are interested in Wageningen’s perspective: what kind of operational data is actually useful for AI-based decision support?</p>
+        </div>
+      </article>
+
+      <article class="page" id="p5">
+        <div class="thumb"><img src="pages/page-05.png" alt="Page 5" /></div>
+        <div>
+          <span class="badge">Page 5</span>
+          <h2>Third-party Endpoints</h2>
+          <p class="purpose">Purpose: Explain integration carefully: possible, but only after validation.</p>
+          <p class="script">MESH can connect third-party endpoints such as weather stations, root-zone sensors, nutrient solution systems, and existing controllers through MESH Link.</p>
+          <p class="script">However, we are careful about integration. An RS-485 port alone does not confirm compatibility. We need the exact model, firmware, physical interface, protocol, register map, access rights, power, and wiring conditions.</p>
+          <p class="script">So our approach is read-first and validation-first. We start by making data visible, then consider deeper integration only when the interface and safety boundaries are clear.</p>
+          <p class="memo"><strong>Korean memo:</strong> 기술적으로 신뢰감을 주는 페이지. “가능합니다”보다 “검증 후 가능합니다”가 더 좋음.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p6">
+        <div class="thumb"><img src="pages/page-06.png" alt="Page 6" /></div>
+        <div>
+          <span class="badge">Page 6</span>
+          <h2>1 ha Greenhouse Reference</h2>
+          <p class="purpose">Purpose: Show that MESH can scale into section-level greenhouse operation.</p>
+          <p class="script">This is a 1 hectare greenhouse reference. The point is that a large greenhouse should not always be treated as one climate point. MESH can group the greenhouse into sections and sensor groups.</p>
+          <p class="script">Local sensor data can support section-level logic, while the Hub and App/Web provide visibility across the whole site.</p>
+          <p class="script">The final design still depends on the actual layout, communication conditions, product revision, and sensor measurement scope.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p7">
+        <div class="thumb"><img src="pages/page-07.png" alt="Page 7" /></div>
+        <div>
+          <span class="badge">Page 7</span>
+          <h2>Five Use Cases</h2>
+          <p class="purpose">Purpose: Introduce the logic of the following five case patterns.</p>
+          <p class="script">This page summarizes five different starting points for MESH: a new-build strawberry greenhouse, a phased blueberry project, a lean greenhouse base in Egypt, open-field monitoring, and a retrofit rooting greenhouse.</p>
+          <p class="script">The point is that MESH is not one fixed package. The starting scope changes depending on whether the customer needs control, monitoring, phased expansion, open-field data, or retrofit integration.</p>
+          <p class="script bridge">For WUR, I think these patterns may be useful when discussing where practical farm data can support research or field validation.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p8">
+        <div class="thumb"><img src="pages/page-08.png" alt="Page 8" /></div>
+        <div>
+          <span class="badge">Page 8</span>
+          <h2>Case 01 · Venlo Strawberry Greenhouse</h2>
+          <p class="purpose">Purpose: Explain section-level control for a new-build commercial greenhouse.</p>
+          <p class="script">This case is a 3,500 square meter Venlo glass strawberry greenhouse in France. The greenhouse has nine structural spans, but the practical operating logic is three sections.</p>
+          <p class="script">This distinction is important. We try to design around real operating sections, not just physical structure. That means manifold groups, valves, screens, vents, and the tenant operation model should define the control logic.</p>
+          <p class="script">The reusable takeaway is simple: use the greenhouse structure as a starting point, but define the real operating sections from how the grower will actually operate the farm.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p9">
+        <div class="thumb"><img src="pages/page-09.png" alt="Page 9" /></div>
+        <div>
+          <span class="badge">Page 9</span>
+          <h2>Case 02 · Blueberry Pilot to 1 ha Expansion</h2>
+          <p class="purpose">Purpose: Show phased adoption from pilot to larger greenhouse operation.</p>
+          <p class="script">This case considers a substrate blueberry project in Georgia, starting from a 0.2 to 0.3 hectare pilot and expanding toward a 1 hectare reference system.</p>
+          <p class="script">The key idea is that Phase 1 should be a real operating pilot, not just a small sensor demo. It should validate climate, root-zone conditions, weather context, and basic operation logic.</p>
+          <p class="script">Then, when the project expands, the Hub, panel, sensors, weather assets, and data structure can remain useful instead of being rebuilt from the beginning.</p>
+          <p class="memo"><strong>Dan에게 포인트:</strong> phased research/pilot model을 설명하기 좋은 페이지.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p10">
+        <div class="thumb"><img src="pages/page-10.png" alt="Page 10" /></div>
+        <div>
+          <span class="badge">Page 10</span>
+          <h2>Case 03 · Egypt Lean Base</h2>
+          <p class="purpose">Purpose: Explain how to propose MESH when crop and operation details are still open.</p>
+          <p class="script">This case is a 4,500 square meter greenhouse in Egypt. The crop, cultivation method, irrigation strategy, and actuator schedule were not fully confirmed at the beginning.</p>
+          <p class="script">In this situation, we avoid over-designing. We propose a lean base: Hub, Control Box, provisional control channels, internal air sensors, and optional weather context.</p>
+          <p class="script">The reusable takeaway is that when site details are open, a lean base plus selectable options keeps the discussion practical and flexible.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p11">
+        <div class="thumb"><img src="pages/page-11.png" alt="Page 11" /></div>
+        <div>
+          <span class="badge">Page 11</span>
+          <h2>Case 04 · Open-field Monitoring</h2>
+          <p class="purpose">Purpose: Show that MESH can also work as a distributed data layer beyond greenhouses.</p>
+          <p class="script">This case is a 4 hectare open-field monitoring reference. The starting scope connects soil moisture, temperature, EC points, and weather data into one MESH workflow.</p>
+          <p class="script">For open fields, the biggest questions are not only sensors. We also need to validate power, communication, outdoor protection, irrigation zones, and whether the data density is representative enough.</p>
+          <p class="script">The reusable takeaway is that MESH can start as a field data baseline before the permanent sensor density, RF design, and power design are fixed.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p12">
+        <div class="thumb"><img src="pages/page-12.png" alt="Page 12" /></div>
+        <div>
+          <span class="badge">Page 12</span>
+          <h2>Case 05 · Retrofit / Read-first</h2>
+          <p class="purpose">Purpose: Explain the safest way to modernize existing greenhouses.</p>
+          <p class="script">This case is an existing 1,280 square meter rooting greenhouse with third-party climate, irrigation, fogging, and heating controllers already in place.</p>
+          <p class="script">Our recommendation is to start with independent crop-level climate monitoring first. Then, in Phase 2, we review read-only controller data through MESH Link only if manuals, ports, protocol, and register maps are validated.</p>
+          <p class="script">This is important because retrofit projects should not disturb existing safety and local control logic too early. MESH can add visibility, history, and integration readiness while existing controllers keep their authority.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p13">
+        <div class="thumb"><img src="pages/page-13.png" alt="Page 13" /></div>
+        <div>
+          <span class="badge">Page 13</span>
+          <h2>What the Cases Show</h2>
+          <p class="purpose">Purpose: Summarize the common strategic pattern across all cases.</p>
+          <p class="script">Across the five cases, the strongest message is not one fixed package. The message is that MESH adapts to the starting point of the farm.</p>
+          <p class="script">For a new-build greenhouse, we can start from section-level control. For a phased project, we validate Phase 1 and expand. For uncertain sites, we use a lean base. For open fields, we start with a representative data baseline. For retrofit sites, we use monitoring-first and read-first integration.</p>
+          <p class="script bridge">This pattern is useful for collaboration discussions because we can first identify the practical decision, then choose the closest field pattern.</p>
+        </div>
+      </article>
+
+      <article class="page" id="p14">
+        <div class="thumb"><img src="pages/page-14.png" alt="Page 14" /></div>
+        <div>
+          <span class="badge">Page 14</span>
+          <h2>Closing Message</h2>
+          <p class="purpose">Purpose: End with the three principles: start practical, validate carefully, expand cleanly.</p>
+          <p class="script">To summarize, our approach is to start practical, validate carefully, and expand cleanly.</p>
+          <p class="script">We select the minimum useful scope for the current decision, confirm equipment and interfaces carefully, and then add zones, sensors, endpoints, and software functions over time.</p>
+          <p class="script">For collaboration with Wageningen, I think the key question is how this field-side MESH data structure can support AI-based greenhouse operation, crop monitoring, and computer vision research.</p>
+          <p class="script bridge">I would be happy to continue the discussion and see whether there is a good format for technical exchange, a small pilot, or a research-oriented collaboration.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
