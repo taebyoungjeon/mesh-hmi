@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESH Partner Pilot Program Viewer</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #d8e1df;
+      --green: #075c45;
+      --bg: #f5f8f7;
+      --paper: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(8, 120, 88, 0.14), transparent 32rem),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 15px 22px;
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .title h1 {
+      margin: 0;
+      font-size: clamp(20px, 2.4vw, 31px);
+      letter-spacing: 0;
+    }
+    .title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    button, a.button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      padding: 11px 16px;
+      font-size: 15px;
+      font-weight: 850;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+    button.primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+    main {
+      width: min(1120px, calc(100% - 24px));
+      margin: 16px auto 40px;
+    }
+    .stage {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.78);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.11);
+      overflow: hidden;
+    }
+    .poster-wrap {
+      display: grid;
+      place-items: center;
+      min-height: calc(100vh - 145px);
+      padding: clamp(10px, 2vw, 22px);
+    }
+    .poster {
+      display: block;
+      max-width: min(100%, var(--zoom-width, 760px));
+      max-height: calc(100vh - 185px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.15);
+      transition: max-width 160ms ease;
+    }
+    .footerbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      background: rgba(255,255,255,0.72);
+    }
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      padding: 2px 7px;
+      border: 1px solid #cfd8d6;
+      border-bottom-width: 2px;
+      border-radius: 7px;
+      background: #fff;
+      color: #334155;
+      font-weight: 850;
+      font-size: 12px;
+    }
+    @media (max-width: 760px) {
+      header { align-items: flex-start; flex-direction: column; padding: 14px; }
+      .controls { width: 100%; justify-content: space-between; }
+      button, a.button { padding: 10px 13px; font-size: 14px; }
+      main { width: calc(100% - 16px); margin-top: 10px; }
+      .poster-wrap { min-height: calc(100vh - 210px); padding: 8px; }
+      .poster { max-height: calc(100vh - 250px); }
+      .footerbar { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>MESH Partner Pilot Program</h1>
+      <p>Fullscreen meeting viewer · selected partner pilot support program</p>
+    </div>
+    <div class="controls">
+      <button id="zoomOutBtn">−</button>
+      <button id="zoomInBtn">+</button>
+      <button class="primary" id="fullBtn">Full Screen</button>
+      <a class="button" href="./TalkFile_MESH_Partner_Pilot_Program_en.pdf">PDF</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage">
+      <div class="poster-wrap">
+        <img class="poster" id="poster" src="pages/page-1.png" alt="MESH Partner Pilot Program" />
+      </div>
+      <div class="footerbar">
+        <div>Use <span class="kbd">+</span> / <span class="kbd">−</span> to zoom, <span class="kbd">F</span> for full screen.</div>
+        <div>One-page meeting handout · MANNA CEA</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const fullBtn = document.getElementById("fullBtn");
+    const zoomInBtn = document.getElementById("zoomInBtn");
+    const zoomOutBtn = document.getElementById("zoomOutBtn");
+    const poster = document.getElementById("poster");
+    const zoomLevels = [620, 760, 920, 1080, 1280, 1500];
+    let zoomIndex = 1;
+
+    function applyZoom() {
+      poster.style.setProperty("--zoom-width", `${zoomLevels[zoomIndex]}px`);
+    }
+
+    function zoomIn() {
+      zoomIndex = Math.min(zoomLevels.length - 1, zoomIndex + 1);
+      applyZoom();
+    }
+
+    function zoomOut() {
+      zoomIndex = Math.max(0, zoomIndex - 1);
+      applyZoom();
+    }
+
+    fullBtn.addEventListener("click", () => {
+      const target = document.querySelector(".stage");
+      if (!document.fullscreenElement) target.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    });
+    zoomInBtn.addEventListener("click", zoomIn);
+    zoomOutBtn.addEventListener("click", zoomOut);
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "+" || event.key === "=") zoomIn();
+      if (event.key === "-" || event.key === "_") zoomOut();
+      if (event.key.toLowerCase() === "f") fullBtn.click();
+      if (event.key === "0") {
+        zoomIndex = 1;
+        applyZoom();
+      }
+    });
+    applyZoom();
+  </script>
+</body>
+</html>
