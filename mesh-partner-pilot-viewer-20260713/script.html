@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESH Partner Pilot Program Script</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #d8e1df;
+      --green: #075c45;
+      --soft: #edf7f3;
+      --paper: #ffffff;
+      --amber: #a66f00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(7, 92, 69, 0.13), transparent 30rem),
+        linear-gradient(180deg, #ffffff 0%, #f5f8f7 100%);
+      line-height: 1.58;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 18px clamp(18px, 4vw, 48px);
+      background: rgba(255,255,255,0.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 40px);
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    main {
+      width: min(1080px, calc(100% - 28px));
+      margin: 26px auto 56px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    aside, .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.08);
+    }
+    aside {
+      position: sticky;
+      top: 96px;
+      padding: 18px;
+    }
+    aside h2, .card h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    aside ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+      color: #334155;
+    }
+    aside li { margin: 8px 0; }
+    .card {
+      padding: clamp(18px, 3vw, 28px);
+      margin-bottom: 18px;
+    }
+    .tag {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .script {
+      margin: 12px 0 0;
+      padding: 16px 18px;
+      border-left: 5px solid var(--green);
+      border-radius: 12px;
+      background: #fbfdfc;
+      font-size: clamp(17px, 1.55vw, 22px);
+      font-weight: 520;
+    }
+    .caution { border-left-color: var(--amber); }
+    .note {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .small-script {
+      font-size: clamp(16px, 1.3vw, 19px);
+    }
+    @media (max-width: 880px) {
+      .top { align-items: flex-start; flex-direction: column; }
+      main { grid-template-columns: 1fr; }
+      aside { position: static; }
+    }
+    @media print {
+      header { display: none; }
+      body { background: #fff; }
+      main { display: block; width: 100%; margin: 0; }
+      aside, .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <h1>MESH Partner Pilot Program Script</h1>
+        <p class="subtitle">Speaker notes for explaining the selected partner pilot support program.</p>
+      </div>
+      <a class="button" href="./index.html">Open Fullscreen Viewer</a>
+    </div>
+  </header>
+
+  <main>
+    <aside>
+      <h2>Key Positioning</h2>
+      <ul>
+        <li>Do not present it as general free product distribution.</li>
+        <li>Present it as a selective pilot with real-site validation.</li>
+        <li>Emphasize technical fit, feedback, and follow-up cooperation.</li>
+        <li>Clarify that shipping, tax, installation, wiring, and third-party equipment are separate discussions.</li>
+      </ul>
+      <h2 style="margin-top:22px;">One-line Summary</h2>
+      <p class="script small-script">A selective support program to test MESH in one real site, validate technical fit, collect feedback, and decide whether there is a repeatable cooperation model.</p>
+    </aside>
+
+    <section>
+      <article class="card">
+        <span class="tag">1. Opening</span>
+        <h2>Introduce the program carefully</h2>
+        <p class="script">I would also like to briefly introduce our MESH Partner Pilot Support Program.</p>
+        <p class="script caution">This is not a general free product distribution program. It is a limited pilot support program for selected partners who have real sites where MESH can be tested and validated.</p>
+        <p class="note">Korean memo: “무상 지원”으로 들리지 않게 조심. 선정형 파일럿, 실제 사이트 검증이라는 표현이 핵심.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">2. Purpose</span>
+        <h2>Why MANNA CEA runs this program</h2>
+        <p class="script">The purpose is to work with a small number of partners and validate how MESH can be applied in real greenhouse or CEA environments.</p>
+        <p class="script">Through this program, we want to check technical fit, installation conditions, communication stability, user feedback, and possible long-term collaboration models.</p>
+        <p class="script">So the goal is not just to send hardware. The goal is to understand whether MESH can create value in a real site and whether we can build a repeatable cooperation model together.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">3. Target Partners</span>
+        <h2>Who can be considered</h2>
+        <p class="script">The program is mainly for partners who can apply MESH in practical sites, such as container farms, greenhouse builders, hydroponic operators, consultants, ag-tech companies, EPC companies, or system integrators.</p>
+        <p class="script">We are not looking for a large number of participants. We would rather select a few partners where the use case is clear and the collaboration potential is meaningful.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">4. Support Scope</span>
+        <h2>What may be included</h2>
+        <p class="script">The pilot support scope may include one AI Hub, one Control Box S, up to six FR or SW control channels, up to two Air Nano sensors, and up to one MESH Link.</p>
+        <p class="script">The final configuration will be adjusted after we check the actual site equipment, power, control method, safety conditions, and communication interface.</p>
+        <p class="script caution">In other words, the listed scope is a reference ceiling, not an automatic fixed package for every partner.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">5. MANNA CEA Role</span>
+        <h2>What MANNA CEA provides</h2>
+        <p class="script">From MANNA CEA’s side, we can provide pilot equipment, initial configuration review, basic setup guidance, and remote technical support during the pilot period.</p>
+        <p class="script">We can also review the site use case together and help define a practical pilot objective, such as monitoring, basic control, device integration, or operation-data collection.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">6. Partner Role</span>
+        <h2>What the partner needs to prepare</h2>
+        <p class="script">From the partner’s side, we would need a suitable pilot site, information about the target equipment, local installation support, basic wiring and power preparation, and feedback during the pilot operation.</p>
+        <p class="script">The partner should also be willing to discuss follow-up cooperation if the pilot result is positive.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">7. Conditions</span>
+        <h2>Important restrictions</h2>
+        <p class="script caution">There are a few important conditions. The pilot equipment cannot be resold, transferred, disassembled, copied, or used for reverse engineering.</p>
+        <p class="script caution">Also, shipping, tax, local installation, wiring, and any third-party equipment are not automatically included and need to be discussed separately.</p>
+        <p class="note">Korean memo: 나중에 비용/책임 범위가 흐려지지 않도록 여기서 한 번 명확히 말해두는 게 좋음.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">8. After Pilot</span>
+        <h2>How this can lead to business</h2>
+        <p class="script">After the pilot, we would review the result together. Based on the result, we can discuss a formal BOM, pricing, supply scope, installation scope, and a possible partner cooperation model.</p>
+        <p class="script">If the pilot proves useful, the next step could be a commercial project, a partner sales model, a joint demonstration site, or a broader technical integration discussion.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">9. For University / Research Context</span>
+        <h2>If explaining to Dan / WUR</h2>
+        <p class="script">This program is more commercial-partner oriented, so it may not directly fit a university research project.</p>
+        <p class="script">However, the same idea could be adapted for a research or demonstration collaboration. If there is a suitable greenhouse, research site, or demonstration environment, we could discuss a small MESH setup for data collection, monitoring, and technical validation.</p>
+      </article>
+
+      <article class="card">
+        <span class="tag">10. Closing</span>
+        <h2>Short closing statement</h2>
+        <p class="script">In short, the MESH Partner Pilot Program is a selective support program to test MESH in one real site with a partner, validate technical fit, collect feedback, and decide whether there is a scalable cooperation model after the pilot.</p>
+        <p class="script">If you think there is a suitable site or partner context, we would be happy to review it together and see whether it fits the program.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
