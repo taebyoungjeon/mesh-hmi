@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>샐러딩 내부 주간 전달 | 2026-10-16</title>
+  <style>
+    :root {
+      --bg: #f3f4ef;
+      --paper: #ffffff;
+      --ink: #16211a;
+      --muted: #647067;
+      --line: #d9dfd7;
+      --accent: #205d47;
+      --blue: #0e7490;
+      --amber: #a16207;
+      --red: #b42318;
+      --shadow: 0 14px 30px rgba(22, 33, 26, 0.08);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); }
+    .page { max-width: 1040px; margin: 0 auto; padding: 24px 16px 60px; }
+    .hero { background: linear-gradient(160deg, #1e3e32 0%, #284d3f 58%, #496657 100%); color: #fff; border-radius: 24px; padding: 28px; box-shadow: var(--shadow); }
+    .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+    h1 { margin: 8px 0 10px; font-size: 34px; line-height: 1.15; }
+    .hero p { margin: 0; color: rgba(255,255,255,.84); line-height: 1.6; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .kpi-card { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; padding: 16px; }
+    .kpi-card span { display: block; font-size: 12px; opacity: .75; margin-bottom: 8px; }
+    .kpi-card b { display: block; font-size: 28px; line-height: 1.05; }
+    .kpi-card small { display: block; margin-top: 8px; color: rgba(255,255,255,.84); }
+    .section { margin-top: 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; }
+    .section-head { padding: 20px 22px 0; }
+    .section-head h2 { margin: 0; font-size: 22px; }
+    .section-body { padding: 18px 22px 22px; }
+    .summary-list, .bullet-list { margin: 0; padding-left: 18px; line-height: 1.8; }
+    .grid-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    .mini-card { border: 1px solid var(--line); border-radius: 18px; padding: 16px; background: #fbfcf9; }
+    .mini-card.warning { background: #fff8f4; border-color: #f1d5bf; }
+    .mini-card h4 { margin: 0 0 8px; font-size: 16px; }
+    .mini-card p { margin: 0; color: var(--muted); line-height: 1.55; }
+    .day-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .day-card { border: 1px solid var(--line); border-radius: 16px; padding: 14px 12px; background: #fafbf8; }
+    .day-head { font-size: 12px; color: var(--muted); }
+    .day-bar { height: 150px; display: flex; align-items: flex-end; margin: 10px 0; }
+    .day-bar span { display: block; width: 100%; border-radius: 14px 14px 8px 8px; background: linear-gradient(180deg, #4b7c67 0%, #205d47 100%); }
+    .day-value { font-size: 24px; font-weight: 800; }
+    .timeline-item { display: grid; grid-template-columns: 170px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-date { font-size: 13px; color: var(--muted); font-weight: 700; }
+    .timeline-body h4 { margin: 0 0 6px; font-size: 17px; }
+    .timeline-body p { margin: 4px 0; color: var(--muted); line-height: 1.55; }
+    .muted { color: var(--muted); }
+    a { color: var(--blue); text-decoration: none; }
+    @media (max-width: 860px) {
+      .kpi-grid, .grid-3, .grid-2, .day-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .page { padding: 14px 12px 40px; }
+      .hero { padding: 22px 18px; border-radius: 18px; }
+      h1 { font-size: 28px; }
+      .kpi-grid, .grid-3, .grid-2, .day-grid { grid-template-columns: 1fr; }
+      .section-head, .section-body { padding-left: 16px; padding-right: 16px; }
+      table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Salading Weekly Internal Report</div>
+      <h1>샐러딩 내부 주간 전달</h1>
+      <p>2026-10-12 ~ 2026-10-16 (월-금, Asia/Seoul)</p>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span>총 생산·판매</span>
+          <b>4,683</b>
+          <small>전주 대비 +3.4%</small>
+        </div>
+        <div class="kpi-card">
+          <span>최대 채널</span>
+          <b>쿠팡</b>
+          <small>2,506개 / -3.7%</small>
+        </div>
+        <div class="kpi-card">
+          <span>1위 품목</span>
+          <b>저당포케볼 연어스테이크</b>
+          <small>700개 / 비중 14.9%</small>
+        </div>
+        <div class="kpi-card">
+          <span>리뷰/VOC</span>
+          <b>98건</b>
+          <small>컬리 79 / 쿠팡 19</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Executive Summary</h2>
+      </div>
+      <div class="section-body">
+        <ul class="summary-list"><li>이번 주 생산·판매 합계는 4,683개로 전주 4,527개 대비 +3.4%이며, 저당 포케볼 2,226개가 포함됐습니다.</li><li>최대 채널은 쿠팡 2,506개로 전주 대비 -3.7%이며, 이 중 저당 포케볼은 1,260개입니다.</li><li>상위 품목은 저당포케볼 연어스테이크 700개, 저당포케볼 소불고기 686개, 구운야채 샐러드 570개이며 상위 2개 품목 비중은 29.6%입니다.</li><li>이번 기간 확인된 리뷰는 컬리 79건, 쿠팡 19건이며 컬리에서는 신선도 2건, 포장·배송 1건이 확인됐습니다.</li><li>쿠팡 리뷰에서는 샐러딩 저당 포케볼 연어 스테이크, 샐러딩 저당 포케볼 치킨의 맛·신선도 신호를 다음 주까지 재확인해야 합니다.</li><li>저당 포케볼 5종 오픈 후 관찰 기간으로, 기존 유사 SKU는 판매량과 VOC를 함께 보고 운영 여부를 판단해야 합니다.</li></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>이번 주 생산·판매 요약</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div>
+            <div class="day-grid">
+            <div class="day-card">
+              <div class="day-head">10-12 (월)</div>
+              <div class="day-bar"><span style="height:140px"></span></div>
+              <div class="day-value">1,138</div>
+            </div>
+
+            <div class="day-card">
+              <div class="day-head">10-13 (화)</div>
+              <div class="day-bar"><span style="height:126px"></span></div>
+              <div class="day-value">1,027</div>
+            </div>
+
+            <div class="day-card">
+              <div class="day-head">10-14 (수)</div>
+              <div class="day-bar"><span style="height:119px"></span></div>
+              <div class="day-value">972</div>
+            </div>
+
+            <div class="day-card">
+              <div class="day-head">10-15 (목)</div>
+              <div class="day-bar"><span style="height:93px"></span></div>
+              <div class="day-value">764</div>
+            </div>
+
+            <div class="day-card">
+              <div class="day-head">10-16 (금)</div>
+              <div class="day-bar"><span style="height:96px"></span></div>
+              <div class="day-value">782</div>
+            </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>채널</th>
+                  <th>이번 주</th>
+                  <th>비중</th>
+                  <th>전주</th>
+                  <th>증감</th>
+                  <th>증감률</th>
+                </tr>
+              </thead>
+              <tbody>
+            <tr>
+              <td>컬리</td>
+              <td>2,177</td>
+              <td>46.5%</td>
+              <td>1,925</td>
+              <td>+252</td>
+              <td>+13.1%</td>
+            </tr>
+
+            <tr>
+              <td>쿠팡</td>
+              <td>2,506</td>
+              <td>53.5%</td>
+              <td>2,602</td>
+              <td>-96</td>
+              <td>-3.7%</td>
+            </tr>
+            </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>인기 품목과 부진 품목</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>품목</th>
+                <th>이번 주</th>
+                <th>비중</th>
+                <th>증감</th>
+                <th>증감률</th>
+                <th>채널 구성</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>저당포케볼 연어스테이크</td>
+              <td>700</td>
+              <td>14.9%</td>
+              <td>+82</td>
+              <td>+13.3%</td>
+              <td>컬리 208 / 쿠팡 492</td>
+            </tr>
+
+            <tr>
+              <td>저당포케볼 소불고기</td>
+              <td>686</td>
+              <td>14.6%</td>
+              <td>+31</td>
+              <td>+4.7%</td>
+              <td>컬리 170 / 쿠팡 516</td>
+            </tr>
+
+            <tr>
+              <td>구운야채 샐러드</td>
+              <td>570</td>
+              <td>12.2%</td>
+              <td>-49</td>
+              <td>-7.9%</td>
+              <td>컬리 114 / 쿠팡 456</td>
+            </tr>
+
+            <tr>
+              <td>리코타 치즈 샐러드</td>
+              <td>383</td>
+              <td>8.2%</td>
+              <td>-30</td>
+              <td>-7.3%</td>
+              <td>컬리 207 / 쿠팡 176</td>
+            </tr>
+
+            <tr>
+              <td>저당포케볼 치킨</td>
+              <td>310</td>
+              <td>6.6%</td>
+              <td>+11</td>
+              <td>+3.7%</td>
+              <td>컬리 214 / 쿠팡 96</td>
+            </tr>
+
+            <tr>
+              <td>저당포케볼 문어</td>
+              <td>290</td>
+              <td>6.2%</td>
+              <td>+28</td>
+              <td>+10.7%</td>
+              <td>컬리 230 / 쿠팡 60</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid-3" style="margin-top:16px">
+            <div class="mini-card warning">
+              <h4>구운야채 샐러드</h4>
+              <p>570개, 전주 대비 -49개</p>
+            </div>
+
+            <div class="mini-card warning">
+              <h4>리코타 치즈 샐러드</h4>
+              <p>383개, 전주 대비 -30개</p>
+            </div>
+
+            <div class="mini-card warning">
+              <h4>콥 샐러드</h4>
+              <p>150개, 전주 대비 -1개</p>
+            </div>
+
+            <div class="mini-card warning">
+              <h4>시저 샐러드</h4>
+              <p>220개, 전주 대비 +1개</p>
+            </div>
+            </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>리뷰 VOC 요약</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-2">
+          <div class="mini-card">
+            <h4>컬리</h4>
+            <p>기간 리뷰 79건, 상품 언급 상위 저당 포케볼 문어 13건, 저당 포케볼 연어 스테이크 12건, 저당 포케볼 새우 8건, 콥 샐러드 7건, 저당 포케볼 치킨 7건</p>
+            <p>주요 테마: 맛 42건, 포만감/편의 11건, 신선도 2건, 포장/배송 1건</p>
+            <p>품목 리스크: 구운 야채 샐러드 1건, 저당 포케볼 연어 스테이크 1건</p>
+            <ul class="bullet-list"><li><b>저당 포케볼 연어 스테이크</b> 대박~~~ 맛도 있고 영향도 골고루 다이어트식에 혁명~~ 올래 이런거는 맛이 없자나요~ 근데 하나하나 너무 신선하고 맛있어서 금세 다시 재재재주문 클릭~~ 처음 메뉴부터 끝까지~~ㅋ 이젠 진짜 홀쭉~~한 몸매로 만…</li><li><b>저당 포케볼 문어</b> 구성이 좋고 보리 밥 구성은 오랜만이라 너무 맛있게 먹었어요 문어도 맛있고 먹는데 사이즈도 그렇고 뭔가 기내식 느낌나서 재미있었어요 보리쌀 사먹으려구요 기존 샐러드랑 구성이 살짝 달라서 너무 맛있게 먹음</li><li><b>저당 포케볼 연어 스테이크</b> 매우 기대했는데 아이들 반응이 생각과 달라 아쉬웠던 샐러드... 저는 연어 안 먹어 생각도 없었지만.. 아이들이 남겨서 감자 보리 등등 먹었는데, 보리 밥은 식감에 맛에 좋았으나 무언가 계속 매콤함이 느껴져서.. …</li><li><b>구운 야채 샐러드</b> 구운 야채는 별로에요 아무래도 차갑게 먹다보니ㅠ</li></ul>
+          </div>
+          <div class="mini-card">
+            <h4>쿠팡</h4>
+            <p>기간 리뷰 19건, SKU별 증가 샐러딩 저당 포케볼 소불고기 7건, 샐러딩 저당 포케볼 치킨 6건, 샐러딩 저당 포케볼 새우 3건, 샐러딩 저당 포케볼 연어 스테이크 2건, 샐러딩 저당 포케볼 문어 1건</p>
+            <p>긍정 반응 상위: 샐러딩 저당 포케볼 치킨 긍정 33.3%, 샐러딩 저당 포케볼 새우 긍정 33.3%, 샐러딩 저당 포케볼 소불고기 긍정 14.3%</p>
+            <p>부정 신호 상위: 샐러딩 저당 포케볼 연어 스테이크 부정 50.0%, 샐러딩 저당 포케볼 치킨 부정 16.7%, 샐러딩 저당 포케볼 소불고기 부정 14.3%</p>
+            <ul class="bullet-list"><li><b>샐러딩 저당 포케볼 소불고기</b> 패키지가 작아 보였지만 실제로는 한 끼로 생각보다 든든했습니다. 소불고기의 달짝지근한 맛과 여러 식감이 잘 어울리고, 조리와 설거지 없이 간편하며 가격 대비 만족도가 좋았습니다. 다만 소불고기 조각은 작은 편입니다.</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>저당 포케볼 출시 반응</h2>
+      </div>
+      <div class="section-body">
+        <div class="grid-3">
+          <div class="mini-card"><h4>기간 신규 리뷰</h4><p><b>63건</b><br>컬리 44 / 쿠팡 19</p></div>
+          <div class="mini-card"><h4>리뷰 증가 상위</h4><p><b>문어</b><br>14건</p></div>
+          <div class="mini-card warning"><h4>반복 불만</h4><p><b>연어 스테이크 2건, 치킨 1건</b><br>맛·신선도·드레싱 우선 점검</p></div>
+        </div>
+        <div class="grid-2" style="margin-top:16px">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>SKU</th><th>생산·판매</th><th>기간 신규</th><th>누적·평점</th><th>기간 반응</th><th>대표 강점·개선</th></tr></thead>
+              <tbody>
+            <tr>
+              <td><b>소불고기</b><br><span class="muted"><a href="https://www.kurly.com/goods/1002296744">컬리</a> / <a href="https://www.coupang.com/vp/products/9615017686?itemId=28708703183&amp;vendorItemId=95649565544">쿠팡</a></span></td>
+              <td>686개<br><span class="muted">컬리 170 / 쿠팡 516</span></td>
+              <td>컬리 4 / 쿠팡 7</td>
+              <td>컬리 152<br><span class="muted">쿠팡 128 / 평점 4.0</span></td>
+              <td>긍정 36.4%<br><span class="muted">부정 9.1%</span></td>
+              <td><b>강점</b> 보기엔 양이 적은거 같았는데 먹으니 든든하고 좋아요<br><span class="muted"><b>개선</b> 반복 불만 없음</span></td>
+            </tr>
+
+            <tr>
+              <td><b>치킨</b><br><span class="muted"><a href="https://www.kurly.com/goods/1002296744">컬리</a> / <a href="https://www.coupang.com/vp/products/9615016958?itemId=28708700287&amp;vendorItemId=95649562706">쿠팡</a></span></td>
+              <td>310개<br><span class="muted">컬리 214 / 쿠팡 96</span></td>
+              <td>컬리 7 / 쿠팡 6</td>
+              <td>컬리 188<br><span class="muted">쿠팡 62 / 평점 4.5</span></td>
+              <td>긍정 46.2%<br><span class="muted">부정 7.7%</span></td>
+              <td><b>강점</b> 보기엔 양이 적어보였는데 먹으니 든든하니 좋아요 소불고기보다 이게 더 맛있어요<br><span class="muted"><b>개선</b> 당근에서 불쾌한 냄새가 나서 다 먹지 못했습니다.</span></td>
+            </tr>
+
+            <tr>
+              <td><b>새우</b><br><span class="muted"><a href="https://www.kurly.com/goods/1002296744">컬리</a> / <a href="https://www.coupang.com/vp/products/9638414021?itemId=28797019111&amp;vendorItemId=95732518930">쿠팡</a></span></td>
+              <td>240개<br><span class="muted">컬리 144 / 쿠팡 96</span></td>
+              <td>컬리 8 / 쿠팡 3</td>
+              <td>컬리 168<br><span class="muted">쿠팡 74 / 평점 4.0</span></td>
+              <td>긍정 72.7%<br><span class="muted">부정 0.0%</span></td>
+              <td><b>강점</b> 단맛을 안좋아해서 저당 좋아요 곡물류가 너무 맛있네요 새우도 간도 적당하고 야채만 따로 추가해서 먹으니 한끼 든든 재구매의사…<br><span class="muted"><b>개선</b> 반복 불만 없음</span></td>
+            </tr>
+
+            <tr>
+              <td><b>문어</b><br><span class="muted"><a href="https://www.kurly.com/goods/1002296744">컬리</a> / <a href="https://www.coupang.com/vp/products/9615017187?itemId=28708701344&amp;vendorItemId=95649563593">쿠팡</a></span></td>
+              <td>290개<br><span class="muted">컬리 230 / 쿠팡 60</span></td>
+              <td>컬리 13 / 쿠팡 1</td>
+              <td>컬리 238<br><span class="muted">쿠팡 57 / 평점 4.5</span></td>
+              <td>긍정 50.0%<br><span class="muted">부정 0.0%</span></td>
+              <td><b>강점</b> 구성이 좋고 보리 밥 구성은 오랜만이라 너무 맛있게 먹었어요 문어도 맛있고 먹는데 사이즈도 그렇고 뭔가 기내식 느낌나서 재미…<br><span class="muted"><b>개선</b> 반복 불만 없음</span></td>
+            </tr>
+
+            <tr>
+              <td><b>연어 스테이크</b><br><span class="muted"><a href="https://www.kurly.com/goods/1002296744">컬리</a> / <a href="https://www.coupang.com/vp/products/9615017431?itemId=28708702147&amp;vendorItemId=95649564626">쿠팡</a></span></td>
+              <td>700개<br><span class="muted">컬리 208 / 쿠팡 492</span></td>
+              <td>컬리 12 / 쿠팡 2</td>
+              <td>컬리 199<br><span class="muted">쿠팡 82 / 평점 4.0</span></td>
+              <td>긍정 50.0%<br><span class="muted">부정 14.3%</span></td>
+              <td><b>강점</b> 대박~~~ 맛도 있고 영향도 골고루 다이어트식에 혁명~~ 올래 이런거는 맛이 없자나요~ 근데 하나하나 너무 신선하고 맛있어서…<br><span class="muted"><b>개선</b> 매우 기대했는데 아이들 반응이 생각과 달라 아쉬웠던 샐러드... 저는 연어 안 먹어 생각도 없었지만.. 아이들이 남겨서 감자…</span></td>
+            </tr>
+            </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="mini-card"><h4>좋은 리뷰</h4><ul class="bullet-list"><li><b>저당 포케볼 연어 스테이크</b> 대박~~~ 맛도 있고 영향도 골고루 다이어트식에 혁명~~ 올래 이런거는 맛이 없자나요~ 근데 하나하나 너무 신선하고 맛있어서 금세 다시 재재재주문 클릭~~ 처음 메뉴부터 끝까지~~ㅋ 이젠 진짜 홀쭉~~한 몸매로 만들수 있을꺼같아요~ 다이어트식~영향식~으로 최고~~~</li><li><b>저당 포케볼 문어</b> 구성이 좋고 보리 밥 구성은 오랜만이라 너무 맛있게 먹었어요 문어도 맛있고 먹는데 사이즈도 그렇고 뭔가 기내식 느낌나서 재미있었어요 보리쌀 사먹으려구요 기존 샐러드랑 구성이 살짝 달라서 너무 맛있게 먹음</li><li><b>저당 포케볼 새우</b> 단맛을 안좋아해서 저당 좋아요 곡물류가 너무 맛있네요 새우도 간도 적당하고 야채만 따로 추가해서 먹으니 한끼 든든 재구매의사 있어요</li></ul></div>
+            <div class="mini-card warning" style="margin-top:12px"><h4>개선 리뷰</h4><ul class="bullet-list"><li><b>저당 포케볼 연어 스테이크</b> 매우 기대했는데 아이들 반응이 생각과 달라 아쉬웠던 샐러드... 저는 연어 안 먹어 생각도 없었지만.. 아이들이 남겨서 감자 보리 등등 먹었는데, 보리 밥은 식감에 맛에 좋았으나 무언가 계속 매콤함이 느껴져서.. 맛은 있는데 입 안에 계속 양파 매콤한 맛이 남아서 고…</li></ul></div>
+          </div>
+        </div>
+        <div class="mini-card" style="margin-top:16px">
+          <h4>채널 차이</h4>
+          <p>컬리 이번 기간: 문어 13건, 연어 스테이크 12건, 새우 8건, 치킨 7건, 소불고기 4건. 쿠팡 현재 확인 가능한 상품 페이지 기준: 소불고기 누적 128건, 연어 스테이크 누적 82건, 새우 누적 74건, 치킨 누적 62건, 문어 누적 57건. 리뷰 수는 판매량이 아닌 반응 속도 지표로만 봅니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>기존 메뉴 영향</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>메뉴</th>
+                <th>출시 전</th>
+                <th>오픈 주</th>
+                <th>이번 주</th>
+                <th>출시 전 대비</th>
+                <th>오픈 주 대비</th>
+              </tr>
+            </thead>
+            <tbody><tr>
+          <td>구운야채 샐러드</td>
+          <td>838</td>
+          <td>779</td>
+          <td>570</td>
+          <td>-268</td>
+          <td>-209</td>
+        </tr>
+<tr>
+          <td>치킨바베큐 샐러드</td>
+          <td>276</td>
+          <td>205</td>
+          <td>144</td>
+          <td>-132</td>
+          <td>-61</td>
+        </tr>
+<tr>
+          <td>콥 샐러드</td>
+          <td>219</td>
+          <td>216</td>
+          <td>150</td>
+          <td>-69</td>
+          <td>-66</td>
+        </tr>
+<tr>
+          <td>야키토리 샐러드</td>
+          <td>218</td>
+          <td>209</td>
+          <td>170</td>
+          <td>-48</td>
+          <td>-39</td>
+        </tr>
+<tr>
+          <td>탄두리 치킨 샐러드</td>
+          <td>214</td>
+          <td>215</td>
+          <td>178</td>
+          <td>-36</td>
+          <td>-37</td>
+        </tr>
+<tr>
+          <td>타코 샐러드</td>
+          <td>182</td>
+          <td>195</td>
+          <td>179</td>
+          <td>-3</td>
+          <td>-16</td>
+        </tr></tbody>
+          </table>
+        </div>
+        <div class="mini-card" style="margin-top:16px">
+          <h4>해석</h4>
+          <p>탄두리 치킨은 출시 전 동기간 대비 -36개로 감소했고, 콥은 -69개로 감소했습니다. 구운야채는 -268개, 치킨바베큐는 -132개이며, 단일 주차만으로 중단을 확정하지 않고 다음 주 수량과 VOC를 함께 보겠습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>운영 이벤트 반영</h2>
+      </div>
+      <div class="section-body">
+            <div class="timeline-item">
+              <div class="timeline-date">2026-07-13 ~ 지속 관찰</div>
+              <div class="timeline-body">
+                <h4>저당 포케볼 5종 오픈</h4>
+                <p>저당 포케볼 5종</p>
+                <p>컬리, 쿠팡</p>
+                <p>탄두리/타코 축소 및 중단 판단 기준점으로 사용</p>
+              </div>
+            </div>
+            </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>다음 주 체크포인트</h2>
+      </div>
+      <div class="section-body">
+        <ul class="bullet-list"><li>하락 폭이 큰 구운야채 샐러드(-49개), 리코타 치즈 샐러드(-30개), 콥 샐러드(-1개)는 컬리 판매 흐름과 쿠팡 요청량 변화를 함께 보며 SKU 운영 우선순위를 검토합니다.</li><li>컬리 VOC에서 확인된 구운 야채 샐러드(1건), 저당 포케볼 연어 스테이크(1건)는 신선도·구성·토핑량 원인을 SKU별로 확인하고 다음 주 반복 여부를 재점검합니다.</li><li>쿠팡 요청 수량이 다음 주에도 이어지는지 저당포케볼 소불고기, 저당포케볼 연어스테이크, 구운야채 샐러드 중심으로 3영업일 더 확인합니다.</li><li>저당 포케볼 5종은 오픈 후 판매·리뷰 흐름을 보고 탄두리·타코·유사 SKU 축소 여부를 확정합니다.</li></ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
